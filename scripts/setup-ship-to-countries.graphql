@@ -1,0 +1,21 @@
+# One-time setup for country-restricted products (run with `shopify store execute --allow-mutations`):
+# a product metafield the merchant edits in the admin ("Ships to countries"), and a demo value:
+# Charcoal Peel-Off Mask ships to the US only. The cart-rules Function reads it (rule `country_restriction`).
+mutation SetupShipToCountries {
+  metafieldDefinitionCreate(definition: {
+    name: "Ships to countries"
+    namespace: "custom"
+    key: "ship_to_countries"
+    description: "ISO country codes this product can be shipped to, e.g. US, DE. Empty = anywhere."
+    type: "list.single_line_text_field"
+    ownerType: PRODUCT
+    pin: true
+  }) {
+    createdDefinition { id }
+    userErrors { field message code }
+  }
+  metafieldsSet(metafields: [{ownerId: "gid://shopify/Product/10490410565914", namespace: "custom", key: "ship_to_countries", type: "list.single_line_text_field", value: "[\"US\"]"}]) {
+    metafields { key value }
+    userErrors { field message }
+  }
+}

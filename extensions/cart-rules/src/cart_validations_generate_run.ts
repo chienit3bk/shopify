@@ -16,6 +16,8 @@ function message(v: Violation): string {
       return `The minimum for ${v.title} is ${v.min} (you have ${v.quantity}).`;
     case 'consent':
       return v.error;
+    case 'country_restriction':
+      return `${v.title} can't be shipped to ${v.countryCode} (ships to ${v.shipsTo.join(', ')} only). Remove it or change the delivery address.`;
     case 'case_pack': {
       const {lower, upper} = casePackOptions(v.size, v.quantity);
       const options = lower > 0 ? `${lower} or ${upper}` : `${upper}`;
@@ -49,11 +51,16 @@ export function cartValidationsGenerateRun(input: CartValidationsGenerateRunInpu
     isB2B: Boolean(purchasingCompany),
     isFirstOrder: pastOrders === 0,
     consents: parseConsents(input.cart.consent?.value),
+    deliveryCountry: input.cart.deliveryGroups[0]?.deliveryAddress?.countryCode ?? undefined,
     rate: Number(input.presentmentCurrencyRate) || undefined,
     lines: input.cart.lines.map((line) => ({
       productId: line.merchandise.__typename === 'ProductVariant' ? line.merchandise.product.id : '',
       title: line.merchandise.__typename === 'ProductVariant' ? line.merchandise.product.title : 'This item',
       quantity: line.quantity,
+      shipsTo:
+        line.merchandise.__typename === 'ProductVariant' && Array.isArray(line.merchandise.product.shipsTo?.jsonValue)
+          ? (line.merchandise.product.shipsTo.jsonValue as unknown[]).filter((c): c is string => typeof c === 'string')
+          : undefined,
       subtotal: Number(line.cost.totalAmount.amount),
       isGift: Boolean(line.giftRule?.value),
     })),

@@ -121,6 +121,17 @@ describe('consent rules', () => {
   });
 });
 
+test('country_restriction: a product with a ship-to list is refused elsewhere, once per product', () => {
+  const geo: CartRulesConfig = {version: 1, excludedProductIds: [], rules: [{type: 'country_restriction'}]};
+  const mask = {...line('charcoal', 1, 28), title: 'Charcoal Peel-Off Mask', shipsTo: ['us', 'DE']};
+  expect(violations(geo, {...cart([mask, line('serum', 1, 48)]), deliveryCountry: 'US'})).toEqual([]);
+  expect(violations(geo, {...cart([mask, {...mask, quantity: 2}]), deliveryCountry: 'ca'})).toEqual([
+    {type: 'country_restriction', title: 'Charcoal Peel-Off Mask', countryCode: 'CA', shipsTo: ['US', 'DE']},
+  ]);
+  expect(violations(geo, cart([mask]))).toEqual([]);
+  expect(violations(geo, {...cart([{...mask, isGift: true}]), deliveryCountry: 'CA'})).toEqual([]);
+});
+
 test('parseCartRules drops malformed rules', () => {
   const parsed = parseCartRules({...config, rules: [...config.rules, {type: 'max_quantity', productIds: ['x'], max: 0, label: 'x'}, {type: 'incompatible', productIds: ['x'], label: 'x'}]});
   expect(parsed?.rules).toEqual(config.rules);

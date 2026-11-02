@@ -8,6 +8,11 @@ query CartValidationsGenerateRunInput {
     consent: attribute(key: "Consent") {
       value
     }
+    deliveryGroups {
+      deliveryAddress {
+        countryCode
+      }
+    }
     buyerIdentity {
       # B2B rules apply when buying for a company location; first-order minimum uses its history.
       purchasingCompany {
@@ -46,6 +51,10 @@ query CartValidationsGenerateRunInput {
           product {
             id
             title
+            # Countries this product may ship to (list.single_line_text_field), e.g. ["US"].
+            shipsTo: metafield(namespace: "custom", key: "ship_to_countries") {
+              jsonValue
+            }
           }
         }
       }

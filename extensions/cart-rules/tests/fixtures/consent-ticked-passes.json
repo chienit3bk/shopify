@@ -11,6 +11,7 @@
         "consent": {
           "value": "final-sale"
         },
+        "deliveryGroups": [],
         "buyerIdentity": null,
         "cost": {
           "subtotalAmount": {
@@ -31,7 +32,8 @@
               "__typename": "ProductVariant",
               "product": {
                 "id": "gid://shopify/Product/oil",
-                "title": "Squalane Face Oil"
+                "title": "Squalane Face Oil",
+                "shipsTo": null
               }
             }
           }
