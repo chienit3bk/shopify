@@ -516,6 +516,23 @@ pure service, so a separate "no shipping" line is right there.)
 Setup: `productCreate` "Gift wrap", `scripts/create-gift-wrap.graphql` (store execute),
 `scripts/set-gift-options-config.graphql`, then add **gift-options** in the checkout editor.
 
+## 19. Order note templates
+
+![Order note demo](docs/demos/order-note.gif)
+
+**Delivery instructions in one tap.** Checkout has no order-note field of its own, so the
+`order-note` block (`purchase.checkout.delivery-address.render-after`) writes the note through
+`applyNoteChange`:
+- Suggestions ("Leave at the door", "Call on arrival", "Reception", "No invoice in parcel") are
+  whole lines: tapping adds the line, tapping again removes that line only
+  (`shared/notes/templates.ts`).
+- Free text the buyer typed stays put; the note is capped at 200 characters, and a suggestion
+  that doesn't fit says so instead of being cut.
+- The note shows under **Notes** on the order (test order #1008).
+
+Setup: `scripts/set-order-note-config.graphql` (with `scripts/order-note-config.json`), then add
+**order-note** in the checkout editor.
+
 ---
 
 Built by **Clark (Chien) Nguyen** — Shopify app developer, Checkout Extensibility & Functions.
