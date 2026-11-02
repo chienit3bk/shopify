@@ -1,0 +1,6 @@
+{
+  "isGift": "This order is a gift",
+  "message": "Gift message (printed on a card)",
+  "messageHelp": "{{used}}/{{max}} characters",
+  "wrap": "Add gift wrap (+{{price}})"
+}
