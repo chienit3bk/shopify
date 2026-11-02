@@ -5,6 +5,8 @@
  * Pure, used by the cart-rules Validation Function and unit tests.
  */
 
+import {checkVat, normalizeVat} from '../tax/vat';
+
 /** Who a rule applies to. B2B = buying for a company location; omitted = everyone. */
 export type BuyerScope = 'b2b' | 'retail';
 
@@ -28,6 +30,8 @@ export type CartRule = {buyer?: BuyerScope} & (
    * The consent block stores ticked ids in the "Consent" cart attribute, so it shows on the order.
    */
   | {type: 'consent'; id: string; productIds: string[]; label: string; error: string}
+  /** A VAT number the buyer entered must have the delivery country's format (empty is fine). */
+  | {type: 'vat_number'}
 );
 
 export interface CartRulesConfig {
@@ -59,6 +63,9 @@ export interface RuleCart {
   isFirstOrder?: boolean;
   /** Consent ids the buyer ticked. */
   consents?: string[];
+  /** The "VAT number" attribute and the delivery country it must belong to. */
+  vatNumber?: string;
+  countryCode?: string;
   /** Cart currency per config currency; unknown → only explicit market amounts apply. */
   rate?: number;
   lines: RuleLine[];
@@ -70,7 +77,8 @@ export type Violation =
   | {type: 'incompatible'; titles: string[]; label: string}
   | {type: 'min_quantity'; title: string; min: number; quantity: number}
   | {type: 'case_pack'; title: string; size: number; quantity: number}
-  | {type: 'consent'; id: string; error: string};
+  | {type: 'consent'; id: string; error: string}
+  | {type: 'vat_number'; value: string; expectedPrefix: string | null};
 
 /** Every rule the cart breaks, in config order. Gift lines never count. */
 export function violations(config: CartRulesConfig, cart: RuleCart): Violation[] {
@@ -93,6 +101,11 @@ export function violations(config: CartRulesConfig, cart: RuleCart): Violation[]
     } else if (rule.type === 'case_pack') {
       for (const {title, quantity} of perProduct(paid.filter((l) => rule.productIds.includes(l.productId)))) {
         if (quantity % rule.size !== 0) out.push({type: 'case_pack', title, size: rule.size, quantity});
+      }
+    } else if (rule.type === 'vat_number') {
+      const check = cart.vatNumber ? checkVat(cart.vatNumber, cart.countryCode) : null;
+      if (check && !check.ok) {
+        out.push({type: 'vat_number', value: normalizeVat(cart.vatNumber!), expectedPrefix: check.expectedPrefix ?? null});
       }
     } else if (rule.type === 'consent') {
       if (paid.some((l) => rule.productIds.includes(l.productId)) && !cart.consents?.includes(rule.id)) {
@@ -168,6 +181,7 @@ export function parseCartRules(raw: unknown): CartRulesConfig | null {
     if (!r) return false;
     if (r.buyer !== undefined && r.buyer !== 'b2b' && r.buyer !== 'retail') return false;
     if (r.type === 'min_quantity') return (r.productIds === undefined || ids(r.productIds)) && count(r.min);
+    if (r.type === 'vat_number') return true;
     if (r.type === 'consent') return ids(r.productIds) && typeof r.id === 'string' && /^[a-z0-9-]+$/.test(r.id) && typeof r.label === 'string' && typeof r.error === 'string';
     if (r.type === 'case_pack') return ids(r.productIds) && count(r.size) && r.size > 1;
     if (r.type === 'max_quantity') return ids(r.productIds) && Number.isInteger(r.max) && r.max > 0 && typeof r.label === 'string';

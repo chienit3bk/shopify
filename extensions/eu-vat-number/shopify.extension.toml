@@ -1,0 +1,12 @@
+api_version = "2026-10"
+
+[[extensions]]
+name = "eu-vat-number"
+handle = "eu-vat-number"
+type = "ui_extension"
+uid = "a8c89408-ca4c-42e4-83b4-9fe0f69b29f03383b3d2"
+
+# Under the delivery address: only for EU addresses, only when the buyer says it's a business.
+[[extensions.targeting]]
+module = "./src/VatNumber.tsx"
+target = "purchase.checkout.delivery-address.render-after"

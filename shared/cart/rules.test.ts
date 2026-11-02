@@ -121,6 +121,15 @@ describe('consent rules', () => {
   });
 });
 
+test('vat_number: a wrong-format or wrong-country number is refused, empty is fine', () => {
+  const vat: CartRulesConfig = {version: 1, excludedProductIds: [], rules: [{type: 'vat_number'}]};
+  const base = cart([line('serum', 1, 48)], 'EUR');
+  expect(violations(vat, base)).toEqual([]);
+  expect(violations(vat, {...base, vatNumber: 'DE 123 456 789', countryCode: 'DE'})).toEqual([]);
+  expect(violations(vat, {...base, vatNumber: 'de12345', countryCode: 'DE'})).toEqual([{type: 'vat_number', value: 'DE12345', expectedPrefix: 'DE'}]);
+  expect(violations(vat, {...base, vatNumber: 'DE123456789', countryCode: 'US'})).toEqual([{type: 'vat_number', value: 'DE123456789', expectedPrefix: null}]);
+});
+
 test('parseCartRules drops malformed rules', () => {
   const parsed = parseCartRules({...config, rules: [...config.rules, {type: 'max_quantity', productIds: ['x'], max: 0, label: 'x'}, {type: 'incompatible', productIds: ['x'], label: 'x'}]});
   expect(parsed?.rules).toEqual(config.rules);

@@ -9,6 +9,8 @@
       "presentmentCurrencyRate": "1.0",
       "cart": {
         "consent": null,
+        "vatNumber": null,
+        "deliveryGroups": [],
         "buyerIdentity": {
           "purchasingCompany": null,
           "customer": {

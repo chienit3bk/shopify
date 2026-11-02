@@ -1,0 +1,7 @@
+{
+  "business": "I'm buying for a business",
+  "label": "EU VAT number",
+  "help": "Saved on your order.",
+  "format": "That doesn't look like a {{prefix}} VAT number.",
+  "country": "Use a VAT number that starts with {{prefix}} for this delivery country."
+}

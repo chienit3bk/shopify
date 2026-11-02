@@ -11,6 +11,8 @@
         "consent": {
           "value": "final-sale"
         },
+        "vatNumber": null,
+        "deliveryGroups": [],
         "buyerIdentity": null,
         "cost": {
           "subtotalAmount": {

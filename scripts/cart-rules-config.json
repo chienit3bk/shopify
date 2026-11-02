@@ -8,6 +8,7 @@
     {"buyer": "b2b", "type": "min_quantity", "min": 3},
     {"buyer": "b2b", "type": "case_pack", "productIds": ["gid://shopify/Product/10490410860826"], "size": 6},
     {"buyer": "b2b", "type": "min_subtotal", "amount": 300, "firstOrderAmount": 500, "amounts": {"EUR": 300}, "firstOrderAmounts": {"EUR": 500}, "currencyCode": "USD"},
-    {"type": "consent", "id": "final-sale", "productIds": ["gid://shopify/Product/10490410664218", "gid://shopify/Product/10490410565914"], "label": "I understand Black Friday deals (Squalane Face Oil, Charcoal Peel-Off Mask) are final sale and can't be returned.", "error": "Please confirm the final-sale terms above the Pay button to place your order."}
+    {"type": "consent", "id": "final-sale", "productIds": ["gid://shopify/Product/10490410664218", "gid://shopify/Product/10490410565914"], "label": "I understand Black Friday deals (Squalane Face Oil, Charcoal Peel-Off Mask) are final sale and can't be returned.", "error": "Please confirm the final-sale terms above the Pay button to place your order."},
+    {"type": "vat_number"}
   ]
 }

@@ -16,6 +16,10 @@ function message(v: Violation): string {
       return `The minimum for ${v.title} is ${v.min} (you have ${v.quantity}).`;
     case 'consent':
       return v.error;
+    case 'vat_number':
+      return v.expectedPrefix
+        ? `The VAT number ${v.value} doesn't look like a ${v.expectedPrefix} VAT number. Fix it or remove it to continue.`
+        : `A VAT number (${v.value}) only applies to EU deliveries. Remove it to continue.`;
     case 'case_pack': {
       const {lower, upper} = casePackOptions(v.size, v.quantity);
       const options = lower > 0 ? `${lower} or ${upper}` : `${upper}`;
@@ -49,6 +53,8 @@ export function cartValidationsGenerateRun(input: CartValidationsGenerateRunInpu
     isB2B: Boolean(purchasingCompany),
     isFirstOrder: pastOrders === 0,
     consents: parseConsents(input.cart.consent?.value),
+    vatNumber: input.cart.vatNumber?.value ?? undefined,
+    countryCode: input.cart.deliveryGroups[0]?.deliveryAddress?.countryCode ?? undefined,
     rate: Number(input.presentmentCurrencyRate) || undefined,
     lines: input.cart.lines.map((line) => ({
       productId: line.merchandise.__typename === 'ProductVariant' ? line.merchandise.product.id : '',
@@ -58,8 +64,9 @@ export function cartValidationsGenerateRun(input: CartValidationsGenerateRunInpu
       isGift: Boolean(line.giftRule?.value),
     })),
   })
-    // A consent box can only be ticked after the buyer sees it: ask for it when they place the order.
-    .filter((v) => v.type !== 'consent' || input.buyerJourney.step === BuyerJourneyStep.CheckoutCompletion)
+    // A consent box can only be ticked after the buyer sees it, and the VAT block shows its own
+    // inline error: both are enforced when the order is placed.
+    .filter((v) => (v.type !== 'consent' && v.type !== 'vat_number') || input.buyerJourney.step === BuyerJourneyStep.CheckoutCompletion)
     .map((v) => ({message: message(v), target: '$.cart'}));
 
   return {operations: [{validationAdd: {errors}}]};

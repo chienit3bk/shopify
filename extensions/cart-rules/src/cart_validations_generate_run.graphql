@@ -8,6 +8,15 @@ query CartValidationsGenerateRunInput {
     consent: attribute(key: "Consent") {
       value
     }
+    # Business buyers' VAT number (eu-vat-number block), checked against the delivery country.
+    vatNumber: attribute(key: "VAT number") {
+      value
+    }
+    deliveryGroups {
+      deliveryAddress {
+        countryCode
+      }
+    }
     buyerIdentity {
       # B2B rules apply when buying for a company location; first-order minimum uses its history.
       purchasingCompany {

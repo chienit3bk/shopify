@@ -1,0 +1,77 @@
+{
+  "payload": {
+    "export": "cart-validations-generate-run",
+    "target": "cart.validations.generate.run",
+    "input": {
+      "buyerJourney": {
+        "step": "CHECKOUT_COMPLETION"
+      },
+      "presentmentCurrencyRate": "1.0",
+      "cart": {
+        "consent": null,
+        "vatNumber": {
+          "value": "DE12345"
+        },
+        "deliveryGroups": [
+          {
+            "deliveryAddress": {
+              "countryCode": "DE"
+            }
+          }
+        ],
+        "buyerIdentity": null,
+        "cost": {
+          "subtotalAmount": {
+            "amount": "31.5",
+            "currencyCode": "EUR"
+          }
+        },
+        "lines": [
+          {
+            "quantity": 1,
+            "cost": {
+              "totalAmount": {
+                "amount": "31.5"
+              }
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "product": {
+                "id": "gid://shopify/Product/oil",
+                "title": "Squalane Face Oil"
+              }
+            }
+          }
+        ]
+      },
+      "shop": {
+        "config": {
+          "jsonValue": {
+            "version": 1,
+            "excludedProductIds": [],
+            "rules": [
+              {
+                "type": "vat_number"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "validationAdd": {
+            "errors": [
+              {
+                "message": "The VAT number DE12345 doesn't look like a DE VAT number. Fix it or remove it to continue.",
+                "target": "$.cart"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
