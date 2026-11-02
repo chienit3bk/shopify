@@ -344,6 +344,10 @@ of the rule's variants free. Two gotchas found live:
   list it was loaded for, or the block adds the sold-out gift before the answer arrives and the
   buyer gets Shopify's "Out of stock" dialog.
 
+### Week 2 recap — delivery
+
+![Week 2 recap](docs/demos/week-2-recap.gif)
+
 ## 11. Delivery rules — hide, rename, reorder (delivery customization Function)
 
 ![Delivery rules demo](docs/demos/delivery-rules.gif)
@@ -390,6 +394,22 @@ skips that check where `Intl` doesn't exist.
 
 Setup: `scripts/set-delivery-date-config.graphql`, `scripts/activate-delivery-validation.graphql`,
 then add **delivery-date** in the checkout editor.
+
+## 13. Carbon-neutral delivery add-on
+
+![Carbon offset demo](docs/demos/carbon-offset.gif)
+
+**"Make my delivery carbon-neutral (+$1.50)".** One checkbox below the shipping options adds or
+removes a **service line** — its own product (no shipping, not taxable), so it is priced in the
+buyer's currency, reported like any product, and visible on the order. Turning it off removes
+every add-on line; the block only shows next to real products.
+
+**Services must not unlock offers.** The first live test showed the $1.50 line moving the
+"spend $X more for a free gift" bar. Gift rules now take `excludedProductIds` (like the
+free-shipping and spend-tier configs already did), and the add-on is excluded from all three.
+
+Setup: `scripts/create-carbon-offset-product.graphql` (store execute), `scripts/set-carbon-offset-config.graphql`,
+then add **carbon-offset** in the checkout editor.
 
 ---
 
