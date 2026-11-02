@@ -14,7 +14,7 @@ under the "spend $X more" bar.
 ### ▶ Live demo
 
 Shopify Plus development store. The first time, Shopify asks for the store password
-**`ohsteg`** — enter it, then click the link again to land in checkout with that cart
+**`bfcm`** — enter it, then click the link again to land in checkout with that cart
 (test store, no real payment).
 
 The demo store sells **Solvane**, a fictional skincare brand (14 products in 6 collections,
@@ -143,7 +143,7 @@ A Black Friday block in checkout: a live countdown to the end of the campaign an
 discounted add-ons the buyer adds with one click. Adding an add-on can also unlock the
 free gifts from demo 1 — the two features share the same cart.
 
-**▶ [Try it](https://clark-nguyen.myshopify.com/cart/53265036247322:1)** (store password `ohsteg`) —
+**▶ [Try it](https://clark-nguyen.myshopify.com/cart/53265036247322:1)** (store password `bfcm`) —
 add the face oil, then the mask, and watch both free gifts unlock.
 
 | Case | How |
