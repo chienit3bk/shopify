@@ -23,6 +23,11 @@ export type CartRule = {buyer?: BuyerScope} & (
   /** No productIds = every product (except excluded ones). */
   | {type: 'min_quantity'; productIds?: string[]; min: number}
   | {type: 'case_pack'; productIds: string[]; size: number}
+  /**
+   * A checkbox the buyer must tick when these products are in the cart (age check, final sale…).
+   * The consent block stores ticked ids in the "Consent" cart attribute, so it shows on the order.
+   */
+  | {type: 'consent'; id: string; productIds: string[]; label: string; error: string}
 );
 
 export interface CartRulesConfig {
@@ -52,6 +57,8 @@ export interface RuleCart {
   isB2B?: boolean;
   /** No earlier orders (the company location's, or the customer's). Unknown → false. */
   isFirstOrder?: boolean;
+  /** Consent ids the buyer ticked. */
+  consents?: string[];
   /** Cart currency per config currency; unknown → only explicit market amounts apply. */
   rate?: number;
   lines: RuleLine[];
@@ -62,7 +69,8 @@ export type Violation =
   | {type: 'min_subtotal'; minimum: number; subtotal: number; currencyCode: string; firstOrder: boolean}
   | {type: 'incompatible'; titles: string[]; label: string}
   | {type: 'min_quantity'; title: string; min: number; quantity: number}
-  | {type: 'case_pack'; title: string; size: number; quantity: number};
+  | {type: 'case_pack'; title: string; size: number; quantity: number}
+  | {type: 'consent'; id: string; error: string};
 
 /** Every rule the cart breaks, in config order. Gift lines never count. */
 export function violations(config: CartRulesConfig, cart: RuleCart): Violation[] {
@@ -86,6 +94,10 @@ export function violations(config: CartRulesConfig, cart: RuleCart): Violation[]
       for (const {title, quantity} of perProduct(paid.filter((l) => rule.productIds.includes(l.productId)))) {
         if (quantity % rule.size !== 0) out.push({type: 'case_pack', title, size: rule.size, quantity});
       }
+    } else if (rule.type === 'consent') {
+      if (paid.some((l) => rule.productIds.includes(l.productId)) && !cart.consents?.includes(rule.id)) {
+        out.push({type: 'consent', id: rule.id, error: rule.error});
+      }
     } else if (rule.type === 'min_subtotal') {
       const firstOrder = Boolean(cart.isFirstOrder) && rule.firstOrderAmount !== undefined;
       const minimum = firstOrder
@@ -105,6 +117,18 @@ export function violations(config: CartRulesConfig, cart: RuleCart): Violation[]
     }
   }
   return out;
+}
+
+/** Consent rules that apply to these product ids (for the checkbox block). */
+export function consentsFor(config: CartRulesConfig, productIds: string[]): Array<Extract<CartRule, {type: 'consent'}>> {
+  return config.rules.filter(
+    (r): r is Extract<CartRule, {type: 'consent'}> => r.type === 'consent' && r.productIds.some((id) => productIds.includes(id)),
+  );
+}
+
+/** "final-sale, age-18" ⇄ ['final-sale', 'age-18']. */
+export function parseConsents(value: string | null | undefined): string[] {
+  return (value ?? '').split(',').map((id) => id.trim()).filter(Boolean);
 }
 
 /** Quantity per product, added up across split lines (a discount can split one product in two). */
@@ -144,6 +168,7 @@ export function parseCartRules(raw: unknown): CartRulesConfig | null {
     if (!r) return false;
     if (r.buyer !== undefined && r.buyer !== 'b2b' && r.buyer !== 'retail') return false;
     if (r.type === 'min_quantity') return (r.productIds === undefined || ids(r.productIds)) && count(r.min);
+    if (r.type === 'consent') return ids(r.productIds) && typeof r.id === 'string' && /^[a-z0-9-]+$/.test(r.id) && typeof r.label === 'string' && typeof r.error === 'string';
     if (r.type === 'case_pack') return ids(r.productIds) && count(r.size) && r.size > 1;
     if (r.type === 'max_quantity') return ids(r.productIds) && Number.isInteger(r.max) && r.max > 0 && typeof r.label === 'string';
     if (r.type === 'min_subtotal') return money(r.amount) && typeof r.currencyCode === 'string' && (r.firstOrderAmount === undefined || money(r.firstOrderAmount));

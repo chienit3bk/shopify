@@ -1,0 +1,18 @@
+api_version = "2026-10"
+
+[[extensions]]
+name = "consent-checkbox"
+handle = "consent-checkbox"
+type = "ui_extension"
+uid = "99664997-96b0-4152-a7ef-59da77eeb4401fd153b5"
+
+# Consent rules live in the cart-rules config (scripts/cart-rules-config.json).
+[[extensions.metafields]]
+namespace = "$app"
+key = "cart_rules_config"
+owner_type = "SHOP"
+
+# Right above the pay button: the last thing the buyer reads before placing the order.
+[[extensions.targeting]]
+module = "./src/Consent.tsx"
+target = "purchase.checkout.actions.render-before"

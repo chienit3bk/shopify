@@ -1,5 +1,5 @@
 import {describe, expect, test} from 'vitest';
-import {type CartRulesConfig, casePackOptions, parseCartRules, violations} from './rules';
+import {type CartRulesConfig, casePackOptions, consentsFor, parseCartRules, parseConsents, violations} from './rules';
 
 const config: CartRulesConfig = {
   version: 1,
@@ -101,6 +101,26 @@ describe('B2B rules', () => {
   });
 });
 
+describe('consent rules', () => {
+  const finalSale: CartRulesConfig = {
+    version: 1,
+    excludedProductIds: [],
+    rules: [{type: 'consent', id: 'final-sale', productIds: ['oil', 'charcoal'], label: 'Final sale', error: 'Please confirm the final-sale terms.'}],
+  };
+
+  test('required only when a listed product is in the cart, and only until ticked', () => {
+    expect(violations(finalSale, cart([line('serum', 1, 48)]))).toEqual([]);
+    expect(violations(finalSale, cart([line('oil', 1, 31.5)]))).toEqual([{type: 'consent', id: 'final-sale', error: 'Please confirm the final-sale terms.'}]);
+    expect(violations(finalSale, {...cart([line('oil', 1, 31.5)]), consents: parseConsents(' age-18 , final-sale')})).toEqual([]);
+  });
+
+  test('a free gift line never asks for consent; the block lists only rules for the cart', () => {
+    expect(violations(finalSale, cart([line('oil', 1, 0, true)]))).toEqual([]);
+    expect(consentsFor(finalSale, ['charcoal']).map((r) => r.id)).toEqual(['final-sale']);
+    expect(consentsFor(finalSale, ['serum'])).toEqual([]);
+  });
+});
+
 test('parseCartRules drops malformed rules', () => {
   const parsed = parseCartRules({...config, rules: [...config.rules, {type: 'max_quantity', productIds: ['x'], max: 0, label: 'x'}, {type: 'incompatible', productIds: ['x'], label: 'x'}]});
   expect(parsed?.rules).toEqual(config.rules);
@@ -112,6 +132,7 @@ test('parseCartRules drops malformed rules', () => {
       {type: 'min_quantity', min: 2.5},
       {type: 'min_subtotal', amount: 300, firstOrderAmount: -1, currencyCode: 'EUR'},
       {buyer: 'b2b', type: 'min_quantity', min: 3},
+      {type: 'consent', id: 'Final Sale!', productIds: ['x'], label: 'x', error: 'x'},
     ],
   });
   expect(b2bRules?.rules).toEqual([{buyer: 'b2b', type: 'min_quantity', min: 3}]);

@@ -1,0 +1,68 @@
+{
+  "payload": {
+    "export": "cart-validations-generate-run",
+    "target": "cart.validations.generate.run",
+    "input": {
+      "buyerJourney": {
+        "step": "CHECKOUT_INTERACTION"
+      },
+      "presentmentCurrencyRate": "1.0",
+      "cart": {
+        "consent": null,
+        "buyerIdentity": null,
+        "cost": {
+          "subtotalAmount": {
+            "amount": "31.5",
+            "currencyCode": "USD"
+          }
+        },
+        "lines": [
+          {
+            "quantity": 1,
+            "cost": {
+              "totalAmount": {
+                "amount": "31.5"
+              }
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "product": {
+                "id": "gid://shopify/Product/oil",
+                "title": "Squalane Face Oil"
+              }
+            }
+          }
+        ]
+      },
+      "shop": {
+        "config": {
+          "jsonValue": {
+            "version": 1,
+            "excludedProductIds": [],
+            "rules": [
+              {
+                "type": "consent",
+                "id": "final-sale",
+                "productIds": [
+                  "gid://shopify/Product/oil"
+                ],
+                "label": "I understand Squalane Face Oil is final sale.",
+                "error": "Please confirm the final-sale terms to place your order."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "validationAdd": {
+            "errors": []
+          }
+        }
+      ]
+    }
+  }
+}
