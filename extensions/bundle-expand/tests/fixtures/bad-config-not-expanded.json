@@ -1,0 +1,38 @@
+{
+  "payload": {
+    "export": "cart-transform-run",
+    "target": "cart.transform.run",
+    "input": {
+      "cart": {
+        "lines": [
+          {
+            "id": "gid://shopify/CartLine/1",
+            "cost": {
+              "amountPerQuantity": {
+                "amount": "99.0"
+              }
+            },
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "bundle": {
+                "jsonValue": {
+                  "version": 1,
+                  "components": [
+                    {
+                      "variantId": "gid://shopify/ProductVariant/1",
+                      "quantity": 1,
+                      "weight": 24
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "output": {
+      "operations": []
+    }
+  }
+}
