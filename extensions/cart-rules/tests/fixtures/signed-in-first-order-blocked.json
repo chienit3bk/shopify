@@ -8,6 +8,7 @@
       },
       "presentmentCurrencyRate": "1.0",
       "cart": {
+        "consent": null,
         "buyerIdentity": {
           "purchasingCompany": null,
           "customer": {

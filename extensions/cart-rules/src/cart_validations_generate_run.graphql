@@ -4,6 +4,10 @@ query CartValidationsGenerateRunInput {
   }
   presentmentCurrencyRate
   cart {
+    # Consent ids ticked in the consent block, e.g. "final-sale".
+    consent: attribute(key: "Consent") {
+      value
+    }
     buyerIdentity {
       # B2B rules apply when buying for a company location; first-order minimum uses its history.
       purchasingCompany {

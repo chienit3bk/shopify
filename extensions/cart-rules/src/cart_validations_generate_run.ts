@@ -4,7 +4,7 @@ import {
   type CartValidationsGenerateRunResult,
   type ValidationError,
 } from '../generated/api';
-import {type Violation, casePackOptions, parseCartRules, violations} from '../../../shared/cart/rules';
+import {type Violation, casePackOptions, parseCartRules, parseConsents, violations} from '../../../shared/cart/rules';
 
 function message(v: Violation): string {
   switch (v.type) {
@@ -14,6 +14,8 @@ function message(v: Violation): string {
       return `The minimum ${v.firstOrder ? 'first order' : 'order'} is ${v.minimum.toFixed(2)} ${v.currencyCode}. Add ${(v.minimum - v.subtotal).toFixed(2)} ${v.currencyCode} more to check out.`;
     case 'min_quantity':
       return `The minimum for ${v.title} is ${v.min} (you have ${v.quantity}).`;
+    case 'consent':
+      return v.error;
     case 'case_pack': {
       const {lower, upper} = casePackOptions(v.size, v.quantity);
       const options = lower > 0 ? `${lower} or ${upper}` : `${upper}`;
@@ -46,6 +48,7 @@ export function cartValidationsGenerateRun(input: CartValidationsGenerateRunInpu
     subtotal: Number(input.cart.cost.subtotalAmount.amount),
     isB2B: Boolean(purchasingCompany),
     isFirstOrder: pastOrders === 0,
+    consents: parseConsents(input.cart.consent?.value),
     rate: Number(input.presentmentCurrencyRate) || undefined,
     lines: input.cart.lines.map((line) => ({
       productId: line.merchandise.__typename === 'ProductVariant' ? line.merchandise.product.id : '',
@@ -54,7 +57,10 @@ export function cartValidationsGenerateRun(input: CartValidationsGenerateRunInpu
       subtotal: Number(line.cost.totalAmount.amount),
       isGift: Boolean(line.giftRule?.value),
     })),
-  }).map((v) => ({message: message(v), target: '$.cart'}));
+  })
+    // A consent box can only be ticked after the buyer sees it: ask for it when they place the order.
+    .filter((v) => v.type !== 'consent' || input.buyerJourney.step === BuyerJourneyStep.CheckoutCompletion)
+    .map((v) => ({message: message(v), target: '$.cart'}));
 
   return {operations: [{validationAdd: {errors}}]};
 }

@@ -476,6 +476,25 @@ serums past a "max 3 serums" rule. Count components in the rule if that matters.
 Setup: `productCreate` "Glow Routine Set", `scripts/create-bundle.graphql` (store execute), then
 `scripts/activate-bundle-expand.graphql` (app execute; scope `write_cart_transforms`).
 
+## 17. Required consent checkbox (final sale, age 18+)
+
+![Consent checkbox demo](docs/demos/consent-checkbox.gif)
+
+**"I understand Black Friday deals are final sale and can't be returned."** A `consent` rule in
+the cart-rules config lists the products that need an explicit yes:
+- The `consent-checkbox` block (`purchase.checkout.actions.render-before`, right above Pay now)
+  shows the box only when one of those products is in the cart (free gift lines don't count).
+- Ticking it writes the rule id to the **`Consent` cart attribute**, so the order shows
+  "Consent: final-sale" under Additional details.
+- The `cart-rules` Function refuses the order without it, but only at `CHECKOUT_COMPLETION`: a
+  box the buyer hasn't reached yet shouldn't be an error while they type their address.
+
+Same rule for age checks: `{"type": "consent", "id": "age-18", "label": "I'm 18 or older", …}`.
+A UI-only checkbox is a suggestion; the Function makes it a requirement.
+
+Setup: add the rule to `scripts/cart-rules-config.json`, run `scripts/set-cart-rules-config.graphql`,
+then add **consent-checkbox** in the checkout editor.
+
 ---
 
 Built by **Clark (Chien) Nguyen** — Shopify app developer, Checkout Extensibility & Functions.
