@@ -1,0 +1,23 @@
+# One-time setup for the Glow Routine Set bundle (run with `shopify store execute --allow-mutations`).
+# 1) productCreate "Glow Routine Set" → note the ids, 2) this file prices it, marks it as bundle-only
+# (requiresComponents: never sold without the cart transform), stores its components with their
+# list prices as weights, and publishes it to the Online Store.
+mutation SetupGlowRoutineBundle {
+  productVariantsBulkUpdate(
+    productId: "gid://shopify/Product/10495207964954"
+    variants: [{
+      id: "gid://shopify/ProductVariant/53283379314970"
+      price: "99.00"
+      compareAtPrice: "124.00"
+      requiresComponents: true
+      inventoryItem: {tracked: false}
+      metafields: [{namespace: "custom", key: "bundle_components", type: "json", value: "{\"version\": 1, \"components\": [{\"variantId\": \"gid://shopify/ProductVariant/53265035952410\", \"quantity\": 1, \"weight\": 24}, {\"variantId\": \"gid://shopify/ProductVariant/53265036116250\", \"quantity\": 1, \"weight\": 48}, {\"variantId\": \"gid://shopify/ProductVariant/53265036280090\", \"quantity\": 1, \"weight\": 52}]}"}]
+    }]
+  ) {
+    productVariants { id price requiresComponents }
+    userErrors { field message }
+  }
+  publishablePublish(id: "gid://shopify/Product/10495207964954", input: [{publicationId: "gid://shopify/Publication/322667872538"}]) {
+    userErrors { message }
+  }
+}

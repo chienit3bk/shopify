@@ -455,6 +455,27 @@ Two things the live test caught:
 The demo was recorded with the B2B rules applied to every buyer (a B2B login needs the buyer's
 email code); `scripts/cart-rules-config.json` scopes them to company buyers.
 
+## 16. Fixed-price bundle — Cart Transform `lineExpand`
+
+![Bundle demo](docs/demos/bundle-expand.gif)
+
+**"Glow Routine Set" — $99 instead of $124.** One product in the store and the cart; the
+`bundle-expand` Function (`cart.transform.run`) expands it into Cleanser + Serum + Night Cream
+at checkout, so each component keeps its own inventory and revenue line on the order.
+
+- Components and their list prices live in a variant metafield (`custom.bundle_components`).
+- `shared/bundle/bundle.ts` splits the bundle's own price (already in the buyer's currency) by
+  list price, rounded to the cent, with leftover cents added so the parts sum exactly:
+  $19.17 + $38.32 + $41.51 = $99.00 (test order #1004).
+- The bundle variant has `requiresComponents: true`, so it can't be sold without the expansion.
+- `lineExpand` works on every plan; only `lineUpdate` (price override) is Plus-only.
+
+Good to know: validation Functions see the **bundle line**, not its components — 4 sets carry 4
+serums past a "max 3 serums" rule. Count components in the rule if that matters.
+
+Setup: `productCreate` "Glow Routine Set", `scripts/create-bundle.graphql` (store execute), then
+`scripts/activate-bundle-expand.graphql` (app execute; scope `write_cart_transforms`).
+
 ---
 
 Built by **Clark (Chien) Nguyen** — Shopify app developer, Checkout Extensibility & Functions.

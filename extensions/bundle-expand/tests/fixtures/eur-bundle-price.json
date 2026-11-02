@@ -1,0 +1,89 @@
+{
+  "payload": {
+    "export": "cart-transform-run",
+    "target": "cart.transform.run",
+    "input": {
+      "cart": {
+        "lines": [
+          {
+            "id": "gid://shopify/CartLine/1",
+            "cost": {
+              "amountPerQuantity": {
+                "amount": "91.0"
+              }
+            },
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "bundle": {
+                "jsonValue": {
+                  "version": 1,
+                  "components": [
+                    {
+                      "variantId": "gid://shopify/ProductVariant/1",
+                      "quantity": 1,
+                      "weight": 24
+                    },
+                    {
+                      "variantId": "gid://shopify/ProductVariant/2",
+                      "quantity": 1,
+                      "weight": 48
+                    },
+                    {
+                      "variantId": "gid://shopify/ProductVariant/3",
+                      "quantity": 1,
+                      "weight": 52
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "lineExpand": {
+            "cartLineId": "gid://shopify/CartLine/1",
+            "expandedCartItems": [
+              {
+                "merchandiseId": "gid://shopify/ProductVariant/1",
+                "quantity": 1,
+                "price": {
+                  "adjustment": {
+                    "fixedPricePerUnit": {
+                      "amount": "17.62"
+                    }
+                  }
+                }
+              },
+              {
+                "merchandiseId": "gid://shopify/ProductVariant/2",
+                "quantity": 1,
+                "price": {
+                  "adjustment": {
+                    "fixedPricePerUnit": {
+                      "amount": "35.22"
+                    }
+                  }
+                }
+              },
+              {
+                "merchandiseId": "gid://shopify/ProductVariant/3",
+                "quantity": 1,
+                "price": {
+                  "adjustment": {
+                    "fixedPricePerUnit": {
+                      "amount": "38.16"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

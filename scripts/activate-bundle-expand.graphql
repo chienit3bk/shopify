@@ -1,0 +1,7 @@
+# Turns on the bundle-expand cart transform (run with `shopify app execute`). One per app per shop.
+mutation ActivateBundleExpand {
+  cartTransformCreate(functionHandle: "bundle-expand", blockOnFailure: false) {
+    cartTransform { id functionId }
+    userErrors { field message }
+  }
+}

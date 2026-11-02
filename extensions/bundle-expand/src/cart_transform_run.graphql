@@ -1,0 +1,22 @@
+query CartTransformRunInput {
+  cart {
+    lines {
+      id
+      cost {
+        # One bundle, in the buyer's currency (market prices included).
+        amountPerQuantity {
+          amount
+        }
+      }
+      merchandise {
+        __typename
+        ... on ProductVariant {
+          # Components + list-price weights (scripts/create-bundle.graphql).
+          bundle: metafield(namespace: "custom", key: "bundle_components") {
+            jsonValue
+          }
+        }
+      }
+    }
+  }
+}
