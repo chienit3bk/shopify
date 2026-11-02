@@ -1,0 +1,22 @@
+api_version = "2026-10"
+
+[[extensions]]
+name = "gift-options"
+handle = "gift-options"
+type = "ui_extension"
+uid = "46f919d5-5e63-4690-a90d-df6bee56e5aa0b9559c9"
+
+# Which variant is the gift wrap, and how long a message fits the card (scripts/gift-options-config.json).
+[[extensions.metafields]]
+namespace = "$app"
+key = "gift_options_config"
+owner_type = "SHOP"
+
+# Storefront API: the wrap's price in the buyer's currency.
+[extensions.capabilities]
+api_access = true
+
+# Under the items in the order summary.
+[[extensions.targeting]]
+module = "./src/GiftOptions.tsx"
+target = "purchase.checkout.cart-line-list.render-after"

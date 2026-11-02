@@ -1,0 +1,22 @@
+# One-time setup for the gift wrap add-on (run with `shopify store execute --allow-mutations`).
+# 1) productCreate "Gift wrap" → note the ids, 2) this file prices it, sets its description and
+# publishes it to the Online Store. It "requires shipping" (weight 0) on purpose: a no-shipping line
+# becomes its own fulfillment, and the warehouse would see the wrap apart from the items it wraps.
+mutation SetupGiftWrap {
+  productUpdate(product: {
+    id: "gid://shopify/Product/10495215698202"
+    descriptionHtml: "<p>Wrapped in kraft paper with a blue ribbon. Your gift message goes on a card inside.</p>"
+  }) {
+    userErrors { field message }
+  }
+  productVariantsBulkUpdate(
+    productId: "gid://shopify/Product/10495215698202"
+    variants: [{id: "gid://shopify/ProductVariant/53283457237274", price: "5.00", inventoryItem: {requiresShipping: true, tracked: false, measurement: {weight: {value: 0, unit: GRAMS}}}}]
+  ) {
+    productVariants { id price }
+    userErrors { field message }
+  }
+  publishablePublish(id: "gid://shopify/Product/10495215698202", input: [{publicationId: "gid://shopify/Publication/322667872538"}]) {
+    userErrors { message }
+  }
+}

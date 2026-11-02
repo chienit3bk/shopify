@@ -1,0 +1,8 @@
+# Writes scripts/gift-options-config.json to the app-owned shop metafield read by the gift-options block.
+# shopify app execute --store <shop> --query-file scripts/set-gift-options-config.graphql --variable-file <vars.json>
+mutation SetGiftOptionsConfig($shopId: ID!, $config: String!) {
+  metafieldsSet(metafields: [{ownerId: $shopId, namespace: "$app", key: "gift_options_config", type: "json", value: $config}]) {
+    metafields { key updatedAt }
+    userErrors { field message }
+  }
+}

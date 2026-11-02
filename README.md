@@ -495,6 +495,27 @@ A UI-only checkbox is a suggestion; the Function makes it a requirement.
 Setup: add the rule to `scripts/cart-rules-config.json`, run `scripts/set-cart-rules-config.graphql`,
 then add **consent-checkbox** in the checkout editor.
 
+## 18. Gift message + gift wrap
+
+![Gift options demo](docs/demos/gift-options.gif)
+
+**"This order is a gift"** under the items in the order summary (`gift-options` block,
+`purchase.checkout.cart-line-list.render-after`):
+- **Card message** → the `Gift message` cart attribute (Additional details on the order), cleaned
+  in `shared/gift/options.ts`: no control characters, at most one blank line, cut to 200 chars.
+- **Gift wrap (+$5)** → its own product line, priced in the buyer's currency via the Storefront
+  API; one wrap per order, unticking "gift" removes both.
+- The wrap is in `excludedProductIds` of the gift, free-shipping, tier and cart-rules configs:
+  a $5 service never unlocks a $9 gift.
+
+Lesson from the live test: a wrap that "doesn't require shipping" becomes **its own
+fulfillment** (order #1006), so the warehouse sees it apart from the items it wraps. Requiring
+shipping with weight 0 keeps it in the same parcel (order #1007). (The carbon-offset add-on is a
+pure service, so a separate "no shipping" line is right there.)
+
+Setup: `productCreate` "Gift wrap", `scripts/create-gift-wrap.graphql` (store execute),
+`scripts/set-gift-options-config.graphql`, then add **gift-options** in the checkout editor.
+
 ---
 
 Built by **Clark (Chien) Nguyen** — Shopify app developer, Checkout Extensibility & Functions.
