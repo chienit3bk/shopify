@@ -17,14 +17,19 @@
             "cost": {
               "subtotalAmount": {
                 "amount": "32.0"
-              }
+              },
+              "amountPerQuantity": {
+                "amount": "32.0"
+              },
+              "compareAtAmountPerQuantity": null
             },
             "giftRule": null,
             "merchandise": {
               "__typename": "ProductVariant",
               "id": "gid://shopify/ProductVariant/mask",
               "product": {
-                "id": "gid://shopify/Product/mask"
+                "id": "gid://shopify/Product/mask",
+                "isGiftCard": false
               }
             }
           }

@@ -21,7 +21,39 @@ export interface TiersConfig {
   version: 1;
   currencyCode: string;
   volume: {productIds: string[]; tiers: VolumeTier[]; label: string} | null;
-  spend: {tiers: SpendTier[]; label: string; excludedProductIds: string[]} | null;
+  spend: {
+    tiers: SpendTier[];
+    label: string;
+    excludedProductIds: string[];
+    /** Items already on sale (compare-at price above the price) don't count and get no extra %. */
+    excludeOnSale?: boolean;
+    /** Gift cards don't count and are never discounted. */
+    excludeGiftCards?: boolean;
+  } | null;
+}
+
+export interface SpendLine {
+  productId: string;
+  isGift: boolean;
+  /** Compare-at price above the selling price. */
+  onSale?: boolean;
+  isGiftCard?: boolean;
+}
+
+export type SpendExclusion = 'gift' | 'excluded' | 'sale' | 'gift_card';
+
+/** Why a line doesn't count towards (or get) the spend discount, or null when it does. */
+export function spendExclusion(spend: NonNullable<TiersConfig['spend']>, line: SpendLine): SpendExclusion | null {
+  if (line.isGift) return 'gift';
+  if (spend.excludeGiftCards && line.isGiftCard) return 'gift_card';
+  if (spend.excludeOnSale && line.onSale) return 'sale';
+  if (spend.excludedProductIds.includes(line.productId)) return 'excluded';
+  return null;
+}
+
+/** On sale = a compare-at price above the price (both per unit, same currency). */
+export function isOnSale(price: number, compareAt: number | null | undefined): boolean {
+  return typeof compareAt === 'number' && compareAt > price;
 }
 
 export interface Progress<T> {
@@ -96,7 +128,13 @@ export function parseTiersConfig(raw: unknown): TiersConfig | null {
       s.tiers.length > 0 &&
       s.tiers.every((t: any) => typeof t?.amount === 'number' && t.amount > 0 && percent(t.percent));
     if (!ok) return null;
-    spend = {tiers: s.tiers, label: s.label, excludedProductIds: s.excludedProductIds ?? []};
+    spend = {
+      tiers: s.tiers,
+      label: s.label,
+      excludedProductIds: s.excludedProductIds ?? [],
+      excludeOnSale: s.excludeOnSale === true,
+      excludeGiftCards: s.excludeGiftCards === true,
+    };
   }
   return {version: 1, currencyCode: c.currencyCode, volume, spend};
 }

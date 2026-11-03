@@ -12,6 +12,10 @@ namespace = "$app"
 key = "tiers_config"
 owner_type = "SHOP"
 
+# Storefront API: compare-at prices and gift-card flags, to leave out what the Function leaves out.
+[extensions.capabilities]
+api_access = true
+
 # Above the discount code field: "Spend $30.00 more for 10% off".
 [[extensions.targeting]]
 module = "./src/Spend.tsx"

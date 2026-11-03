@@ -17,14 +17,19 @@
             "cost": {
               "subtotalAmount": {
                 "amount": "140.0"
-              }
+              },
+              "amountPerQuantity": {
+                "amount": "140.0"
+              },
+              "compareAtAmountPerQuantity": null
             },
             "giftRule": null,
             "merchandise": {
               "__typename": "ProductVariant",
               "id": "gid://shopify/ProductVariant/serum",
               "product": {
-                "id": "gid://shopify/Product/serum"
+                "id": "gid://shopify/Product/serum",
+                "isGiftCard": false
               }
             }
           },
@@ -34,14 +39,19 @@
             "cost": {
               "subtotalAmount": {
                 "amount": "42.0"
-              }
+              },
+              "amountPerQuantity": {
+                "amount": "42.0"
+              },
+              "compareAtAmountPerQuantity": null
             },
             "giftRule": null,
             "merchandise": {
               "__typename": "ProductVariant",
               "id": "gid://shopify/ProductVariant/sale",
               "product": {
-                "id": "gid://shopify/Product/sale"
+                "id": "gid://shopify/Product/sale",
+                "isGiftCard": false
               }
             }
           },
@@ -51,7 +61,11 @@
             "cost": {
               "subtotalAmount": {
                 "amount": "9.0"
-              }
+              },
+              "amountPerQuantity": {
+                "amount": "9.0"
+              },
+              "compareAtAmountPerQuantity": null
             },
             "giftRule": {
               "value": "spend-75"
@@ -60,7 +74,8 @@
               "__typename": "ProductVariant",
               "id": "gid://shopify/ProductVariant/gift",
               "product": {
-                "id": "gid://shopify/Product/gift"
+                "id": "gid://shopify/Product/gift",
+                "isGiftCard": false
               }
             }
           }

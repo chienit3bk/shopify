@@ -6,12 +6,13 @@ import {
   OrderDiscountSelectionStrategy,
   ProductDiscountSelectionStrategy,
 } from '../generated/api';
-import {parseTiersConfig, spendProgress, volumeProgress} from '../../../shared/tiers/tiers';
+import {isOnSale, parseTiersConfig, spendExclusion, spendProgress, volumeProgress} from '../../../shared/tiers/tiers';
 
 /**
  * One config, two discount classes:
  *   PRODUCT — volume tiers per SKU (quantity summed across lines of the same variant),
- *   ORDER   — spend tiers on the subtotal of the lines that count (no gifts, no excluded products).
+ *   ORDER   — spend tiers on the subtotal of the lines that count (no gifts, no excluded products,
+ *             optionally no sale items or gift cards), and only those lines get the % off.
  */
 export function cartLinesDiscountsGenerateRun(input: CartInput): CartLinesDiscountsGenerateRunResult {
   const config = parseTiersConfig(input.shop.config?.jsonValue);
@@ -24,6 +25,11 @@ export function cartLinesDiscountsGenerateRun(input: CartInput): CartLinesDiscou
     isGift: Boolean(line.giftRule?.value),
     variantId: line.merchandise.__typename === 'ProductVariant' ? line.merchandise.id : '',
     productId: line.merchandise.__typename === 'ProductVariant' ? line.merchandise.product.id : '',
+    isGiftCard: line.merchandise.__typename === 'ProductVariant' && line.merchandise.product.isGiftCard,
+    onSale: isOnSale(
+      Number(line.cost.amountPerQuantity.amount),
+      line.cost.compareAtAmountPerQuantity ? Number(line.cost.compareAtAmountPerQuantity.amount) : null,
+    ),
   }));
   const operations: CartOperation[] = [];
 
@@ -50,8 +56,8 @@ export function cartLinesDiscountsGenerateRun(input: CartInput): CartLinesDiscou
   }
 
   if (config.spend && input.discount.discountClasses.includes(DiscountClass.Order)) {
-    const excluded = new Set(config.spend.excludedProductIds);
-    const notCounted = lines.filter((line) => line.isGift || excluded.has(line.productId));
+    const spend = config.spend;
+    const notCounted = lines.filter((line) => spendExclusion(spend, line) !== null);
     const subtotal = lines.filter((line) => !notCounted.includes(line)).reduce((sum, line) => sum + line.subtotal, 0);
     const tier = spendProgress(
       config,
