@@ -548,6 +548,24 @@ it with the delivery country (rule `{"type": "country_restriction"}`):
 Setup: `scripts/setup-ship-to-countries.graphql` (store execute: definition + demo value), add the
 rule to `scripts/cart-rules-config.json`, run `scripts/set-cart-rules-config.graphql`.
 
+## 21. Spend tiers that skip sale items and gift cards
+
+![Spend tiers excluding sale items demo](docs/demos/tiers-exclude-sale.gif)
+
+**No discount on top of a discount.** The spend tiers from section 9 gain two switches in
+`scripts/tiers-config.json`:
+- `"excludeOnSale": true` — a line whose compare-at price is above its price doesn't count
+  towards the tier and gets no extra %, with no product list to keep up to date.
+- `"excludeGiftCards": true` — gift cards don't count and are never discounted.
+
+Cart $118 = Serum $48 + Night Cream $52 + Exfoliator $18 (on sale, was $24) → $100 counts → 5% off
+those two lines = **−$5.00**, not $5.90. The `tiered-discount` Function reads
+`compareAtAmountPerQuantity` and `product.isGiftCard`; the `spend-tiers` bar gets the same flags
+from the Storefront API and says "Sale items and gift cards don't count towards this discount."
+
+Setup: `scripts/set-demo-sale-item.graphql` (store execute, demo compare-at), then
+`scripts/set-tiers-config.graphql`.
+
 ---
 
 Built by **Clark (Chien) Nguyen** — Shopify app developer, Checkout Extensibility & Functions.

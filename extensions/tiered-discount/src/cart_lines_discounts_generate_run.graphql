@@ -14,6 +14,13 @@ query CartInput {
         subtotalAmount {
           amount
         }
+        # A compare-at above the price = already on sale (excludeOnSale).
+        amountPerQuantity {
+          amount
+        }
+        compareAtAmountPerQuantity {
+          amount
+        }
       }
       # Gift lines are already free: never discounted, never counted.
       giftRule: attribute(key: "_free_gift") {
@@ -25,6 +32,7 @@ query CartInput {
           id
           product {
             id
+            isGiftCard
           }
         }
       }

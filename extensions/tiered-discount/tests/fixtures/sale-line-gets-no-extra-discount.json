@@ -1,0 +1,148 @@
+{
+  "payload": {
+    "export": "cart-lines-discounts-generate-run",
+    "target": "cart.lines.discounts.generate.run",
+    "input": {
+      "presentmentCurrencyRate": "1.0",
+      "cart": {
+        "cost": {
+          "subtotalAmount": {
+            "currencyCode": "USD"
+          }
+        },
+        "lines": [
+          {
+            "id": "gid://shopify/CartLine/1",
+            "quantity": 1,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "140.0"
+              },
+              "amountPerQuantity": {
+                "amount": "140.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/1",
+              "product": {
+                "id": "gid://shopify/Product/serum",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/2",
+            "quantity": 1,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "18.0"
+              },
+              "amountPerQuantity": {
+                "amount": "18.0"
+              },
+              "compareAtAmountPerQuantity": {
+                "amount": "24.0"
+              }
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/2",
+              "product": {
+                "id": "gid://shopify/Product/konjac",
+                "isGiftCard": false
+              }
+            }
+          }
+        ]
+      },
+      "shop": {
+        "config": {
+          "jsonValue": {
+            "version": 1,
+            "currencyCode": "USD",
+            "volume": {
+              "productIds": [
+                "gid://shopify/Product/mask"
+              ],
+              "tiers": [
+                {
+                  "minQuantity": 2,
+                  "percent": 5
+                },
+                {
+                  "minQuantity": 4,
+                  "percent": 10
+                },
+                {
+                  "minQuantity": 6,
+                  "percent": 15
+                }
+              ],
+              "label": "Stock up & save"
+            },
+            "spend": {
+              "tiers": [
+                {
+                  "amount": 100,
+                  "amounts": {
+                    "EUR": 90
+                  },
+                  "percent": 5
+                },
+                {
+                  "amount": 150,
+                  "amounts": {
+                    "EUR": 140
+                  },
+                  "percent": 10
+                }
+              ],
+              "label": "Spend more, save more",
+              "excludedProductIds": [],
+              "excludeOnSale": true,
+              "excludeGiftCards": true
+            }
+          }
+        }
+      },
+      "discount": {
+        "discountClasses": [
+          "PRODUCT",
+          "ORDER"
+        ]
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "orderDiscountsAdd": {
+            "candidates": [
+              {
+                "message": "Spend more, save more \u2014 5% off",
+                "targets": [
+                  {
+                    "orderSubtotal": {
+                      "excludedCartLineIds": [
+                        "gid://shopify/CartLine/2"
+                      ]
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "5.0"
+                  }
+                }
+              }
+            ],
+            "selectionStrategy": "FIRST"
+          }
+        }
+      ]
+    }
+  }
+}

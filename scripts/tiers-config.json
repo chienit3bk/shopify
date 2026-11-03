@@ -45,6 +45,8 @@
       "gid://shopify/Product/10490410565914",
       "gid://shopify/Product/10493236117786",
       "gid://shopify/Product/10495215698202"
-    ]
+    ],
+    "excludeOnSale": true,
+    "excludeGiftCards": true
   }
 }

@@ -1,0 +1,11 @@
+# Demo sale item for "spend tiers exclude sale items" (run with `shopify store execute --allow-mutations`):
+# Konjac Body Exfoliator at $18, compare-at $24.
+mutation SetDemoSaleItem {
+  productVariantsBulkUpdate(
+    productId: "gid://shopify/Product/10490410959130"
+    variants: [{id: "gid://shopify/ProductVariant/53265037066522", price: "18.00", compareAtPrice: "24.00"}]
+  ) {
+    productVariants { id price compareAtPrice }
+    userErrors { field message }
+  }
+}

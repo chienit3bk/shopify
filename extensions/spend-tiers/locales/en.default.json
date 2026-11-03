@@ -1,5 +1,6 @@
 {
   "spendMore": "Spend {{amount}} more for {{percent}}% off",
   "saving": "{{label}}: you're saving {{percent}}%",
-  "progress": "Progress towards the next discount"
+  "progress": "Progress towards the next discount",
+  "notCounted": "Sale items and gift cards don't count towards this discount."
 }
