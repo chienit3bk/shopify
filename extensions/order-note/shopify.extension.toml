@@ -1,0 +1,18 @@
+api_version = "2026-10"
+
+[[extensions]]
+name = "order-note"
+handle = "order-note"
+type = "ui_extension"
+uid = "1c913eac-a772-4a89-b985-ef52b6f6edb1f9529a1d"
+
+# Which one-tap templates to offer (scripts/order-note-config.json).
+[[extensions.metafields]]
+namespace = "$app"
+key = "order_note_config"
+owner_type = "SHOP"
+
+# Under the delivery address: instructions for the courier.
+[[extensions.targeting]]
+module = "./src/OrderNote.tsx"
+target = "purchase.checkout.delivery-address.render-after"

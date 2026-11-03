@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "maxLength": 200,
+  "templates": [
+    {"id": "door", "label": "Leave at the door", "text": "Leave at the front door"},
+    {"id": "call", "label": "Call on arrival", "text": "Call me on arrival"},
+    {"id": "reception", "label": "Reception", "text": "Deliver to reception / front desk"},
+    {"id": "no-invoice", "label": "No invoice in parcel", "text": "It's a gift: no invoice in the parcel"}
+  ]
+}

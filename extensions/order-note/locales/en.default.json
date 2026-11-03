@@ -1,0 +1,6 @@
+{
+  "heading": "Delivery instructions",
+  "label": "Note for this order",
+  "help": "{{used}}/{{max}} characters. Tap a suggestion to add or remove it.",
+  "tooLong": "That suggestion doesn't fit. Shorten the note first."
+}
