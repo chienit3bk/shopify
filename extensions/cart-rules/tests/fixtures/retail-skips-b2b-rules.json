@@ -9,6 +9,7 @@
       "presentmentCurrencyRate": "1.0",
       "cart": {
         "consent": null,
+        "deliveryGroups": [],
         "buyerIdentity": {
           "purchasingCompany": null,
           "customer": {
@@ -35,7 +36,8 @@
               "__typename": "ProductVariant",
               "product": {
                 "id": "gid://shopify/Product/patches",
-                "title": "Hydrogel Eye Patches"
+                "title": "Hydrogel Eye Patches",
+                "shipsTo": null
               }
             }
           }

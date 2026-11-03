@@ -1,0 +1,74 @@
+{
+  "payload": {
+    "export": "cart-validations-generate-run",
+    "target": "cart.validations.generate.run",
+    "input": {
+      "buyerJourney": {
+        "step": "CHECKOUT_COMPLETION"
+      },
+      "presentmentCurrencyRate": "1.0",
+      "cart": {
+        "consent": null,
+        "deliveryGroups": [
+          {
+            "deliveryAddress": {
+              "countryCode": "US"
+            }
+          }
+        ],
+        "buyerIdentity": null,
+        "cost": {
+          "subtotalAmount": {
+            "amount": "28.0",
+            "currencyCode": "USD"
+          }
+        },
+        "lines": [
+          {
+            "quantity": 1,
+            "cost": {
+              "totalAmount": {
+                "amount": "28.0"
+              }
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "product": {
+                "id": "gid://shopify/Product/charcoal",
+                "title": "Charcoal Peel-Off Mask",
+                "shipsTo": {
+                  "jsonValue": [
+                    "US"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      "shop": {
+        "config": {
+          "jsonValue": {
+            "version": 1,
+            "excludedProductIds": [],
+            "rules": [
+              {
+                "type": "country_restriction"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "validationAdd": {
+            "errors": []
+          }
+        }
+      ]
+    }
+  }
+}

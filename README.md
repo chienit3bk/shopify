@@ -533,6 +533,21 @@ Setup: `productCreate` "Gift wrap", `scripts/create-gift-wrap.graphql` (store ex
 Setup: `scripts/set-order-note-config.graphql` (with `scripts/order-note-config.json`), then add
 **order-note** in the checkout editor.
 
+## 20. Country-restricted products (no catalogs)
+
+![Country restrictions demo](docs/demos/country-restrictions.gif)
+
+**"This mask ships to the US only."** The merchant fills a product field, **Ships to countries**
+(metafield `custom.ship_to_countries`, a list of country codes). The `cart-rules` Function reads
+it with the delivery country (rule `{"type": "country_restriction"}`):
+- Delivery to a country not on the list → "Charcoal Peel-Off Mask can't be shipped to CA (ships to
+  US only). Remove it or change the delivery address."
+- Products with an empty field ship anywhere; free gift lines are never blocked.
+- No market or catalog changes: the restriction travels with the product.
+
+Setup: `scripts/setup-ship-to-countries.graphql` (store execute: definition + demo value), add the
+rule to `scripts/cart-rules-config.json`, run `scripts/set-cart-rules-config.graphql`.
+
 ---
 
 Built by **Clark (Chien) Nguyen** — Shopify app developer, Checkout Extensibility & Functions.

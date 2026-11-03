@@ -9,6 +9,7 @@
       "presentmentCurrencyRate": "1.0",
       "cart": {
         "consent": null,
+        "deliveryGroups": [],
         "buyerIdentity": null,
         "cost": {
           "subtotalAmount": {
@@ -29,7 +30,8 @@
               "__typename": "ProductVariant",
               "product": {
                 "id": "gid://shopify/Product/lip",
-                "title": "Nourishing Lip Oil"
+                "title": "Nourishing Lip Oil",
+                "shipsTo": null
               }
             }
           },
@@ -45,7 +47,8 @@
               "__typename": "ProductVariant",
               "product": {
                 "id": "gid://shopify/Product/offset",
-                "title": "Carbon-neutral delivery"
+                "title": "Carbon-neutral delivery",
+                "shipsTo": null
               }
             }
           }

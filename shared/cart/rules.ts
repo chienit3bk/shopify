@@ -28,6 +28,8 @@ export type CartRule = {buyer?: BuyerScope} & (
    * The consent block stores ticked ids in the "Consent" cart attribute, so it shows on the order.
    */
   | {type: 'consent'; id: string; productIds: string[]; label: string; error: string}
+  /** Products with a ship-to list (product metafield) can only go to those countries. */
+  | {type: 'country_restriction'}
 );
 
 export interface CartRulesConfig {
@@ -41,6 +43,8 @@ export interface RuleLine {
   productId: string;
   title: string;
   quantity: number;
+  /** Countries this product may ship to (product metafield); undefined = anywhere. */
+  shipsTo?: string[];
   /** Line amount after item discounts (a "buy 2 get 1" free unit is 0). */
   subtotal: number;
   isGift: boolean;
@@ -59,6 +63,8 @@ export interface RuleCart {
   isFirstOrder?: boolean;
   /** Consent ids the buyer ticked. */
   consents?: string[];
+  /** Delivery country, once the buyer has entered an address. */
+  deliveryCountry?: string;
   /** Cart currency per config currency; unknown → only explicit market amounts apply. */
   rate?: number;
   lines: RuleLine[];
@@ -70,7 +76,8 @@ export type Violation =
   | {type: 'incompatible'; titles: string[]; label: string}
   | {type: 'min_quantity'; title: string; min: number; quantity: number}
   | {type: 'case_pack'; title: string; size: number; quantity: number}
-  | {type: 'consent'; id: string; error: string};
+  | {type: 'consent'; id: string; error: string}
+  | {type: 'country_restriction'; title: string; countryCode: string; shipsTo: string[]};
 
 /** Every rule the cart breaks, in config order. Gift lines never count. */
 export function violations(config: CartRulesConfig, cart: RuleCart): Violation[] {
@@ -93,6 +100,16 @@ export function violations(config: CartRulesConfig, cart: RuleCart): Violation[]
     } else if (rule.type === 'case_pack') {
       for (const {title, quantity} of perProduct(paid.filter((l) => rule.productIds.includes(l.productId)))) {
         if (quantity % rule.size !== 0) out.push({type: 'case_pack', title, size: rule.size, quantity});
+      }
+    } else if (rule.type === 'country_restriction') {
+      const country = cart.deliveryCountry?.toUpperCase();
+      if (!country) continue;
+      const seen = new Set<string>();
+      for (const line of paid) {
+        const shipsTo = line.shipsTo?.map((c) => c.trim().toUpperCase()).filter(Boolean);
+        if (!shipsTo?.length || shipsTo.includes(country) || seen.has(line.productId)) continue;
+        seen.add(line.productId);
+        out.push({type: 'country_restriction', title: line.title, countryCode: country, shipsTo});
       }
     } else if (rule.type === 'consent') {
       if (paid.some((l) => rule.productIds.includes(l.productId)) && !cart.consents?.includes(rule.id)) {
@@ -168,6 +185,7 @@ export function parseCartRules(raw: unknown): CartRulesConfig | null {
     if (!r) return false;
     if (r.buyer !== undefined && r.buyer !== 'b2b' && r.buyer !== 'retail') return false;
     if (r.type === 'min_quantity') return (r.productIds === undefined || ids(r.productIds)) && count(r.min);
+    if (r.type === 'country_restriction') return true;
     if (r.type === 'consent') return ids(r.productIds) && typeof r.id === 'string' && /^[a-z0-9-]+$/.test(r.id) && typeof r.label === 'string' && typeof r.error === 'string';
     if (r.type === 'case_pack') return ids(r.productIds) && count(r.size) && r.size > 1;
     if (r.type === 'max_quantity') return ids(r.productIds) && Number.isInteger(r.max) && r.max > 0 && typeof r.label === 'string';

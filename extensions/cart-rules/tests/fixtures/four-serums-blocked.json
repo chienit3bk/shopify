@@ -9,6 +9,7 @@
       "presentmentCurrencyRate": "1.0",
       "cart": {
         "consent": null,
+        "deliveryGroups": [],
         "buyerIdentity": null,
         "cost": {
           "subtotalAmount": {
@@ -29,7 +30,8 @@
               "__typename": "ProductVariant",
               "product": {
                 "id": "gid://shopify/Product/serum",
-                "title": "Vitamin C Brightening Serum"
+                "title": "Vitamin C Brightening Serum",
+                "shipsTo": null
               }
             }
           }
