@@ -584,6 +584,25 @@ Function in Rust.
 
 Setup: add `volumeRules` to `scripts/tiers-config.json`, run `scripts/set-tiers-config.graphql`.
 
+## 23. Case packs — sell by the case, count stock by the bottle
+
+![Case packs demo](docs/demos/case-packs.gif)
+
+**"Gentle Gel Cleanser — Case of 6", $125 (6 × $24 = $144).** A case is a bundle with one
+component, so the `bundle-expand` cart transform from section 16 handles it:
+`{"components": [{"variantId": "<bottle>", "quantity": 6, "weight": 24}]}`.
+
+The cents problem: $125 / 6 = $20.8333…, and 6 × $20.83 = $124.98. `priceComponents` now puts
+the leftover cents on one unit, split out as its own line: **5 × $20.83 + 1 × $20.85 = $125.00**
+(test order #1009, both lines "Part of: Gentle Gel Cleanser — Case of 6"). Pricing the case so it
+divides ($120 / 6 = $20.00) gives a single clean line.
+
+Found in the Function logs: discount Functions see the **case line**, not the bottles. With a
+compare-at price the case counts as on sale, so `excludeOnSale` keeps spend tiers from stacking on
+the case discount.
+
+Setup: `productCreate` "Gentle Gel Cleanser — Case of 6", then `scripts/create-case-pack.graphql`.
+
 ---
 
 Built by **Clark (Chien) Nguyen** — Shopify app developer, Checkout Extensibility & Functions.
