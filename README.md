@@ -566,6 +566,24 @@ from the Storefront API and says "Sale items and gift cards don't count towards 
 Setup: `scripts/set-demo-sale-item.graphql` (store execute, demo compare-at), then
 `scripts/set-tiers-config.graphql`.
 
+## 22. 40 quantity-break tables from one discount
+
+![Many volume rules demo](docs/demos/many-volume-rules.gif)
+
+**One automatic discount per product doesn't scale** (stores hit the automatic-discount limit
+long before they run out of products). The `tiered-discount` Function now reads a list of
+tables, `volumeRules`, next to the original `volume`:
+- Each table: its products, its tiers, its label ("Eye patch 3-pack — 12% off",
+  "Barrier duo: 2+ 8% · 3+ 12%"). First matching table wins (`volumeRuleIndex`).
+- A malformed table is dropped on its own; the other tables keep working.
+- The `volume-tiers` block shows each line's own ladder and "Add 1 more for 12% off".
+
+Measured with `shopify app function run`: 40 tables × 20 cart lines = **6.8M of the 11M
+instruction limit** in JavaScript (1 table × 1 line = 0.86M). For hundreds of tables, write the
+Function in Rust.
+
+Setup: add `volumeRules` to `scripts/tiers-config.json`, run `scripts/set-tiers-config.graphql`.
+
 ---
 
 Built by **Clark (Chien) Nguyen** — Shopify app developer, Checkout Extensibility & Functions.
