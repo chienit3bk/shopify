@@ -137,7 +137,7 @@ Then in the checkout editor open **Apps → free-gift-checkout → Add block** a
 
 ## 2. BFCM checkout offer — countdown + one-click add-ons
 
-![BFCM offer demo](docs/demos/bfcm-offer.gif)
+https://github.com/user-attachments/assets/7d7917ce-b09e-4b6d-8f0a-fb9bcfd35ae5
 
 A Black Friday block in checkout: a live countdown to the end of the campaign and
 discounted add-ons the buyer adds with one click. Adding an add-on can also unlock the
@@ -159,7 +159,7 @@ Config: [`scripts/bfcm-offer-config.json`](scripts/bfcm-offer-config.json) · lo
 
 ## 3. Post-purchase: attribution survey + referral code
 
-![Post-purchase demo](docs/demos/bfcm-post-purchase.gif)
+https://github.com/user-attachments/assets/d198b4ed-9966-4d5f-b7aa-fb27226ea8a7
 
 **"How did you hear about us?" — stored on the order, no backend.** The thank-you page can't
 write to an order, so the question sits right above **Pay now**. The answer is saved to a cart
@@ -182,7 +182,7 @@ Logic: `shared/attribution/survey.ts`, `shared/referral/referral.ts` (12 unit te
 
 ## 4. Shipping cut-off countdown + trust badges
 
-![Cut-off and trust demo](docs/demos/trust-and-cutoff.gif)
+https://github.com/user-attachments/assets/65c8ce4b-3606-4a55-941c-1d1072a320d2
 
 **"Order within 2h 41m — ships today."** Above the shipping options, computed on the
 **warehouse clock** (shop timezone), not the buyer's: weekends and holidays are skipped
@@ -203,7 +203,7 @@ Logic: `shared/shipping/cutoff.ts`.
 
 ## 5. Gift funnel analytics — `analytics.publish` + a web pixel
 
-![Gift analytics demo](docs/demos/gift-analytics.gif)
+https://github.com/user-attachments/assets/74b7c141-09e2-42cc-a7e5-8e5089c7d8fd
 
 **Which free gift actually moves the order value?** The free-gift block now tells the app's
 web pixel what the buyer saw: a "spend $X more" nudge, a gift unlocked, a gift removed. The
@@ -226,7 +226,7 @@ Logic: `shared/analytics/gift-funnel.ts` (10 unit tests).
 
 ## 6. Gift picker + checkout validation
 
-![Gift picker demo](docs/demos/gift-picker.gif)
+https://github.com/user-attachments/assets/1d46add7-a5d4-4378-b188-cac5a1e3bc96
 
 **"Pick a free mini with orders over $120."** A rule can offer several gifts
 (`giftOptions`); the buyer chooses one in checkout and can switch any time. Picker gifts are
@@ -252,7 +252,7 @@ Logic: `chooseGift` and `invalidGiftLines` in `shared/free-gift/rules.ts`; 5 was
 
 ## 7. Free Express shipping over $120 — sale items don't count
 
-![Free Express shipping demo](docs/demos/free-express-shipping.gif)
+https://github.com/user-attachments/assets/b63773f8-7181-46b0-9f75-830c8cf45e06
 
 A shipping rate condition ("free over $X") only sees the **cart total**. Merchants keep asking
 for the threshold to ignore some items — sale items, "always ships free" products, gift
@@ -271,7 +271,7 @@ Setup: `scripts/set-free-shipping-config.graphql`, then `scripts/create-free-shi
 
 ## 8. Buy 2, get 1 free — on the same SKU
 
-![Buy 2 get 1 demo](docs/demos/buy-2-get-1.gif)
+https://github.com/user-attachments/assets/0690cba6-51bb-40f0-89ef-f1b6f6754471
 
 **A partial-quantity line discount.** With 3 lip oils in one line, the `bogo-discount`
 Function targets `{cartLine: {id, quantity: 1}}` at 100% — one unit is free, the other two
@@ -290,7 +290,7 @@ Setup: `scripts/set-bogo-config.graphql` (`scripts/bogo-config.json`), then
 
 ## 9. Tiered discounts — volume per SKU + spend on the order
 
-![Tiered discounts demo](docs/demos/tiered-discounts.gif)
+https://github.com/user-attachments/assets/a87a98b2-30ad-4248-a268-68ee8e1a6368
 
 One config (`scripts/tiers-config.json`), one Function (`tiered-discount`) with **two discount
 classes**:
@@ -315,7 +315,7 @@ Setup: `scripts/set-tiers-config.graphql`, `scripts/create-tiered-discount.graph
 
 ## 10. Gift for a collection + out-of-stock fallback
 
-![Collection gift demo](docs/demos/gift-collection-fallback.gif)
+https://github.com/user-attachments/assets/fd280553-5f93-4b0c-93af-1598f0483c20
 
 **"Free mini with any Tools & Body item"** — lip oil, or eye patches once it sells out. New condition `gift_collection_in_cart`. The
 discount Function can't hard-code collection ids (they differ per store), so it uses **input
@@ -346,11 +346,11 @@ of the rule's variants free. Two gotchas found live:
 
 ### Week 2 recap — delivery
 
-![Week 2 recap](docs/demos/week-2-recap.gif)
+https://github.com/user-attachments/assets/bd0a527c-8b82-4fe8-97fd-65a4bdea5947
 
 ## 11. Delivery rules — hide, rename, reorder (delivery customization Function)
 
-![Delivery rules demo](docs/demos/delivery-rules.gif)
+https://github.com/user-attachments/assets/a873b668-87cb-4761-bc95-74085cdbe0fe
 
 One `delivery-customization` Function (`cart.delivery-options.transform.run`) and a list of
 rules in `scripts/delivery-rules-config.json`:
@@ -375,7 +375,7 @@ Setup: `scripts/set-demo-weights.graphql` (demo catalog weights), `scripts/set-d
 
 ## 12. Delivery date picker + PO Box check
 
-![Delivery date demo](docs/demos/delivery-date-po-box.gif)
+https://github.com/user-attachments/assets/a83e6875-e539-4167-9e92-b007ed2e8900
 
 **Pick a delivery date on the warehouse calendar.** The `delivery-date` block (below the
 shipping options) uses the same calendar as the cut-off banner: earliest = ship date (cut-off
@@ -397,7 +397,7 @@ then add **delivery-date** in the checkout editor.
 
 ## 13. Carbon-neutral delivery add-on
 
-![Carbon offset demo](docs/demos/carbon-offset.gif)
+https://github.com/user-attachments/assets/5792d9cb-96ef-4d1e-abbb-f7726c3369b9
 
 **"Make my delivery carbon-neutral (+$1.50)".** One checkbox below the shipping options adds or
 removes a **service line** — its own product (no shipping, not taxable), so it is priced in the
@@ -415,7 +415,7 @@ then add **carbon-offset** in the checkout editor.
 
 ## 14. Max quantity, minimum order and incompatible products
 
-![Cart rules demo](docs/demos/cart-rules.gif)
+https://github.com/user-attachments/assets/9a92db60-b20b-4370-8947-5797c819ff04
 
 **One validation Function, three rule types, one JSON config** (`shared/cart/rules.ts`):
 - `max_quantity` — "You can buy up to 3 of Vitamin C Brightening Serum per order (you have 4)." Split lines
@@ -434,7 +434,7 @@ Setup: `scripts/set-cart-rules-config.graphql` (with `scripts/cart-rules-config.
 
 ## 15. B2B: minimum quantity, case packs, first-order minimum
 
-![B2B cart rules demo](docs/demos/b2b-cart-rules.gif)
+https://github.com/user-attachments/assets/1df9c0c5-f285-469c-b9bc-33b2537283b3
 
 Same `cart-rules` Function; every rule can be scoped with `"buyer": "b2b"` (buying for a company
 location) or `"retail"`:
@@ -457,7 +457,7 @@ email code); `scripts/cart-rules-config.json` scopes them to company buyers.
 
 ## 16. Fixed-price bundle — Cart Transform `lineExpand`
 
-![Bundle demo](docs/demos/bundle-expand.gif)
+https://github.com/user-attachments/assets/bdd332f5-62b6-499c-8838-76694fc6f89f
 
 **"Glow Routine Set" — $99 instead of $124.** One product in the store and the cart; the
 `bundle-expand` Function (`cart.transform.run`) expands it into Cleanser + Serum + Night Cream
@@ -478,7 +478,7 @@ Setup: `productCreate` "Glow Routine Set", `scripts/create-bundle.graphql` (stor
 
 ## 17. Required consent checkbox (final sale, age 18+)
 
-![Consent checkbox demo](docs/demos/consent-checkbox.gif)
+https://github.com/user-attachments/assets/0b709b22-9f46-4430-a1b3-7ca7219533cb
 
 **"I understand Black Friday deals are final sale and can't be returned."** A `consent` rule in
 the cart-rules config lists the products that need an explicit yes:
@@ -497,7 +497,7 @@ then add **consent-checkbox** in the checkout editor.
 
 ## 18. Gift message + gift wrap
 
-![Gift options demo](docs/demos/gift-options.gif)
+https://github.com/user-attachments/assets/84448f0d-cc4a-4be5-8d69-648a70976259
 
 **"This order is a gift"** under the items in the order summary (`gift-options` block,
 `purchase.checkout.cart-line-list.render-after`):
@@ -518,7 +518,7 @@ Setup: `productCreate` "Gift wrap", `scripts/create-gift-wrap.graphql` (store ex
 
 ## 19. Order note templates
 
-![Order note demo](docs/demos/order-note.gif)
+https://github.com/user-attachments/assets/d69d9fe4-7a5c-49dd-abbc-b4124337aa1c
 
 **Delivery instructions in one tap.** Checkout has no order-note field of its own, so the
 `order-note` block (`purchase.checkout.delivery-address.render-after`) writes the note through
@@ -535,7 +535,7 @@ Setup: `scripts/set-order-note-config.graphql` (with `scripts/order-note-config.
 
 ## 20. Country-restricted products (no catalogs)
 
-![Country restrictions demo](docs/demos/country-restrictions.gif)
+https://github.com/user-attachments/assets/5cd03e75-9b78-4e5d-bca4-1a63b333a528
 
 **"This mask ships to the US only."** The merchant fills a product field, **Ships to countries**
 (metafield `custom.ship_to_countries`, a list of country codes). The `cart-rules` Function reads
@@ -550,7 +550,7 @@ rule to `scripts/cart-rules-config.json`, run `scripts/set-cart-rules-config.gra
 
 ## 21. Spend tiers that skip sale items and gift cards
 
-![Spend tiers excluding sale items demo](docs/demos/tiers-exclude-sale.gif)
+https://github.com/user-attachments/assets/acc39262-6a9c-48e1-b82f-6269acf8c098
 
 **No discount on top of a discount.** The spend tiers from section 9 gain two switches in
 `scripts/tiers-config.json`:
@@ -568,7 +568,7 @@ Setup: `scripts/set-demo-sale-item.graphql` (store execute, demo compare-at), th
 
 ## 22. 40 quantity-break tables from one discount
 
-![Many volume rules demo](docs/demos/many-volume-rules.gif)
+https://github.com/user-attachments/assets/b0802f42-b07a-45f5-a0f8-ef49d73647bd
 
 **One automatic discount per product doesn't scale** (stores hit the automatic-discount limit
 long before they run out of products). The `tiered-discount` Function now reads a list of
@@ -586,7 +586,7 @@ Setup: add `volumeRules` to `scripts/tiers-config.json`, run `scripts/set-tiers-
 
 ## 23. Case packs — sell by the case, count stock by the bottle
 
-![Case packs demo](docs/demos/case-packs.gif)
+https://github.com/user-attachments/assets/e3fb8680-6f0d-479f-8604-0d41b75b1d62
 
 **"Gentle Gel Cleanser — Case of 6", $125 (6 × $24 = $144).** A case is a bundle with one
 component, so the `bundle-expand` cart transform from section 16 handles it:
