@@ -17,10 +17,22 @@ export interface SpendTier {
   percent: number;
 }
 
+export interface VolumeRule {
+  productIds: string[];
+  tiers: VolumeTier[];
+  label: string;
+}
+
 export interface TiersConfig {
   version: 1;
   currencyCode: string;
-  volume: {productIds: string[]; tiers: VolumeTier[]; label: string} | null;
+  /** The first volume rule (kept for configs written before `volumeRules`). */
+  volume: VolumeRule | null;
+  /**
+   * More quantity-break tables, each for its own products — dozens of "buy N, save X%" rules
+   * from one discount instead of one automatic discount per product. First match wins.
+   */
+  volumeRules?: VolumeRule[];
   spend: {
     tiers: SpendTier[];
     label: string;
@@ -59,6 +71,21 @@ export function isOnSale(price: number, compareAt: number | null | undefined): b
 export interface Progress<T> {
   current: T | null;
   next: T | null;
+}
+
+/** Product id → its volume rule: `volume` first, then `volumeRules` in order (first match wins). */
+export function volumeRuleIndex(config: TiersConfig): Map<string, VolumeRule> {
+  const index = new Map<string, VolumeRule>();
+  for (const rule of [config.volume, ...(config.volumeRules ?? [])]) {
+    if (!rule) continue;
+    for (const id of rule.productIds) if (!index.has(id)) index.set(id, rule);
+  }
+  return index;
+}
+
+/** The volume rule for one product (see `volumeRuleIndex` for many). */
+export function volumeRuleFor(config: TiersConfig, productId: string): VolumeRule | null {
+  return volumeRuleIndex(config).get(productId) ?? null;
 }
 
 /** Highest volume tier reached by `quantity`, and the one after it. */
@@ -105,18 +132,25 @@ export function parseTiersConfig(raw: unknown): TiersConfig | null {
   const percent = (p: unknown) => typeof p === 'number' && p > 0 && p <= 100;
   const ids = (list: unknown) => Array.isArray(list) && list.every((id) => typeof id === 'string');
 
+  const volumeRule = (v: any): VolumeRule | null =>
+    v &&
+    ids(v.productIds) &&
+    typeof v.label === 'string' &&
+    Array.isArray(v.tiers) &&
+    v.tiers.length > 0 &&
+    v.tiers.every((t: any) => Number.isInteger(t?.minQuantity) && t.minQuantity > 0 && percent(t.percent))
+      ? {productIds: v.productIds, tiers: v.tiers, label: v.label}
+      : null;
+
   let volume: TiersConfig['volume'] = null;
   if (c.volume) {
-    const v = c.volume;
-    const ok =
-      ids(v.productIds) &&
-      typeof v.label === 'string' &&
-      Array.isArray(v.tiers) &&
-      v.tiers.length > 0 &&
-      v.tiers.every((t: any) => Number.isInteger(t?.minQuantity) && t.minQuantity > 0 && percent(t.percent));
-    if (!ok) return null;
-    volume = {productIds: v.productIds, tiers: v.tiers, label: v.label};
+    volume = volumeRule(c.volume);
+    if (!volume) return null;
   }
+  // A bad extra rule is dropped on its own, so one typo can't switch off the other 39.
+  const volumeRules = Array.isArray(c.volumeRules)
+    ? c.volumeRules.map(volumeRule).filter((rule: VolumeRule | null): rule is VolumeRule => rule !== null)
+    : [];
 
   let spend: TiersConfig['spend'] = null;
   if (c.spend) {
@@ -136,7 +170,7 @@ export function parseTiersConfig(raw: unknown): TiersConfig | null {
       excludeGiftCards: s.excludeGiftCards === true,
     };
   }
-  return {version: 1, currencyCode: c.currencyCode, volume, spend};
+  return {version: 1, currencyCode: c.currencyCode, volume, ...(volumeRules.length ? {volumeRules} : {}), spend};
 }
 
 function round2(value: number): number {

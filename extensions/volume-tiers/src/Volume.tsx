@@ -2,7 +2,7 @@ import '@shopify/ui-extensions/preact';
 import {render} from 'preact';
 import {useState} from 'preact/hooks';
 import type {CartLine} from '@shopify/ui-extensions/checkout';
-import {parseTiersConfig, volumeProgress} from '../../../shared/tiers/tiers';
+import {parseTiersConfig, volumeProgress, volumeRuleFor} from '../../../shared/tiers/tiers';
 
 export default async () => {
   render(<Volume />, document.body);
@@ -23,9 +23,10 @@ function Volume() {
   const entry = shopify.appMetafields.value.find(
     ({target, metafield}) => target.type === 'shop' && metafield.key === CONFIG_KEY,
   );
-  const volume = entry ? parseTiersConfig(entry.metafield.value)?.volume : null;
+  const config = entry ? parseTiersConfig(entry.metafield.value) : null;
+  const volume = config ? volumeRuleFor(config, line.merchandise.product.id) : null;
   const isGift = (cartLine: CartLine) => cartLine.attributes.some((attribute) => attribute.key === GIFT_ATTRIBUTE_KEY);
-  if (!volume || isGift(line) || !volume.productIds.includes(line.merchandise.product.id)) return null;
+  if (!volume || isGift(line)) return null;
 
   const sameVariant = shopify.lines.value.filter((cartLine) => cartLine.merchandise.id === line.merchandise.id && !isGift(cartLine));
   // Render once per variant, on its first line.

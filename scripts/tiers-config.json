@@ -22,6 +22,36 @@
     ],
     "label": "Stock up & save"
   },
+  "volumeRules": [
+    {
+      "productIds": [
+        "gid://shopify/Product/10490410860826"
+      ],
+      "tiers": [
+        {
+          "minQuantity": 3,
+          "percent": 12
+        }
+      ],
+      "label": "Eye patch 3-pack"
+    },
+    {
+      "productIds": [
+        "gid://shopify/Product/10490410729754"
+      ],
+      "tiers": [
+        {
+          "minQuantity": 2,
+          "percent": 8
+        },
+        {
+          "minQuantity": 3,
+          "percent": 12
+        }
+      ],
+      "label": "Barrier duo"
+    }
+  ],
   "spend": {
     "tiers": [
       {
