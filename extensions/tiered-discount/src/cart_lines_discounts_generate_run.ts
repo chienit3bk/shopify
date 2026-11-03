@@ -6,11 +6,12 @@ import {
   OrderDiscountSelectionStrategy,
   ProductDiscountSelectionStrategy,
 } from '../generated/api';
-import {isOnSale, parseTiersConfig, spendExclusion, spendProgress, volumeProgress} from '../../../shared/tiers/tiers';
+import {isOnSale, parseTiersConfig, spendExclusion, spendProgress, volumeProgress, volumeRuleIndex} from '../../../shared/tiers/tiers';
 
 /**
  * One config, two discount classes:
- *   PRODUCT — volume tiers per SKU (quantity summed across lines of the same variant),
+ *   PRODUCT — volume tiers per SKU (quantity summed across lines of the same variant), one
+ *             table per product group (`volume` + `volumeRules`),
  *   ORDER   — spend tiers on the subtotal of the lines that count (no gifts, no excluded products,
  *             optionally no sale items or gift cards), and only those lines get the % off.
  */
@@ -33,18 +34,21 @@ export function cartLinesDiscountsGenerateRun(input: CartInput): CartLinesDiscou
   }));
   const operations: CartOperation[] = [];
 
-  if (config.volume && input.discount.discountClasses.includes(DiscountClass.Product)) {
-    const volume = config.volume;
-    const eligible = lines.filter((line) => !line.isGift && volume.productIds.includes(line.productId));
+  if ((config.volume || config.volumeRules?.length) && input.discount.discountClasses.includes(DiscountClass.Product)) {
+    const rules = volumeRuleIndex(config);
+    const eligible = lines
+      .filter((line) => !line.isGift)
+      .map((line) => ({line, rule: rules.get(line.productId) ?? null}))
+      .filter((entry) => entry.rule !== null);
     const perVariant = new Map<string, number>();
-    eligible.forEach((line) => perVariant.set(line.variantId, (perVariant.get(line.variantId) ?? 0) + line.quantity));
+    eligible.forEach(({line}) => perVariant.set(line.variantId, (perVariant.get(line.variantId) ?? 0) + line.quantity));
 
-    const candidates = eligible.flatMap((line) => {
-      const tier = volumeProgress(volume.tiers, perVariant.get(line.variantId) ?? 0).current;
+    const candidates = eligible.flatMap(({line, rule}) => {
+      const tier = volumeProgress(rule!.tiers, perVariant.get(line.variantId) ?? 0).current;
       if (!tier) return [];
       return [
         {
-          message: `${volume.label} — ${tier.percent}% off`,
+          message: `${rule!.label} — ${tier.percent}% off`,
           targets: [{cartLine: {id: line.id}}],
           value: {percentage: {value: tier.percent.toFixed(1)}},
         },

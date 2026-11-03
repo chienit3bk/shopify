@@ -1,5 +1,5 @@
 import {describe, expect, test} from 'vitest';
-import {type TiersConfig, isOnSale, parseTiersConfig, spendExclusion, spendProgress, volumeProgress} from './tiers';
+import {type TiersConfig, isOnSale, parseTiersConfig, spendExclusion, spendProgress, volumeProgress, volumeRuleFor} from './tiers';
 
 const config: TiersConfig = {
   version: 1,
@@ -75,6 +75,29 @@ describe('spendExclusion', () => {
     expect(isOnSale(18, 24)).toBe(true);
     expect(isOnSale(18, 18)).toBe(false);
     expect(isOnSale(18, null)).toBe(false);
+  });
+});
+
+describe('volumeRuleFor', () => {
+  const many: TiersConfig = {
+    ...config,
+    volumeRules: [
+      {productIds: ['patches'], tiers: [{minQuantity: 3, percent: 10}], label: 'Patch pack'},
+      {productIds: ['mask', 'lip'], tiers: [{minQuantity: 2, percent: 50}], label: 'Never used: mask is in volume'},
+    ],
+  };
+  test('first matching rule wins; products without a rule get none', () => {
+    expect(volumeRuleFor(many, 'mask')?.label).toBe('Stock up & save');
+    expect(volumeRuleFor(many, 'patches')?.label).toBe('Patch pack');
+    expect(volumeRuleFor(many, 'lip')?.label).toBe('Never used: mask is in volume');
+    expect(volumeRuleFor(many, 'serum')).toBeNull();
+  });
+
+  test('40 rules parse, and one broken rule is dropped without the others', () => {
+    const rules = Array.from({length: 40}, (_, i) => ({productIds: [`p${i}`], tiers: [{minQuantity: 2, percent: 5}], label: `Rule ${i}`}));
+    const parsed = parseTiersConfig({...config, volumeRules: [...rules, {productIds: ['x'], tiers: [], label: 'broken'}]});
+    expect(parsed?.volumeRules).toHaveLength(40);
+    expect(volumeRuleFor(parsed!, 'p39')?.label).toBe('Rule 39');
   });
 });
 

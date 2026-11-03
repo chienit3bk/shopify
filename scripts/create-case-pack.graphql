@@ -1,0 +1,23 @@
+# One-time setup for the Gentle Gel Cleanser case of 6 (run with `shopify store execute --allow-mutations`).
+# 1) productCreate "Gentle Gel Cleanser — Case of 6" → note the ids, 2) this file prices the case
+# ($125 vs 6 × $24), makes it bundle-only (requiresComponents) and points it at 6 × the bottle, so the
+# bundle-expand cart transform ships and counts stock per bottle. Publishes it to the Online Store.
+mutation SetupCasePack {
+  productVariantsBulkUpdate(
+    productId: "gid://shopify/Product/10496652443930"
+    variants: [{
+      id: "gid://shopify/ProductVariant/53292266488090"
+      price: "125.00"
+      compareAtPrice: "144.00"
+      requiresComponents: true
+      inventoryItem: {tracked: false}
+      metafields: [{namespace: "custom", key: "bundle_components", type: "json", value: "{\"version\": 1, \"components\": [{\"variantId\": \"gid://shopify/ProductVariant/53265035952410\", \"quantity\": 6, \"weight\": 24}]}"}]
+    }]
+  ) {
+    productVariants { id price requiresComponents }
+    userErrors { field message }
+  }
+  publishablePublish(id: "gid://shopify/Product/10496652443930", input: [{publicationId: "gid://shopify/Publication/322667872538"}]) {
+    userErrors { message }
+  }
+}

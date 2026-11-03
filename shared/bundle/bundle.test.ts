@@ -36,10 +36,21 @@ describe('priceComponents', () => {
   });
 });
 
+test('case pack: one component × 6 at a case price', () => {
+  expect(priceComponents(120, [{variantId: v(1), quantity: 6, weight: 24}])).toEqual([{variantId: v(1), quantity: 6, unitPrice: 20}]);
+  // $100 / 6 doesn't split into cents: 5 × $16.66 + 1 × $16.70.
+  expect(priceComponents(100, [{variantId: v(1), quantity: 6, weight: 24}])).toEqual([
+    {variantId: v(1), quantity: 5, unitPrice: 16.66},
+    {variantId: v(1), quantity: 1, unitPrice: 16.7},
+  ]);
+  expect(total(priceComponents(125, [{variantId: v(1), quantity: 6, weight: 24}]))).toBe(125);
+});
+
 describe('parseBundleConfig', () => {
   test('accepts the demo shape, rejects one-item bundles and bad ids', () => {
     expect(parseBundleConfig(JSON.stringify({version: 1, components: routine}))?.components).toEqual(routine);
     expect(parseBundleConfig({version: 1, components: routine.slice(0, 1)})).toBeNull();
+    expect(parseBundleConfig({version: 1, components: [{...routine[0], quantity: 6}]})?.components).toHaveLength(1);
     expect(parseBundleConfig({version: 1, components: [...routine, {variantId: 'x', quantity: 1, weight: 1}]})).toBeNull();
     expect(parseBundleConfig({version: 1, components: [...routine, {variantId: v(4), quantity: 0, weight: 1}]})).toBeNull();
     expect(parseBundleConfig('nope')).toBeNull();

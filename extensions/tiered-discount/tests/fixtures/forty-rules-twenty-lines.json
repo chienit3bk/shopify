@@ -1,0 +1,1447 @@
+{
+  "payload": {
+    "export": "cart-lines-discounts-generate-run",
+    "target": "cart.lines.discounts.generate.run",
+    "input": {
+      "presentmentCurrencyRate": "1.0",
+      "cart": {
+        "cost": {
+          "subtotalAmount": {
+            "currencyCode": "USD"
+          }
+        },
+        "lines": [
+          {
+            "id": "gid://shopify/CartLine/1",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/1",
+              "product": {
+                "id": "gid://shopify/Product/p0",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/2",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/2",
+              "product": {
+                "id": "gid://shopify/Product/p2",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/3",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/3",
+              "product": {
+                "id": "gid://shopify/Product/p4",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/4",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/4",
+              "product": {
+                "id": "gid://shopify/Product/p6",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/5",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/5",
+              "product": {
+                "id": "gid://shopify/Product/p8",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/6",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/6",
+              "product": {
+                "id": "gid://shopify/Product/p10",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/7",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/7",
+              "product": {
+                "id": "gid://shopify/Product/p12",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/8",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/8",
+              "product": {
+                "id": "gid://shopify/Product/p14",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/9",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/9",
+              "product": {
+                "id": "gid://shopify/Product/p16",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/10",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/10",
+              "product": {
+                "id": "gid://shopify/Product/p18",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/11",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/11",
+              "product": {
+                "id": "gid://shopify/Product/p20",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/12",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/12",
+              "product": {
+                "id": "gid://shopify/Product/p22",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/13",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/13",
+              "product": {
+                "id": "gid://shopify/Product/p24",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/14",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/14",
+              "product": {
+                "id": "gid://shopify/Product/p26",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/15",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/15",
+              "product": {
+                "id": "gid://shopify/Product/p28",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/16",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/16",
+              "product": {
+                "id": "gid://shopify/Product/p30",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/17",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/17",
+              "product": {
+                "id": "gid://shopify/Product/p32",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/18",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/18",
+              "product": {
+                "id": "gid://shopify/Product/p34",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/19",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/19",
+              "product": {
+                "id": "gid://shopify/Product/p36",
+                "isGiftCard": false
+              }
+            }
+          },
+          {
+            "id": "gid://shopify/CartLine/20",
+            "quantity": 3,
+            "cost": {
+              "subtotalAmount": {
+                "amount": "30.0"
+              },
+              "amountPerQuantity": {
+                "amount": "10.0"
+              },
+              "compareAtAmountPerQuantity": null
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/20",
+              "product": {
+                "id": "gid://shopify/Product/p38",
+                "isGiftCard": false
+              }
+            }
+          }
+        ]
+      },
+      "shop": {
+        "config": {
+          "jsonValue": {
+            "version": 1,
+            "currencyCode": "USD",
+            "volume": null,
+            "spend": {
+              "tiers": [
+                {
+                  "amount": 100,
+                  "amounts": {
+                    "EUR": 90
+                  },
+                  "percent": 5
+                },
+                {
+                  "amount": 150,
+                  "amounts": {
+                    "EUR": 140
+                  },
+                  "percent": 10
+                }
+              ],
+              "label": "Spend more, save more",
+              "excludedProductIds": [
+                "gid://shopify/Product/sale"
+              ]
+            },
+            "volumeRules": [
+              {
+                "productIds": [
+                  "gid://shopify/Product/p0"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 0"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p1"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 1"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p2"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 2"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p3"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 3"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p4"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 4"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p5"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 5"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p6"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 6"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p7"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 7"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p8"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 8"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p9"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 9"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p10"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 10"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p11"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 11"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p12"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 12"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p13"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 13"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p14"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 14"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p15"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 15"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p16"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 16"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p17"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 17"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p18"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 18"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p19"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 19"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p20"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 20"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p21"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 21"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p22"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 22"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p23"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 23"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p24"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 24"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p25"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 25"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p26"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 26"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p27"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 27"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p28"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 28"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p29"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 29"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p30"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 30"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p31"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 31"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p32"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 32"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p33"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 33"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p34"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 34"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p35"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 35"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p36"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 36"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p37"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 37"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p38"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 38"
+              },
+              {
+                "productIds": [
+                  "gid://shopify/Product/p39"
+                ],
+                "tiers": [
+                  {
+                    "minQuantity": 2,
+                    "percent": 5
+                  },
+                  {
+                    "minQuantity": 3,
+                    "percent": 10
+                  }
+                ],
+                "label": "Rule 39"
+              }
+            ]
+          }
+        }
+      },
+      "discount": {
+        "discountClasses": [
+          "PRODUCT"
+        ]
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "productDiscountsAdd": {
+            "candidates": [
+              {
+                "message": "Rule 0 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/1"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 2 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/2"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 4 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/3"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 6 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/4"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 8 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/5"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 10 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/6"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 12 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/7"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 14 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/8"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 16 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/9"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 18 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/10"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 20 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/11"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 22 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/12"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 24 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/13"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 26 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/14"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 28 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/15"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 30 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/16"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 32 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/17"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 34 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/18"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 36 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/19"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              },
+              {
+                "message": "Rule 38 \u2014 10% off",
+                "targets": [
+                  {
+                    "cartLine": {
+                      "id": "gid://shopify/CartLine/20"
+                    }
+                  }
+                ],
+                "value": {
+                  "percentage": {
+                    "value": "10.0"
+                  }
+                }
+              }
+            ],
+            "selectionStrategy": "ALL"
+          }
+        }
+      ]
+    }
+  }
+}
