@@ -649,6 +649,45 @@ Function returns `enteredDiscountCodesReject`, and the buyer sees why the code d
 Setup: add `rejectCodes` to `scripts/tiers-config.json`, then run `scripts/set-tiers-config.graphql`.
 The demo code comes from `scripts/create-demo-codes.graphql`.
 
+### From merchant questions
+
+## 27. PO Box check per item, not per carrier
+
+https://github.com/user-attachments/assets/07eef043-dde3-482e-9c12-0a349903e2b5
+
+Some items can't go to a PO Box on any delivery option. Tick the product field **No PO Box
+delivery** (`custom.no_po_box`), and the `delivery-validation` Function puts the error on the
+address field. In the demo, Squalane Face Oil is blocked even on Standard, while Ceramide Barrier
+Cream goes to the same PO Box. The check runs per delivery group, so it only looks at items in
+that shipment.
+
+Setup: `scripts/setup-no-po-box.graphql`.
+
+## 28. One sample kit per customer every 30 days
+
+https://github.com/user-attachments/assets/743d2fe4-6e1a-40b6-8d4a-2780bf285440
+
+The `once_per_period` rule in `cart-rules` reads the customer field `custom.sample_kit_last_order`.
+The buyer **doesn't have to sign in**: the Function also receives that field when a guest's email
+matches a customer.
+
+| Buyer | Result |
+|---|---|
+| Signed in, too soon | Blocked, with the date the next kit is available |
+| Guest, email matches a recent claim | Blocked, with no date (the email alone doesn't prove who is typing) |
+| New email, or the period has ended | Passes |
+
+Limits:
+- A brand-new email passes, so this stops repeat buyers, not someone with many addresses.
+- In the test, the Function didn't get the customer about 15 seconds after the order. It did 3 minutes later.
+  Very fast repeat orders can get through that gap.
+- The date has to be written when a kit is ordered. Use a Shopify Flow: **Order created** → the
+  order contains the kit → update the customer metafield. This demo sets the date by hand; the
+  Flow isn't set up here.
+
+Setup: `scripts/create-sample-kit.graphql`, `scripts/setup-sample-kit-limit.graphql`, then
+`scripts/set-cart-rules-config.graphql`.
+
 ---
 
 Built by **Clark (Chien) Nguyen** — Shopify app developer, Checkout Extensibility & Functions.
