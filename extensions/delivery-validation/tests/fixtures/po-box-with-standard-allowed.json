@@ -16,7 +16,8 @@
             },
             "selectedDeliveryOption": {
               "title": "Standard \u2014 USPS Ground (3\u20135 days)"
-            }
+            },
+            "cartLines": []
           }
         ]
       },

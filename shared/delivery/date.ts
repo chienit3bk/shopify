@@ -80,6 +80,11 @@ export function isPoBox(...lines: Array<string | null | undefined>): boolean {
   return lines.some((line) => !!line && PO_BOX.test(line));
 }
 
+/** Titles of the items that can't go to a PO Box on any delivery option, each once. */
+export function poBoxRestrictedTitles(lines: Array<{title: string; noPoBox: boolean}>): string[] {
+  return [...new Set(lines.filter((line) => line.noPoBox).map((line) => line.title))];
+}
+
 /** The selected option can't deliver to a PO Box (title starts with a blocked method). */
 export function blocksPoBox(config: DeliveryDateConfig, optionTitle: string | null | undefined): boolean {
   if (!optionTitle) return false;

@@ -1,0 +1,21 @@
+# One-time setup for items a carrier can't take to a PO Box (run with `shopify store execute --allow-mutations`):
+# a product field the merchant ticks in the admin, and a demo value on Squalane Face Oil.
+# The delivery-validation Function reads it, whichever delivery option the buyer picks.
+mutation SetupNoPoBox {
+  metafieldDefinitionCreate(definition: {
+    name: "No PO Box delivery"
+    namespace: "custom"
+    key: "no_po_box"
+    description: "Tick when the carrier can't deliver this item to a PO Box."
+    type: "boolean"
+    ownerType: PRODUCT
+    pin: true
+  }) {
+    createdDefinition { id }
+    userErrors { field message code }
+  }
+  metafieldsSet(metafields: [{ownerId: "gid://shopify/Product/10490410664218", namespace: "custom", key: "no_po_box", type: "boolean", value: "true"}]) {
+    metafields { key value }
+    userErrors { field message }
+  }
+}

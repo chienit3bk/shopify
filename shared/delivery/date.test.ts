@@ -6,6 +6,7 @@ import {
   dateProblem,
   earliestDeliveryDate,
   isPoBox,
+  poBoxRestrictedTitles,
   parseDeliveryDateConfig,
   pickerConstraints,
 } from './date';
@@ -79,4 +80,20 @@ describe('PO Box', () => {
 test('parseDeliveryDateConfig', () => {
   expect(parseDeliveryDateConfig(JSON.stringify(config))).toEqual(config);
   expect(parseDeliveryDateConfig({...config, windowDays: 0})).toBeNull();
+});
+
+describe('poBoxRestrictedTitles', () => {
+  test('lists only flagged items, each once', () => {
+    expect(
+      poBoxRestrictedTitles([
+        {title: 'Squalane Face Oil', noPoBox: true},
+        {title: 'Gentle Gel Cleanser', noPoBox: false},
+        {title: 'Squalane Face Oil', noPoBox: true},
+      ]),
+    ).toEqual(['Squalane Face Oil']);
+  });
+
+  test('is empty when no item is flagged', () => {
+    expect(poBoxRestrictedTitles([{title: 'Gentle Gel Cleanser', noPoBox: false}])).toEqual([]);
+  });
 });

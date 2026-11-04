@@ -4,7 +4,7 @@ import {
   type CartValidationsGenerateRunResult,
   type ValidationError,
 } from '../generated/api';
-import {type DateProblem, blocksPoBox, dateProblem, earliestFromShipDate, isDeliveryDay, isPoBox, addDays, parseDeliveryDateConfig} from '../../../shared/delivery/date';
+import {type DateProblem, blocksPoBox, dateProblem, earliestFromShipDate, isDeliveryDay, isPoBox, addDays, parseDeliveryDateConfig, poBoxRestrictedTitles} from '../../../shared/delivery/date';
 import {parseCutoffConfig} from '../../../shared/shipping/cutoff';
 
 const DATE_MESSAGES: Record<DateProblem, string> = {
@@ -15,8 +15,9 @@ const DATE_MESSAGES: Record<DateProblem, string> = {
 };
 
 /**
- * - PO Box + a carrier that can't deliver there (Express/UPS): an error on the address
- *   field as soon as the buyer enters it.
+ * - PO Box + an item the carrier can't take there (product metafield custom.no_po_box), or a
+ *   carrier that can't deliver there (Express/UPS): an error on the address field as soon as
+ *   the buyer enters it.
  * - Delivery date (cart attribute from the delivery-date block): re-checked when the
  *   order is placed, against the warehouse calendar.
  */
@@ -29,11 +30,19 @@ export function cartValidationsGenerateRun(input: CartValidationsGenerateRunInpu
 
   input.cart.deliveryGroups.forEach((group, i) => {
     const address = group.deliveryAddress;
-    if (address && blocksPoBox(config, group.selectedDeliveryOption?.title) && isPoBox(address.address1, address.address2)) {
-      errors.push({
-        message: "Express (UPS) can't deliver to a PO Box. Choose Standard or use a street address.",
-        target: `$.cart.deliveryGroups[${i}].deliveryAddress.address1`,
-      });
+    if (!address || !isPoBox(address.address1, address.address2)) return;
+    const target = `$.cart.deliveryGroups[${i}].deliveryAddress.address1`;
+    const restricted = poBoxRestrictedTitles(
+      group.cartLines.flatMap(({merchandise}) =>
+        merchandise.__typename === 'ProductVariant'
+          ? [{title: merchandise.product.title, noPoBox: merchandise.product.noPoBox?.jsonValue === true}]
+          : [],
+      ),
+    );
+    if (restricted.length > 0) {
+      errors.push({message: `${restricted.join(' and ')} can't ship to a PO Box. Please use a street address.`, target});
+    } else if (blocksPoBox(config, group.selectedDeliveryOption?.title)) {
+      errors.push({message: "Express (UPS) can't deliver to a PO Box. Choose Standard or use a street address.", target});
     }
   });
 
