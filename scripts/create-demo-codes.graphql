@@ -1,0 +1,16 @@
+# Demo code for the "no codes on sale items" rule: shopify app execute --store <shop> --query-file scripts/create-demo-codes.graphql
+mutation CreateDemoCode {
+  discountCodeBasicCreate(
+    basicCodeDiscount: {
+      title: "WELCOME10"
+      code: "WELCOME10"
+      startsAt: "2026-11-01T00:00:00Z"
+      customerSelection: {all: true}
+      customerGets: {value: {percentage: 0.1}, items: {all: true}}
+      combinesWith: {productDiscounts: true, orderDiscounts: false, shippingDiscounts: true}
+    }
+  ) {
+    codeDiscountNode { id }
+    userErrors { field message }
+  }
+}

@@ -1130,7 +1130,8 @@
         "discountClasses": [
           "PRODUCT"
         ]
-      }
+      },
+      "enteredDiscountCodes": []
     },
     "output": {
       "operations": [

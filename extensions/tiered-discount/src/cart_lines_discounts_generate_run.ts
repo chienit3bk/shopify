@@ -6,7 +6,7 @@ import {
   OrderDiscountSelectionStrategy,
   ProductDiscountSelectionStrategy,
 } from '../generated/api';
-import {isOnSale, parseTiersConfig, spendExclusion, spendProgress, volumeProgress, volumeRuleIndex} from '../../../shared/tiers/tiers';
+import {codesToReject, isOnSale, parseTiersConfig, spendExclusion, spendProgress, volumeProgress, volumeRuleIndex} from '../../../shared/tiers/tiers';
 
 /**
  * One config, two discount classes:
@@ -33,6 +33,13 @@ export function cartLinesDiscountsGenerateRun(input: CartInput): CartLinesDiscou
     ),
   }));
   const operations: CartOperation[] = [];
+
+  const rejected = codesToReject(config.rejectCodes, input.enteredDiscountCodes, lines.some((line) => line.onSale));
+  if (rejected.length) {
+    operations.push({
+      enteredDiscountCodesReject: {codes: rejected.map((code) => ({code})), message: config.rejectCodes!.message},
+    });
+  }
 
   if ((config.volume || config.volumeRules?.length) && input.discount.discountClasses.includes(DiscountClass.Product)) {
     const rules = volumeRuleIndex(config);

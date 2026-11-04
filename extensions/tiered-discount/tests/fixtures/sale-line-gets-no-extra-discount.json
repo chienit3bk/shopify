@@ -114,7 +114,8 @@
           "PRODUCT",
           "ORDER"
         ]
-      }
+      },
+      "enteredDiscountCodes": []
     },
     "output": {
       "operations": [
