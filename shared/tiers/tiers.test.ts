@@ -1,5 +1,5 @@
 import {describe, expect, test} from 'vitest';
-import {type TiersConfig, isOnSale, parseTiersConfig, spendExclusion, spendProgress, volumeProgress, volumeRuleFor} from './tiers';
+import {codesToReject, type TiersConfig, isOnSale, parseTiersConfig, spendExclusion, spendProgress, volumeProgress, volumeRuleFor} from './tiers';
 
 const config: TiersConfig = {
   version: 1,
@@ -107,5 +107,38 @@ describe('parseTiersConfig', () => {
     expect(parseTiersConfig({...config, volume: {...config.volume, tiers: [{minQuantity: 2, percent: 120}]}})).toBeNull();
     expect(parseTiersConfig({...config, spend: {...config.spend, tiers: []}})).toBeNull();
     expect(parseTiersConfig({...config, volume: null, spend: null})).toEqual({...config, volume: null, spend: null});
+  });
+});
+
+describe('codesToReject', () => {
+  const rule = {message: 'Codes can\'t be used on sale items.', allowedCodes: ['STAFF20']};
+
+  test('rejects entered codes when the cart has a sale item', () => {
+    expect(codesToReject(rule, [{code: 'WELCOME10', rejectable: true}], true)).toEqual(['WELCOME10']);
+  });
+  test('keeps codes when nothing is on sale', () => {
+    expect(codesToReject(rule, [{code: 'WELCOME10', rejectable: true}], false)).toEqual([]);
+  });
+  test('never returns a code that is not rejectable', () => {
+    expect(codesToReject(rule, [{code: 'WELCOME10', rejectable: false}], true)).toEqual([]);
+  });
+  test('keeps allowed codes, in any case', () => {
+    expect(codesToReject(rule, [{code: 'staff20', rejectable: true}], true)).toEqual([]);
+  });
+  test('does nothing without a rule', () => {
+    expect(codesToReject(undefined, [{code: 'WELCOME10', rejectable: true}], true)).toEqual([]);
+  });
+});
+
+describe('parseTiersConfig rejectCodes', () => {
+  const base = {version: 1, currencyCode: 'USD', volume: null, spend: null};
+
+  test('keeps a valid rule', () => {
+    expect(parseTiersConfig({...base, rejectCodes: {message: 'No codes'}})?.rejectCodes).toEqual({message: 'No codes', allowedCodes: []});
+  });
+  test('drops a rule without a message and keeps the rest of the config', () => {
+    const config = parseTiersConfig({...base, rejectCodes: {}});
+    expect(config).not.toBeNull();
+    expect(config?.rejectCodes).toBeUndefined();
   });
 });

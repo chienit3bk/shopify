@@ -23,6 +23,18 @@ export interface VolumeRule {
   label: string;
 }
 
+/** Script-style rule: discount codes can't be used while the cart holds a sale item. */
+export interface RejectCodes {
+  message: string;
+  /** Codes that still work on sale items, e.g. a staff code. Case-insensitive. */
+  allowedCodes?: string[];
+}
+
+export interface EnteredCode {
+  code: string;
+  rejectable: boolean;
+}
+
 export interface TiersConfig {
   version: 1;
   currencyCode: string;
@@ -42,6 +54,7 @@ export interface TiersConfig {
     /** Gift cards don't count and are never discounted. */
     excludeGiftCards?: boolean;
   } | null;
+  rejectCodes?: RejectCodes;
 }
 
 export interface SpendLine {
@@ -66,6 +79,13 @@ export function spendExclusion(spend: NonNullable<TiersConfig['spend']>, line: S
 /** On sale = a compare-at price above the price (both per unit, same currency). */
 export function isOnSale(price: number, compareAt: number | null | undefined): boolean {
   return typeof compareAt === 'number' && compareAt > price;
+}
+
+/** The entered codes to reject. A code that isn't rejectable must never be returned. */
+export function codesToReject(rule: RejectCodes | undefined, codes: EnteredCode[], hasSaleLine: boolean): string[] {
+  if (!rule || !hasSaleLine) return [];
+  const allowed = new Set((rule.allowedCodes ?? []).map((code) => code.toLowerCase()));
+  return codes.filter((entered) => entered.rejectable && !allowed.has(entered.code.toLowerCase())).map((entered) => entered.code);
 }
 
 export interface Progress<T> {
@@ -170,7 +190,19 @@ export function parseTiersConfig(raw: unknown): TiersConfig | null {
       excludeGiftCards: s.excludeGiftCards === true,
     };
   }
-  return {version: 1, currencyCode: c.currencyCode, volume, ...(volumeRules.length ? {volumeRules} : {}), spend};
+  const r = c.rejectCodes;
+  const rejectCodes: RejectCodes | null =
+    r && typeof r.message === 'string' && r.message.length > 0 && ids(r.allowedCodes ?? [])
+      ? {message: r.message, allowedCodes: r.allowedCodes ?? []}
+      : null;
+  return {
+    version: 1,
+    currencyCode: c.currencyCode,
+    volume,
+    ...(volumeRules.length ? {volumeRules} : {}),
+    spend,
+    ...(rejectCodes ? {rejectCodes} : {}),
+  };
 }
 
 function round2(value: number): number {

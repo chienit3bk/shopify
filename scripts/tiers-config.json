@@ -78,5 +78,11 @@
     ],
     "excludeOnSale": true,
     "excludeGiftCards": true
+  },
+  "rejectCodes": {
+    "message": "Discount codes can't be used with sale items. Remove the sale item or the code.",
+    "allowedCodes": [
+      "STAFF20"
+    ]
   }
 }
