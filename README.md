@@ -632,6 +632,23 @@ cart. Products with several variants link to the product page instead.
 
 Setup: theme editor → Add section → Apps → **Shop by concern**, then pick up to 3 collections.
 
+### Migration — Shopify Scripts
+
+## 26. Scripts → Functions: three scripts side by side
+
+https://github.com/user-attachments/assets/5b98d906-e721-4cac-b300-78748fadf4b4
+
+**[Read the guide](docs/scripts-to-functions.md):** three common Plus scripts next to the Function
+config that replaces them: spend tiers that skip sale items, rejecting discount codes, and hiding
+and renaming shipping rates.
+
+New here: `rejectCodes` in the tiers config. With a sale item in the cart, the `tiered-discount`
+Function returns `enteredDiscountCodesReject`, and the buyer sees why the code didn't work.
+`allowedCodes` keeps a staff code working. Without a sale item, `WELCOME10` works as normal.
+
+Setup: add `rejectCodes` to `scripts/tiers-config.json`, then run `scripts/set-tiers-config.graphql`.
+The demo code comes from `scripts/create-demo-codes.graphql`.
+
 ---
 
 Built by **Clark (Chien) Nguyen** — Shopify app developer, Checkout Extensibility & Functions.
