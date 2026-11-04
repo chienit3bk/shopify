@@ -1,0 +1,81 @@
+{%- liquid
+  assign tab_labels = block.settings.label_1 | append: '|' | append: block.settings.label_2 | append: '|' | append: block.settings.label_3 | split: '|'
+  assign tab_collections = block.settings.collections
+-%}
+<div
+  class="sb-shop page-width"
+  data-shop-by
+  data-added="{{ 'shop_by.added' | t | escape }}"
+  data-view-cart="{{ 'shop_by.view_cart' | t | escape }}"
+  data-error="{{ 'volume_picker.error' | t | escape }}"
+  {{ block.shopify_attributes }}
+>
+  {%- if block.settings.heading != blank -%}
+    <h2 class="sb-shop__heading">{{ block.settings.heading | escape }}</h2>
+  {%- endif -%}
+  {%- if tab_collections == blank -%}
+    <p>{{ 'shop_by.empty' | t }}</p>
+  {%- else -%}
+    <div class="sb-shop__tabs" role="tablist" aria-label="{{ block.settings.heading | escape }}">
+      {%- for tab_collection in tab_collections limit: 3 -%}
+        <button
+          type="button"
+          class="sb-shop__tab"
+          role="tab"
+          id="sb-tab-{{ block.id }}-{{ forloop.index }}"
+          aria-controls="sb-panel-{{ block.id }}-{{ forloop.index }}"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+        >
+          {{ tab_labels[forloop.index0] | default: tab_collection.title | escape }}
+        </button>
+      {%- endfor -%}
+    </div>
+    {%- for tab_collection in tab_collections limit: 3 -%}
+      <div
+        class="sb-shop__grid"
+        role="tabpanel"
+        id="sb-panel-{{ block.id }}-{{ forloop.index }}"
+        aria-labelledby="sb-tab-{{ block.id }}-{{ forloop.index }}"
+        {% unless forloop.first %}hidden{% endunless %}
+      >
+        {%- for card_product in tab_collection.products limit: 4 -%}
+          <div class="sb-card" data-card>
+            <a href="{{ card_product.url }}">
+              {%- if card_product.featured_image -%}
+                {{ card_product.featured_image | image_url: width: 480 | image_tag: loading: 'lazy', alt: card_product.title }}
+              {%- endif -%}
+            </a>
+            <a class="sb-card__title" href="{{ card_product.url }}">{{ card_product.title | escape }}</a>
+            <span>{{ card_product.price | money }}</span>
+            {%- if card_product.available == false -%}
+              <button type="button" class="sb-button" disabled>{{ 'shop_by.sold_out' | t }}</button>
+            {%- elsif card_product.variants.size == 1 -%}
+              <button type="button" class="sb-button" data-quick-add data-variant-id="{{ card_product.selected_or_first_available_variant.id }}">{{ 'shop_by.quick_add' | t }}</button>
+            {%- else -%}
+              <a class="sb-button" href="{{ card_product.url }}">{{ 'shop_by.choose_options' | t }}</a>
+            {%- endif -%}
+            <p class="sb-status" data-status role="status"></p>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endfor -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Shop by concern",
+  "target": "content",
+  "enabled_on": { "templates": ["index", "collection"] },
+  "javascript": "storefront-blocks.js",
+  "stylesheet": "storefront-blocks.css",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by concern" },
+    { "type": "collection_list", "id": "collections", "label": "Collections (one per tab)", "limit": 3 },
+    { "type": "text", "id": "label_1", "label": "Tab 1 label", "default": "Hydrate" },
+    { "type": "text", "id": "label_2", "label": "Tab 2 label", "default": "Brighten" },
+    { "type": "text", "id": "label_3", "label": "Tab 3 label", "default": "Deep clean" }
+  ]
+}
+{% endschema %}

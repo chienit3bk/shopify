@@ -1,0 +1,78 @@
+{%- liquid
+  assign config = shop.metafields["$app"].tiers_config.value
+  assign gid = 'gid://shopify/Product/' | append: product.id
+  assign tiers = nil
+  assign title = ''
+  if config.volume.productIds contains gid
+    assign tiers = config.volume.tiers
+    assign title = config.volume.label
+  else
+    for rule in config.volumeRules
+      if rule.productIds contains gid
+        assign tiers = rule.tiers
+        assign title = rule.label
+        break
+      endif
+    endfor
+  endif
+  assign variant = product.selected_or_first_available_variant
+  assign single_variant = false
+  if product.variants.size == 1
+    assign single_variant = true
+  endif
+-%}
+{%- if tiers and variant.available -%}
+  <div
+    class="sb-volume"
+    data-volume-picker
+    {{ block.shopify_attributes }}
+  >
+    <fieldset>
+      <legend class="sb-volume__title">{{ title | escape }}</legend>
+      <label class="sb-volume__option">
+        <input type="radio" name="sb-qty-{{ block.id }}" value="1" checked>
+        <span class="sb-volume__name">{{ 'volume_picker.one_item' | t }}</span>
+        {%- if single_variant -%}
+          <span class="sb-volume__price">{{ variant.price | money }}</span>
+        {%- else -%}
+          <span></span>
+        {%- endif -%}
+      </label>
+      {%- for tier in tiers -%}
+        {%- liquid
+          assign full = variant.price | times: tier.minQuantity
+          assign keep = 100 | minus: tier.percent
+          assign total = full | times: keep | divided_by: 100.0 | round
+          assign each = total | times: 1.0 | divided_by: tier.minQuantity | round
+          assign each_price = each | money
+        -%}
+        <label class="sb-volume__option">
+          <input type="radio" name="sb-qty-{{ block.id }}" value="{{ tier.minQuantity }}">
+          <span class="sb-volume__name">
+            {{ 'volume_picker.items' | t: count: tier.minQuantity }}
+            {%- if single_variant -%}
+              <span class="sb-volume__each">{{ 'volume_picker.each' | t: price: each_price }}</span>
+            {%- endif -%}
+          </span>
+          <span class="sb-volume__price">
+            {%- if single_variant -%}
+              {{ total | money }}
+            {%- endif -%}
+            <span class="sb-volume__save">{{ 'volume_picker.save' | t: percent: tier.percent }}</span>
+          </span>
+        </label>
+      {%- endfor -%}
+    </fieldset>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Buy more, save more",
+  "target": "content",
+  "enabled_on": { "templates": ["product"] },
+  "javascript": "storefront-blocks.js",
+  "stylesheet": "storefront-blocks.css",
+  "settings": []
+}
+{% endschema %}
