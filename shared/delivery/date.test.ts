@@ -6,6 +6,7 @@ import {
   dateProblem,
   earliestDeliveryDate,
   isPoBox,
+  pickupOnlyTitles,
   poBoxRestrictedTitles,
   parseDeliveryDateConfig,
   pickerConstraints,
@@ -95,5 +96,23 @@ describe('poBoxRestrictedTitles', () => {
 
   test('is empty when no item is flagged', () => {
     expect(poBoxRestrictedTitles([{title: 'Gentle Gel Cleanser', noPoBox: false}])).toEqual([]);
+  });
+});
+
+describe('pickupOnlyTitles', () => {
+  const lines = [
+    {title: 'Jade Facial Roller', pickupOnly: true},
+    {title: 'Gentle Gel Cleanser', pickupOnly: false},
+    {title: 'Jade Facial Roller', pickupOnly: true},
+  ];
+
+  test('lists flagged items, each once, when a shipping option is selected', () => {
+    expect(pickupOnlyTitles(lines, 'SHIPPING')).toEqual(['Jade Facial Roller']);
+    expect(pickupOnlyTitles(lines, 'LOCAL')).toEqual(['Jade Facial Roller']);
+  });
+
+  test('is empty for pickup, or before an option is selected', () => {
+    expect(pickupOnlyTitles(lines, 'PICK_UP')).toEqual([]);
+    expect(pickupOnlyTitles(lines, null)).toEqual([]);
   });
 });

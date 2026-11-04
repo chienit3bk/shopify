@@ -1,0 +1,30 @@
+# One-time setup for items that can only be picked up (run with `shopify store execute --allow-mutations`):
+# local pickup on the shop location, a product field the merchant ticks in the admin, and a demo value on
+# Jade Facial Roller. The delivery-validation Function reads it. A pickup location needs an address:
+# without one, checkout says "No locations with your items".
+mutation SetupPickupOnly {
+  locationEdit(id: "gid://shopify/Location/116755267866", input: {address: {address1: "350 5th Ave", city: "New York", provinceCode: "NY", zip: "10118", countryCode: US}}) {
+    location { id }
+    userErrors { field message }
+  }
+  locationLocalPickupEnable(localPickupSettings: {locationId: "gid://shopify/Location/116755267866", pickupTime: TWO_HOURS}) {
+    localPickupSettings { pickupTime }
+    userErrors { field message }
+  }
+  metafieldDefinitionCreate(definition: {
+    name: "Pickup only"
+    namespace: "custom"
+    key: "pickup_only"
+    description: "Tick when this item can't be shipped and has to be picked up."
+    type: "boolean"
+    ownerType: PRODUCT
+    pin: true
+  }) {
+    createdDefinition { id }
+    userErrors { field message code }
+  }
+  metafieldsSet(metafields: [{ownerId: "gid://shopify/Product/10490410926362", namespace: "custom", key: "pickup_only", type: "boolean", value: "true"}]) {
+    metafields { key value }
+    userErrors { field message }
+  }
+}

@@ -17,7 +17,8 @@
               "address2": null
             },
             "selectedDeliveryOption": {
-              "title": "Standard"
+              "title": "Standard",
+              "deliveryMethodType": "SHIPPING"
             },
             "cartLines": []
           }
