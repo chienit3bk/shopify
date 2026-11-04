@@ -13,7 +13,8 @@
         "buyerIdentity": {
           "purchasingCompany": null,
           "customer": {
-            "numberOfOrders": 0
+            "numberOfOrders": 0,
+            "lastClaim": null
           },
           "isAuthenticated": false
         },
@@ -82,6 +83,9 @@
               }
             ]
           }
+        },
+        "localTime": {
+          "date": "2026-11-04"
         }
       }
     },

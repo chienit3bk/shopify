@@ -5,6 +5,8 @@
  * Pure, used by the cart-rules Validation Function and unit tests.
  */
 
+import {addDays} from '../delivery/date';
+
 /** Who a rule applies to. B2B = buying for a company location; omitted = everyone. */
 export type BuyerScope = 'b2b' | 'retail';
 
@@ -30,6 +32,12 @@ export type CartRule = {buyer?: BuyerScope} & (
   | {type: 'consent'; id: string; productIds: string[]; label: string; error: string}
   /** Products with a ship-to list (product metafield) can only go to those countries. */
   | {type: 'country_restriction'}
+  /**
+   * One per customer per period (sample kits). The last claim is a customer metafield, which the
+   * Function also gets for a guest whose email matches a customer. That can only block: a guest
+   * typing someone else's email stops themselves, and never learns the date.
+   */
+  | {type: 'once_per_period'; productIds: string[]; days: number; label: string}
 );
 
 export interface CartRulesConfig {
@@ -67,6 +75,12 @@ export interface RuleCart {
   deliveryCountry?: string;
   /** Cart currency per config currency; unknown → only explicit market amounts apply. */
   rate?: number;
+  /** Buyer signed in to their customer account (a guest only typed an email). */
+  isSignedIn?: boolean;
+  /** Date of the buyer's last claim (customer metafield), YYYY-MM-DD or a full timestamp. */
+  lastClaim?: string;
+  /** Shop's date, YYYY-MM-DD. */
+  today?: string;
   lines: RuleLine[];
 }
 
@@ -77,7 +91,8 @@ export type Violation =
   | {type: 'min_quantity'; title: string; min: number; quantity: number}
   | {type: 'case_pack'; title: string; size: number; quantity: number}
   | {type: 'consent'; id: string; error: string}
-  | {type: 'country_restriction'; title: string; countryCode: string; shipsTo: string[]};
+  | {type: 'country_restriction'; title: string; countryCode: string; shipsTo: string[]}
+  | {type: 'once_per_period'; label: string; days: number; nextDate?: string};
 
 /** Every rule the cart breaks, in config order. Gift lines never count. */
 export function violations(config: CartRulesConfig, cart: RuleCart): Violation[] {
@@ -111,6 +126,13 @@ export function violations(config: CartRulesConfig, cart: RuleCart): Violation[]
         seen.add(line.productId);
         out.push({type: 'country_restriction', title: line.title, countryCode: country, shipsTo});
       }
+    } else if (rule.type === 'once_per_period') {
+      if (!paid.some((l) => rule.productIds.includes(l.productId))) continue;
+      const claimed = cart.lastClaim?.slice(0, 10);
+      if (!claimed || !cart.today || !ISO_DATE.test(claimed)) continue;
+      const nextDate = addDays(claimed, rule.days);
+      if (cart.today >= nextDate) continue;
+      out.push({type: 'once_per_period', label: rule.label, days: rule.days, ...(cart.isSignedIn ? {nextDate} : {})});
     } else if (rule.type === 'consent') {
       if (paid.some((l) => rule.productIds.includes(l.productId)) && !cart.consents?.includes(rule.id)) {
         out.push({type: 'consent', id: rule.id, error: rule.error});
@@ -124,7 +146,8 @@ export function violations(config: CartRulesConfig, cart: RuleCart): Violation[]
       const notCounted = cart.lines.filter((l) => l.isGift || excluded.has(l.productId)).reduce((sum, l) => sum + l.subtotal, 0);
       const counted = paid.filter((l) => !excluded.has(l.productId)).reduce((sum, l) => sum + l.subtotal, 0);
       const subtotal = round2(cart.subtotal !== undefined ? cart.subtotal - notCounted : counted);
-      if (paid.length > 0 && subtotal < minimum) {
+      // A cart of excluded items only (a sample kit, a service) has nothing the minimum applies to.
+      if (paid.some((l) => !excluded.has(l.productId)) && subtotal < minimum) {
         out.push({type: 'min_subtotal', minimum, subtotal, currencyCode: cart.currencyCode, firstOrder});
       }
     } else {
@@ -186,6 +209,7 @@ export function parseCartRules(raw: unknown): CartRulesConfig | null {
     if (r.buyer !== undefined && r.buyer !== 'b2b' && r.buyer !== 'retail') return false;
     if (r.type === 'min_quantity') return (r.productIds === undefined || ids(r.productIds)) && count(r.min);
     if (r.type === 'country_restriction') return true;
+    if (r.type === 'once_per_period') return ids(r.productIds) && count(r.days) && typeof r.label === 'string';
     if (r.type === 'consent') return ids(r.productIds) && typeof r.id === 'string' && /^[a-z0-9-]+$/.test(r.id) && typeof r.label === 'string' && typeof r.error === 'string';
     if (r.type === 'case_pack') return ids(r.productIds) && count(r.size) && r.size > 1;
     if (r.type === 'max_quantity') return ids(r.productIds) && Number.isInteger(r.max) && r.max > 0 && typeof r.label === 'string';
@@ -198,6 +222,8 @@ export function parseCartRules(raw: unknown): CartRulesConfig | null {
     : [];
   return {version: 1, rules, excludedProductIds};
 }
+
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 const round2 = (n: number) => Math.round(n * 100) / 100;
 

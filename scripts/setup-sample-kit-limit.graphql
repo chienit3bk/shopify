@@ -1,0 +1,16 @@
+# One-time setup for the sample kit limit (run with `shopify store execute --allow-mutations`):
+# the customer field the cart-rules Function reads. A Shopify Flow on "Order created" writes it.
+mutation SetupSampleKitLimit {
+  metafieldDefinitionCreate(definition: {
+    name: "Last sample kit order"
+    namespace: "custom"
+    key: "sample_kit_last_order"
+    description: "Date of the customer's last sample kit order. Written by Shopify Flow."
+    type: "date"
+    ownerType: CUSTOMER
+    pin: true
+  }) {
+    createdDefinition { id }
+    userErrors { field message code }
+  }
+}

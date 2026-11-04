@@ -17,7 +17,8 @@
             }
           },
           "customer": {
-            "numberOfOrders": 4
+            "numberOfOrders": 4,
+            "lastClaim": null
           },
           "isAuthenticated": true
         },
@@ -103,6 +104,9 @@
               }
             ]
           }
+        },
+        "localTime": {
+          "date": "2026-11-04"
         }
       }
     },

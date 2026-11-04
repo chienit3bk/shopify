@@ -23,6 +23,10 @@ function message(v: Violation): string {
       const options = lower > 0 ? `${lower} or ${upper}` : `${upper}`;
       return `${v.title} ships in cases of ${v.size}. Change the quantity to ${options} (you have ${v.quantity}).`;
     }
+    case 'once_per_period':
+      return v.nextDate
+        ? `You can order one ${v.label} every ${v.days} days. Your next one is available from ${v.nextDate}. Remove it to continue.`
+        : `A ${v.label} was already ordered with this email in the last ${v.days} days. Remove it to continue.`;
     case 'incompatible':
       return `${v.label}: ${v.titles.join(' and ')} can't be ordered together. Remove one to continue.`;
   }
@@ -30,7 +34,8 @@ function message(v: Violation): string {
 
 /**
  * Max quantity per product, minimum order value per market and incompatible products; for B2B
- * buyers also minimum quantity, case packs and a first-order minimum.
+ * buyers also minimum quantity, case packs and a first-order minimum; one sample kit per customer
+ * per period.
  * Checked in checkout (not on the cart page, where buyers are still building the cart).
  */
 export function cartValidationsGenerateRun(input: CartValidationsGenerateRunInput): CartValidationsGenerateRunResult {
@@ -53,6 +58,9 @@ export function cartValidationsGenerateRun(input: CartValidationsGenerateRunInpu
     consents: parseConsents(input.cart.consent?.value),
     deliveryCountry: input.cart.deliveryGroups[0]?.deliveryAddress?.countryCode ?? undefined,
     rate: Number(input.presentmentCurrencyRate) || undefined,
+    isSignedIn: Boolean(isAuthenticated),
+    lastClaim: customer?.lastClaim?.value,
+    today: input.shop.localTime.date,
     lines: input.cart.lines.map((line) => ({
       productId: line.merchandise.__typename === 'ProductVariant' ? line.merchandise.product.id : '',
       title: line.merchandise.__typename === 'ProductVariant' ? line.merchandise.product.title : 'This item',
