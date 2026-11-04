@@ -603,6 +603,35 @@ the case discount.
 
 Setup: `productCreate` "Gentle Gel Cleanser — Case of 6", then `scripts/create-case-pack.graphql`.
 
+### Storefront — theme app extension
+
+## 24. Buy more, save more on the product page
+
+https://github.com/user-attachments/assets/36e7e588-f9e1-4ca9-a888-e97010d9076f
+
+**Quantity options under the price, from the same config as the discount.** The block reads the
+`tiers_config` metafield that the `tiered-discount` Function uses, so the storefront and the
+checkout can't disagree: 4 × Gentle Gel Cleanser shows $86.40 in the block, the cart and checkout.
+
+It doesn't add its own button. It sets the quantity on the theme's buy form, so the theme's Add to
+cart and cart drawer keep working. Products with no table show nothing. Products with several
+variants show the percent only, because the block prices the selected variant at page load.
+
+Found while testing: this theme has a hidden installment form before the buy form, so the block
+looks for the form that has a submit button.
+
+Setup: theme editor → product template → Add block → Apps → **Buy more, save more**.
+
+## 25. Shop by concern on home and collection pages
+
+https://github.com/user-attachments/assets/8d06ac5a-f249-4b22-b8cd-4d4658c80461
+
+**Tabs from a collection list, with quick add.** Tabs switch without a page load and follow the
+ARIA tabs pattern (arrow keys, Home, End). Quick add posts to `/cart/add.js` and shows a link to the
+cart. Products with several variants link to the product page instead.
+
+Setup: theme editor → Add section → Apps → **Shop by concern**, then pick up to 3 collections.
+
 ---
 
 Built by **Clark (Chien) Nguyen** — Shopify app developer, Checkout Extensibility & Functions.

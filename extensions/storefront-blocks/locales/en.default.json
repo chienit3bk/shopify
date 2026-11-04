@@ -1,0 +1,17 @@
+{
+  "volume_picker": {
+    "one_item": "1 item",
+    "items": "{{ count }} items",
+    "save": "Save {{ percent }}%",
+    "each": "{{ price }} each",
+    "error": "Couldn't add this to your cart. Please try again."
+  },
+  "shop_by": {
+    "quick_add": "Quick add",
+    "added": "Added",
+    "view_cart": "View cart",
+    "choose_options": "Choose options",
+    "sold_out": "Sold out",
+    "empty": "Pick a collection for this tab in the theme editor."
+  }
+}
