@@ -15,6 +15,20 @@ query CartValidationsGenerateRunInput {
       selectedDeliveryOption {
         title
       }
+      cartLines {
+        merchandise {
+          __typename
+          ... on ProductVariant {
+            product {
+              title
+              # True on items the carrier can't take to a PO Box, whichever option is chosen.
+              noPoBox: metafield(namespace: "custom", key: "no_po_box") {
+                jsonValue
+              }
+            }
+          }
+        }
+      }
     }
   }
   shop {

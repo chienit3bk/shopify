@@ -1,0 +1,15 @@
+# One-time setup for the sample kit (run with `shopify store execute --allow-mutations`).
+# 1) productCreate "Solvane Sample Kit" → note the ids, 2) this file prices it and publishes it to
+# the Online Store. The limit itself is the `once_per_period` rule in scripts/cart-rules-config.json.
+mutation SetupSampleKit {
+  productVariantsBulkUpdate(
+    productId: "gid://shopify/Product/10498993881370"
+    variants: [{id: "gid://shopify/ProductVariant/53309528768794", price: "5.00", inventoryItem: {requiresShipping: true, tracked: false, measurement: {weight: {value: 80, unit: GRAMS}}}}]
+  ) {
+    productVariants { id price }
+    userErrors { field message }
+  }
+  publishablePublish(id: "gid://shopify/Product/10498993881370", input: [{publicationId: "gid://shopify/Publication/322667872538"}]) {
+    userErrors { message }
+  }
+}

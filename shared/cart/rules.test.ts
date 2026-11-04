@@ -148,3 +148,45 @@ test('parseCartRules drops malformed rules', () => {
   });
   expect(b2bRules?.rules).toEqual([{buyer: 'b2b', type: 'min_quantity', min: 3}]);
 });
+
+describe('once per period', () => {
+  const rule: CartRulesConfig = {
+    version: 1,
+    excludedProductIds: ['kit'],
+    rules: [
+      {type: 'once_per_period', productIds: ['kit'], days: 30, label: 'sample kit'},
+      {type: 'min_subtotal', amount: 25, currencyCode: 'USD'},
+    ],
+  };
+  const kit = {productId: 'kit', title: 'Sample Kit', quantity: 1, subtotal: 5, isGift: false};
+  const cart = {currencyCode: 'USD', lines: [kit], today: '2026-11-04'};
+
+  test('a first claim passes, signed in or not, and the kit alone needs no minimum', () => {
+    expect(violations(rule, cart)).toEqual([]);
+    expect(violations(rule, {...cart, isSignedIn: true})).toEqual([]);
+  });
+
+  test('blocked until the period ends, allowed on the day it ends', () => {
+    expect(violations(rule, {...cart, isSignedIn: true, lastClaim: '2026-10-06T09:00:00Z'})).toEqual([
+      {type: 'once_per_period', label: 'sample kit', days: 30, nextDate: '2026-11-05'},
+    ]);
+    expect(violations(rule, {...cart, isSignedIn: true, lastClaim: '2026-10-05'})).toEqual([]);
+  });
+
+  test('a guest matching a customer is blocked without seeing the date', () => {
+    const [violation] = violations(rule, {...cart, lastClaim: '2026-10-20'});
+    expect(violation).toEqual({type: 'once_per_period', label: 'sample kit', days: 30});
+    expect(violation).not.toHaveProperty('nextDate');
+  });
+
+  test('other carts and unreadable dates are left alone', () => {
+    const other = {productId: 'serum', title: 'Serum', quantity: 1, subtotal: 30, isGift: false};
+    expect(violations(rule, {...cart, lines: [other]})).toEqual([]);
+    expect(violations(rule, {...cart, isSignedIn: true, lastClaim: 'soon'})).toEqual([]);
+  });
+
+  test('parse keeps a valid rule and drops a bad one', () => {
+    const bad = {type: 'once_per_period', productIds: ['kit'], days: 0, label: 'x'};
+    expect(parseCartRules({version: 1, rules: [rule.rules[0], bad]})?.rules).toEqual([rule.rules[0]]);
+  });
+});

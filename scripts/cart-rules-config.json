@@ -1,7 +1,9 @@
 {
   "version": 1,
-  "excludedProductIds": ["gid://shopify/Product/10493236117786", "gid://shopify/Product/10495215698202"],
+  "excludedProductIds": ["gid://shopify/Product/10493236117786", "gid://shopify/Product/10495215698202", "gid://shopify/Product/10498993881370"],
   "rules": [
+    {"type": "once_per_period", "productIds": ["gid://shopify/Product/10498993881370"], "days": 30, "label": "sample kit"},
+    {"type": "max_quantity", "productIds": ["gid://shopify/Product/10498993881370"], "max": 1, "label": "Sample kit limit"},
     {"buyer": "retail", "type": "max_quantity", "productIds": ["gid://shopify/Product/10490410598682"], "max": 3, "label": "BFCM limit"},
     {"buyer": "retail", "type": "min_subtotal", "amount": 25, "amounts": {"EUR": 25}, "currencyCode": "USD"},
     {"type": "incompatible", "productIds": ["gid://shopify/Product/10490410533146", "gid://shopify/Product/10490410565914"], "label": "One mask per order"},

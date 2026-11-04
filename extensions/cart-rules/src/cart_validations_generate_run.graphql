@@ -22,6 +22,10 @@ query CartValidationsGenerateRunInput {
       }
       customer {
         numberOfOrders
+        # Last sample kit order; written by a Shopify Flow on "Order created".
+        lastClaim: metafield(namespace: "custom", key: "sample_kit_last_order") {
+          value
+        }
       }
       # A guest's email can name anyone's account; order history counts only when signed in.
       isAuthenticated
@@ -61,6 +65,9 @@ query CartValidationsGenerateRunInput {
     }
   }
   shop {
+    localTime {
+      date
+    }
     # App-owned rules (scripts/cart-rules-config.json).
     config: metafield(key: "cart_rules_config") {
       jsonValue

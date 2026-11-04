@@ -1,0 +1,93 @@
+{
+  "payload": {
+    "export": "cart-validations-generate-run",
+    "target": "cart.validations.generate.run",
+    "input": {
+      "buyerJourney": {
+        "step": "CHECKOUT_INTERACTION"
+      },
+      "presentmentCurrencyRate": "1.0",
+      "cart": {
+        "consent": null,
+        "deliveryGroups": [],
+        "buyerIdentity": {
+          "purchasingCompany": null,
+          "customer": {
+            "numberOfOrders": 2,
+            "lastClaim": {
+              "value": "2026-10-20"
+            }
+          },
+          "isAuthenticated": true
+        },
+        "cost": {
+          "subtotalAmount": {
+            "amount": "5.0",
+            "currencyCode": "USD"
+          }
+        },
+        "lines": [
+          {
+            "quantity": 1,
+            "cost": {
+              "totalAmount": {
+                "amount": "5.0"
+              }
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "product": {
+                "id": "gid://shopify/Product/kit",
+                "title": "Solvane Sample Kit",
+                "shipsTo": null
+              }
+            }
+          }
+        ]
+      },
+      "shop": {
+        "config": {
+          "jsonValue": {
+            "version": 1,
+            "excludedProductIds": [
+              "gid://shopify/Product/kit"
+            ],
+            "rules": [
+              {
+                "type": "once_per_period",
+                "productIds": [
+                  "gid://shopify/Product/kit"
+                ],
+                "days": 30,
+                "label": "sample kit"
+              },
+              {
+                "type": "min_subtotal",
+                "amount": 25,
+                "currencyCode": "USD"
+              }
+            ]
+          }
+        },
+        "localTime": {
+          "date": "2026-11-04"
+        }
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "validationAdd": {
+            "errors": [
+              {
+                "message": "You can order one sample kit every 30 days. Your next one is available from 2026-11-19. Remove it to continue.",
+                "target": "$.cart"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

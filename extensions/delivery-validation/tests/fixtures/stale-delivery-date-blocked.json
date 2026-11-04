@@ -18,7 +18,8 @@
             },
             "selectedDeliveryOption": {
               "title": "Standard"
-            }
+            },
+            "cartLines": []
           }
         ]
       },
