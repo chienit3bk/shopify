@@ -15,7 +15,8 @@
               "address2": null
             },
             "selectedDeliveryOption": {
-              "title": "Express \u2014 UPS 2nd Day Air"
+              "title": "Express \u2014 UPS 2nd Day Air",
+              "deliveryMethodType": "SHIPPING"
             },
             "cartLines": []
           }

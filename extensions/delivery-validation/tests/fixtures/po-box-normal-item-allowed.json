@@ -15,7 +15,8 @@
               "address2": null
             },
             "selectedDeliveryOption": {
-              "title": "Standard \u2014 USPS Ground (3\u20135 days)"
+              "title": "Standard \u2014 USPS Ground (3\u20135 days)",
+              "deliveryMethodType": "SHIPPING"
             },
             "cartLines": [
               {
@@ -23,7 +24,8 @@
                   "__typename": "ProductVariant",
                   "product": {
                     "title": "Gentle Gel Cleanser",
-                    "noPoBox": null
+                    "noPoBox": null,
+                    "pickupOnly": null
                   }
                 }
               }

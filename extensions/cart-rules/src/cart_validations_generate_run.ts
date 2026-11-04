@@ -54,6 +54,7 @@ export function cartValidationsGenerateRun(input: CartValidationsGenerateRunInpu
     currencyCode: input.cart.cost.subtotalAmount.currencyCode,
     subtotal: Number(input.cart.cost.subtotalAmount.amount),
     isB2B: Boolean(purchasingCompany),
+    isWholesale: Boolean(customer?.isWholesale),
     isFirstOrder: pastOrders === 0,
     consents: parseConsents(input.cart.consent?.value),
     deliveryCountry: input.cart.deliveryGroups[0]?.deliveryAddress?.countryCode ?? undefined,

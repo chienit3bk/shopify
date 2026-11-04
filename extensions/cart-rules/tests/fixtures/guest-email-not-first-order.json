@@ -14,7 +14,8 @@
           "purchasingCompany": null,
           "customer": {
             "numberOfOrders": 0,
-            "lastClaim": null
+            "lastClaim": null,
+            "isWholesale": false
           },
           "isAuthenticated": false
         },

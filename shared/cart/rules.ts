@@ -7,8 +7,12 @@
 
 import {addDays} from '../delivery/date';
 
-/** Who a rule applies to. B2B = buying for a company location; omitted = everyone. */
-export type BuyerScope = 'b2b' | 'retail';
+/**
+ * Who a rule applies to. B2B = buying for a company location; wholesale = a customer tagged
+ * "wholesale" (no B2B catalog needed); omitted = everyone. Wholesale can only add limits: the tag
+ * also matches a guest's unverified email, so never use it to grant something.
+ */
+export type BuyerScope = 'b2b' | 'retail' | 'wholesale';
 
 export type CartRule = {buyer?: BuyerScope} & (
   | {type: 'max_quantity'; productIds: string[]; max: number; label: string}
@@ -67,6 +71,8 @@ export interface RuleCart {
   subtotal?: number;
   /** Buying for a company location (B2B checkout). */
   isB2B?: boolean;
+  /** Customer tagged "wholesale", signed in or matched by a guest's email. */
+  isWholesale?: boolean;
   /** No earlier orders (the company location's, or the customer's). Unknown → false. */
   isFirstOrder?: boolean;
   /** Consent ids the buyer ticked. */
@@ -101,7 +107,7 @@ export function violations(config: CartRulesConfig, cart: RuleCart): Violation[]
   const out: Violation[] = [];
 
   for (const rule of config.rules) {
-    if (rule.buyer && rule.buyer !== (cart.isB2B ? 'b2b' : 'retail')) continue;
+    if (rule.buyer === 'wholesale' ? !cart.isWholesale : rule.buyer && rule.buyer !== (cart.isB2B ? 'b2b' : 'retail')) continue;
 
     if (rule.type === 'max_quantity') {
       for (const {title, quantity} of perProduct(paid.filter((l) => rule.productIds.includes(l.productId)))) {
@@ -156,7 +162,14 @@ export function violations(config: CartRulesConfig, cart: RuleCart): Violation[]
       if (present.size > 1) out.push({type: 'incompatible', titles: [...present.values()], label: rule.label});
     }
   }
-  return out;
+  return highestMinimumOnly(out);
+}
+
+/** A buyer under two minimums (retail + wholesale) only needs to hear the higher one. */
+function highestMinimumOnly(found: Violation[]): Violation[] {
+  const minimums = found.filter((v) => v.type === 'min_subtotal');
+  const top = minimums.reduce<Violation | null>((best, v) => (best?.type === 'min_subtotal' && best.minimum >= v.minimum ? best : v), null);
+  return found.filter((v) => v.type !== 'min_subtotal' || v === top);
 }
 
 /** Consent rules that apply to these product ids (for the checkbox block). */
@@ -206,7 +219,7 @@ export function parseCartRules(raw: unknown): CartRulesConfig | null {
   const money = (n: unknown) => typeof n === 'number' && n > 0;
   const rules = c.rules.filter((r: any): r is CartRule => {
     if (!r) return false;
-    if (r.buyer !== undefined && r.buyer !== 'b2b' && r.buyer !== 'retail') return false;
+    if (r.buyer !== undefined && r.buyer !== 'b2b' && r.buyer !== 'retail' && r.buyer !== 'wholesale') return false;
     if (r.type === 'min_quantity') return (r.productIds === undefined || ids(r.productIds)) && count(r.min);
     if (r.type === 'country_restriction') return true;
     if (r.type === 'once_per_period') return ids(r.productIds) && count(r.days) && typeof r.label === 'string';

@@ -14,6 +14,7 @@ query CartValidationsGenerateRunInput {
       }
       selectedDeliveryOption {
         title
+        deliveryMethodType
       }
       cartLines {
         merchandise {
@@ -23,6 +24,10 @@ query CartValidationsGenerateRunInput {
               title
               # True on items the carrier can't take to a PO Box, whichever option is chosen.
               noPoBox: metafield(namespace: "custom", key: "no_po_box") {
+                jsonValue
+              }
+              # True on items that can't be shipped at all: the buyer has to choose Pick up.
+              pickupOnly: metafield(namespace: "custom", key: "pickup_only") {
                 jsonValue
               }
             }

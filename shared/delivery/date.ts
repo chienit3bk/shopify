@@ -85,6 +85,12 @@ export function poBoxRestrictedTitles(lines: Array<{title: string; noPoBox: bool
   return [...new Set(lines.filter((line) => line.noPoBox).map((line) => line.title))];
 }
 
+/** Pickup-only items in a group whose selected option isn't pickup; nothing selected yet → none. */
+export function pickupOnlyTitles(lines: Array<{title: string; pickupOnly: boolean}>, methodType: string | null | undefined): string[] {
+  if (!methodType || methodType === 'PICK_UP') return [];
+  return [...new Set(lines.filter((line) => line.pickupOnly).map((line) => line.title))];
+}
+
 /** The selected option can't deliver to a PO Box (title starts with a blocked method). */
 export function blocksPoBox(config: DeliveryDateConfig, optionTitle: string | null | undefined): boolean {
   if (!optionTitle) return false;

@@ -688,6 +688,35 @@ Limits:
 Setup: `scripts/create-sample-kit.graphql`, `scripts/setup-sample-kit-limit.graphql`, then
 `scripts/set-cart-rules-config.graphql`.
 
+## 29. Minimum order for wholesale-tagged customers
+
+https://github.com/user-attachments/assets/1dc1507c-32a4-4ac5-b5d9-a6a6aaa4c0db
+
+A store without B2B catalogs can still hold wholesale customers to a minimum. A `min_subtotal` rule
+with `"buyer": "wholesale"` applies to customers tagged `wholesale` (`hasAnyTag` in the
+`cart-rules` Function). In the demo the same $38 cart is blocked for the tagged email and passes
+for anyone else; the tagged customer passes at $100.32.
+
+A guest whose email matches the tag gets the minimum too. That is safe because the rule only
+blocks. **Never use a guest's email to grant something**, like a VIP gift: the email isn't verified,
+so anyone who knows it would get the gift. Check `isAuthenticated` for those.
+
+Setup: tag the customer, add the rule to `scripts/cart-rules-config.json`, then run
+`scripts/set-cart-rules-config.graphql`.
+
+## 30. Pickup-only items
+
+https://github.com/user-attachments/assets/0f9c05d9-80fb-489c-a0f8-b6d291faf972
+
+Tick the product field **Pickup only** (`custom.pickup_only`). With a shipping option selected,
+the `delivery-validation` Function tells the buyer to choose Pickup; with Pickup, the order goes
+through. It reads `deliveryMethodType` on the selected option, so option names don't matter.
+
+Gotcha: a pickup location needs an address. Without one, checkout says "No locations with your
+items" even though pickup is on.
+
+Setup: `scripts/setup-pickup-only.graphql`.
+
 ---
 
 Built by **Clark (Chien) Nguyen** — Shopify app developer, Checkout Extensibility & Functions.

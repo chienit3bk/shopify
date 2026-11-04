@@ -138,7 +138,7 @@ test('parseCartRules drops malformed rules', () => {
   const b2bRules = parseCartRules({
     version: 1,
     rules: [
-      {buyer: 'wholesale', type: 'min_quantity', min: 3},
+      {buyer: 'staff', type: 'min_quantity', min: 3},
       {type: 'case_pack', productIds: ['x'], size: 1},
       {type: 'min_quantity', min: 2.5},
       {type: 'min_subtotal', amount: 300, firstOrderAmount: -1, currencyCode: 'EUR'},
@@ -188,5 +188,34 @@ describe('once per period', () => {
   test('parse keeps a valid rule and drops a bad one', () => {
     const bad = {type: 'once_per_period', productIds: ['kit'], days: 0, label: 'x'};
     expect(parseCartRules({version: 1, rules: [rule.rules[0], bad]})?.rules).toEqual([rule.rules[0]]);
+  });
+});
+
+describe('wholesale minimum', () => {
+  const rule: CartRulesConfig = {
+    version: 1,
+    excludedProductIds: [],
+    rules: [
+      {buyer: 'retail', type: 'min_subtotal', amount: 25, currencyCode: 'USD'},
+      {buyer: 'wholesale', type: 'min_subtotal', amount: 100, currencyCode: 'USD'},
+    ],
+  };
+  const cart = (subtotal: number) => ({
+    currencyCode: 'USD',
+    lines: [{productId: 'cream', title: 'Cream', quantity: 1, subtotal, isGift: false}],
+  });
+
+  test('a tagged customer gets only the higher minimum', () => {
+    expect(violations(rule, {...cart(20), isWholesale: true})).toEqual([
+      {type: 'min_subtotal', minimum: 100, subtotal: 20, currencyCode: 'USD', firstOrder: false},
+    ]);
+  });
+
+  test('a tagged customer passes at the minimum; everyone else keeps the retail one', () => {
+    expect(violations(rule, {...cart(100), isWholesale: true})).toEqual([]);
+    expect(violations(rule, cart(60))).toEqual([]);
+    expect(violations(rule, cart(20))).toEqual([
+      {type: 'min_subtotal', minimum: 25, subtotal: 20, currencyCode: 'USD', firstOrder: false},
+    ]);
   });
 });

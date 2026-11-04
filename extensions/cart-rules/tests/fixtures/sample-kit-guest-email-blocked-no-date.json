@@ -16,7 +16,8 @@
             "numberOfOrders": 0,
             "lastClaim": {
               "value": "2026-10-20"
-            }
+            },
+            "isWholesale": false
           },
           "isAuthenticated": false
         },

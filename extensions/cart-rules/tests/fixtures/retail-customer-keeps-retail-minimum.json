@@ -1,0 +1,84 @@
+{
+  "payload": {
+    "export": "cart-validations-generate-run",
+    "target": "cart.validations.generate.run",
+    "input": {
+      "buyerJourney": {
+        "step": "CHECKOUT_INTERACTION"
+      },
+      "presentmentCurrencyRate": "1.0",
+      "cart": {
+        "consent": null,
+        "deliveryGroups": [],
+        "buyerIdentity": {
+          "purchasingCompany": null,
+          "customer": {
+            "numberOfOrders": 0,
+            "isWholesale": false,
+            "lastClaim": null
+          },
+          "isAuthenticated": false
+        },
+        "cost": {
+          "subtotalAmount": {
+            "amount": "38.0",
+            "currencyCode": "USD"
+          }
+        },
+        "lines": [
+          {
+            "quantity": 1,
+            "cost": {
+              "totalAmount": {
+                "amount": "38.0"
+              }
+            },
+            "giftRule": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "product": {
+                "id": "gid://shopify/Product/cream",
+                "title": "Ceramide Barrier Cream",
+                "shipsTo": null
+              }
+            }
+          }
+        ]
+      },
+      "shop": {
+        "config": {
+          "jsonValue": {
+            "version": 1,
+            "excludedProductIds": [],
+            "rules": [
+              {
+                "buyer": "retail",
+                "type": "min_subtotal",
+                "amount": 25,
+                "currencyCode": "USD"
+              },
+              {
+                "buyer": "wholesale",
+                "type": "min_subtotal",
+                "amount": 100,
+                "currencyCode": "USD"
+              }
+            ]
+          }
+        },
+        "localTime": {
+          "date": "2026-11-04"
+        }
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "validationAdd": {
+            "errors": []
+          }
+        }
+      ]
+    }
+  }
+}
