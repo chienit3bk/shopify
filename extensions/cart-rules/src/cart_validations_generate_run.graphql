@@ -22,6 +22,8 @@ query CartValidationsGenerateRunInput {
       }
       customer {
         numberOfOrders
+        # Wholesale minimum. Also true for a guest whose email matches: only ever used to block.
+        isWholesale: hasAnyTag(tags: ["wholesale"])
         # Last sample kit order; written by a Shopify Flow on "Order created".
         lastClaim: metafield(namespace: "custom", key: "sample_kit_last_order") {
           value

@@ -18,7 +18,8 @@
           },
           "customer": {
             "numberOfOrders": 4,
-            "lastClaim": null
+            "lastClaim": null,
+            "isWholesale": false
           },
           "isAuthenticated": true
         },
