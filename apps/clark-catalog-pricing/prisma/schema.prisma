@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Note that some adapters may set a maximum length for the String type by default, please ensure your strings are long
+// enough when changing adapters.
+// See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
+datasource db {
+  provider = "sqlite"
+  url      = "file:dev.sqlite"
+}
+
+model Session {
+  id            String    @id
+  shop          String
+  state         String
+  isOnline      Boolean   @default(false)
+  scope         String?
+  expires       DateTime?
+  accessToken   String
+  userId        BigInt?
+  firstName     String?
+  lastName      String?
+  email         String?
+  accountOwner  Boolean   @default(false)
+  locale        String?
+  collaborator  Boolean?  @default(false)
+  emailVerified Boolean?  @default(false)
+  refreshToken        String?
+  refreshTokenExpires DateTime?
+}
+
+// One wholesale price rule = one Shopify catalog + price list for a company location.
+model PricingRule {
+  id                   Int       @id @default(autoincrement())
+  shop                 String
+  name                 String
+  companyLocationId    String
+  companyLocationName  String
+  percentOff           Float
+  collectionId         String?
+  collectionTitle      String?
+  collectionPercentOff Float?
+  currency             String
+  catalogId            String
+  priceListId          String
+  fixedPriceCount      Int       @default(0)
+  lastSyncedAt         DateTime?
+  createdAt            DateTime  @default(now())
+  logs                 SyncLog[]
+
+  @@unique([shop, companyLocationId])
+  @@index([shop])
+}
+
+model SyncLog {
+  id        Int          @id @default(autoincrement())
+  shop      String
+  ruleId    Int?
+  rule      PricingRule? @relation(fields: [ruleId], references: [id], onDelete: SetNull)
+  source    String // manual | webhook
+  status    String // success | error
+  message   String
+  createdAt DateTime     @default(now())
+
+  @@index([shop, createdAt])
+}
