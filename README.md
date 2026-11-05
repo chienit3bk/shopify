@@ -735,3 +735,13 @@ two settings. Setup steps, event map, consent notes and what was tested:
 
 Logic: `shared/analytics/ga4.ts` (17 unit tests).
 
+
+## 32. B2B price lists in a custom app
+
+An embedded app with its own database. It gives a company location a Shopify catalog, a discount and
+fixed prices for one collection. A retail price change reaches the company price through a webhook.
+Test data on a fictional store. Screenshots, setup and limits:
+[`apps/clark-catalog-pricing`](apps/clark-catalog-pricing/README.md). Video:
+[`docs/demos/catalog-pricing.mp4`](docs/demos/catalog-pricing.mp4).
+
+Stack: React Router, Prisma, Polaris web components, Admin GraphQL `2026-10`.
