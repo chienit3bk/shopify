@@ -1,0 +1,11 @@
+api_version = "2026-10"
+
+[[extensions]]
+name = "buy-again"
+handle = "buy-again"
+type = "ui_extension"
+uid = "1ec8e8de-7df7-424d-bc1c-df62dc4b9b6c"
+
+[[extensions.targeting]]
+module = "./src/BuyAgain.tsx"
+target = "customer-account.order-index.block.render"
