@@ -4,7 +4,7 @@ uid = "f30a0110-d6eb-8f2c-2056-c07df2fe350e04a6e0e4"
 
 runtime_context = "strict"
 
-# Counts only gift interactions and order totals — no personal data.
+# Gift interactions and order totals, plus GA4 ecommerce events when configured. No names, emails or addresses.
 [customer_privacy]
 analytics = true
 marketing = false
@@ -18,4 +18,15 @@ type = "object"
 [settings.fields.endpoint]
 name = "Collector URL"
 description = "HTTPS endpoint that receives each event as JSON, or none"
+type = "single_line_text_field"
+
+# GA4 is off until both fields hold real values; see docs/ga4-pixel.md.
+[settings.fields.ga4MeasurementId]
+name = "GA4 Measurement ID"
+description = "G-XXXXXXXXXX from the GA4 web data stream, or none"
+type = "single_line_text_field"
+
+[settings.fields.ga4ApiSecret]
+name = "GA4 Measurement Protocol API secret"
+description = "Created under the same data stream, or none"
 type = "single_line_text_field"

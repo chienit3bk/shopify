@@ -1,0 +1,8 @@
+# Saves the GA4 settings on the app pixel. Get the pixel id with: query { webPixel { id settings } }
+# Run: shopify app execute --query-file scripts/set-ga4-pixel.graphql --variables '{"id":"gid://shopify/WebPixel/...","settings":"{\"endpoint\":\"none\",\"ga4MeasurementId\":\"G-XXXXXXXXXX\",\"ga4ApiSecret\":\"...\"}"}'
+mutation SetGa4Pixel($id: ID!, $settings: JSON!) {
+  webPixelUpdate(id: $id, webPixel: {settings: $settings}) {
+    webPixel { id settings }
+    userErrors { field message code }
+  }
+}
