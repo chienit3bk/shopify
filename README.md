@@ -725,3 +725,13 @@ Built by **Clark (Chien) Nguyen** — Shopify app developer, Checkout Extensibil
 [dev.to](https://dev.to/chienit3bk)
 
 Product photos: [Shopify Burst](https://www.shopify.com/stock-photos) (free for commercial use). Solvane is a fictional brand.
+
+## 31. Connect GA4 with customer events
+
+Send `page_view` through `purchase` to GA4 without editing the theme or checkout. Pick a
+[custom pixel](docs/examples/ga4-custom-pixel.js) to paste in the admin, or the app pixel with
+two settings. Setup steps, event map, consent notes and what was tested:
+[`docs/ga4-pixel.md`](docs/ga4-pixel.md).
+
+Logic: `shared/analytics/ga4.ts` (17 unit tests).
+
