@@ -88,3 +88,21 @@
 .sb-option__error { margin: 0; color: #b3261e; font-size: 0.9em; }
 .sb-has-addon .shopify-payment-button { display: none; }
 .sb-options { max-width: 440px; }
+.sb-chart { margin-block: 20px; }
+.sb-chart__table { width: 100%; border-collapse: collapse; font-size: 1.3rem; table-layout: fixed; }
+.sb-chart__heading { padding-block-end: 8px; font-size: 1.5rem; font-weight: 600; text-align: start; }
+.sb-chart__table th, .sb-chart__table td { padding: 8px 6px; border-block-end: 1px solid rgb(0 0 0 / 0.12); font-weight: 400; text-align: start; overflow-wrap: anywhere; vertical-align: top; }
+.sb-chart__table thead th { font-weight: 600; }
+.sb-chart__table tbody th { font-weight: 600; }
+.sb-chart__table th:nth-child(2) { width: 22%; }
+.sb-chart__meta { margin: 10px 0 0; font-size: 1.3rem; opacity: 0.75; }
+.sb-filter { display: grid; gap: 12px; margin-block: 16px; }
+.sb-filter__head { display: flex; gap: 12px; align-items: baseline; justify-content: space-between; }
+.sb-filter__heading { margin: 0; font-size: 1.6rem; }
+.sb-filter__clear { color: inherit; font-size: 1.3rem; }
+.sb-filter__group { display: grid; gap: 6px; }
+.sb-filter__label { font-size: 1.3rem; opacity: 0.75; }
+.sb-filter__values { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.sb-filter__chip { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 16px; border: 1px solid rgb(0 0 0 / 0.3); border-radius: 22px; color: inherit; font-size: 1.4rem; text-decoration: none; }
+.sb-filter__chip[aria-current] { border-color: currentColor; background: rgb(var(--color-foreground, 0 0 0)); color: rgb(var(--color-background, 255 255 255)); }
+.sb-filter__chip--off { opacity: 0.4; cursor: not-allowed; }

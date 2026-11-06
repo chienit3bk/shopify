@@ -1,0 +1,51 @@
+{%- assign chart = product.metafields.custom.ingredient_chart.value -%}
+{%- if chart != blank -%}
+  <div class="sb-chart" {{ block.shopify_attributes }}>
+    <table class="sb-chart__table">
+      <caption class="sb-chart__heading">{{ block.settings.heading | escape }}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{{ 'ingredient_chart.ingredient' | t }}</th>
+          <th scope="col">{{ 'ingredient_chart.amount' | t }}</th>
+          <th scope="col">{{ 'ingredient_chart.role' | t }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%- for row in chart.ingredients.value -%}
+          {%- assign cells = row | split: ' | ' -%}
+          <tr>
+            <th scope="row">{{ cells[0] | escape }}</th>
+            <td>{{ cells[1] | escape }}</td>
+            <td>{{ cells[2] | escape }}</td>
+          </tr>
+        {%- endfor -%}
+      </tbody>
+    </table>
+    {%- assign region = product.metafields.custom.region.value -%}
+    {%- assign concerns = product.metafields.custom.concerns.value -%}
+    {%- if region != blank or concerns != blank -%}
+      <p class="sb-chart__meta">
+        {%- if region != blank -%}
+          {{- 'ingredient_chart.region' | t: region: region -}}
+        {%- endif -%}
+        {%- if region != blank and concerns != blank %} · {% endif -%}
+        {%- if concerns != blank -%}
+          {%- assign concern_list = concerns | join: ', ' -%}
+          {{- 'ingredient_chart.concerns' | t: concerns: concern_list -}}
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Ingredient chart",
+  "target": "section",
+  "enabled_on": { "templates": ["product"] },
+  "stylesheet": "storefront-blocks.css",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What's inside" }
+  ]
+}
+{% endschema %}

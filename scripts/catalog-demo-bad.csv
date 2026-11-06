@@ -1,0 +1,4 @@
+Handle,Product name,Price (USD),SKU,Type,Description,Origin region,Skin concerns,Key ingredients,Photo URL
+demo-import-good-row,Demo Import: Good Row,20.00,DEMO-BAD-001,Serum,Fictional.,Nordic,Dryness,Oat: 2%: Calms,https://cdn.shopify.com/s/files/1/1021/6767/5162/files/purifying-face-mask.jpg
+demo-import-bad-price,Demo Import: Bad Price,free,DEMO-BAD-002,Serum,Fictional.,Nordic,Dryness,Oat: 2%: Calms,https://cdn.shopify.com/s/files/1/1021/6767/5162/files/purifying-face-mask.jpg
+vitamin-c-brightening-serum,Demo Import: Wrong Handle,20.00,DEMO-BAD-003,Serum,Fictional.,Atlantis,Wrinkles,Oat,not-a-url

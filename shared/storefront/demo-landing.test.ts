@@ -11,7 +11,7 @@ const demos = areas.flatMap((area) => Object.values(area.blocks ?? {}));
 
 describe('demo landing data', () => {
   it('lists every demo once, in a named area', () => {
-    expect(demos).toHaveLength(35);
+    expect(demos).toHaveLength(36);
     expect(new Set(demos.map((d) => d.settings.name)).size).toBe(demos.length);
     for (const area of areas) expect(area.settings.title).toBeTruthy();
   });
