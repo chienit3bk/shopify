@@ -1,0 +1,71 @@
+{%- comment -%}
+  Shows a native bundle's options as images of its components. Each option picks a variant of the
+  bundle product, so the theme's own form, price and sold-out state keep working. Products without
+  `custom.bundle_items` render nothing, so the block can sit on the shared product template.
+{%- endcomment -%}
+{%- assign items = product.metafields.custom.bundle_items.value -%}
+{%- if items != blank -%}
+  <div
+    class="sb-swatches sb-swatches--thumbs"
+    data-swatches
+    data-sold-out="{{ 'swatches.sold_out' | t }}"
+    data-unavailable="{{ 'swatches.unavailable' | t }}"
+    {{ block.shopify_attributes }}
+  >
+    {%- for option in product.options_with_values -%}
+      {%- assign index = forloop.index0 -%}
+      <fieldset class="sb-swatches__group" data-option="{{ option.name | escape }}" data-index="{{ index }}">
+        <legend class="sb-swatches__legend">
+          {{ option.name | escape }}: <span data-selected>{{ option.selected_value | escape }}</span>
+          <span class="sb-swatches__note" data-note></span>
+        </legend>
+        <div class="sb-swatches__row">
+          {%- for value in option.values -%}
+            {%- liquid
+              assign image = blank
+              for item in items limit: 1, offset: index
+                assign image = item.featured_image
+                for variant in item.variants
+                  if variant.options contains value.name and variant.featured_image
+                    assign image = variant.featured_image
+                  endif
+                endfor
+              endfor
+            -%}
+            <label class="sb-swatch" title="{{ value | escape }}">
+              <input
+                type="radio"
+                name="sb-bundle-{{ block.id }}-{{ option.position }}"
+                value="{{ value | escape }}"
+                {% if option.selected_value == value %}
+                  checked
+                {% endif %}
+              >
+              <span
+                class="sb-swatch__dot"
+                {% if image %}
+                  data-native-image="{{ image | image_url: width: 176 }}"
+                {% endif %}
+              ></span>
+              <span class="sb-swatch__name">{{ value | escape }}</span>
+            </label>
+          {%- endfor -%}
+        </div>
+      </fieldset>
+    {%- endfor -%}
+    <script type="application/json" data-variants>
+      {{ product.variants | json }}
+    </script>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Bundle picker",
+  "target": "content",
+  "enabled_on": { "templates": ["product"] },
+  "javascript": "product-pack.js",
+  "stylesheet": "storefront-blocks.css",
+  "settings": []
+}
+{% endschema %}

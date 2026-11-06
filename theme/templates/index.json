@@ -487,6 +487,18 @@
             "video_label": "Watch video"
           }
         },
+        "demo_37": {
+          "type": "demo",
+          "settings": {
+            "name": "Native bundles with an image picker",
+            "text": "Pick one image per item. One product and price, real SKUs and stock on the order, no bundle app fee.",
+            "try_url": "/products/everyday-bundle",
+            "try_label": "Try it",
+            "note": "Ink is sold out on purpose.",
+            "video_url": "https://github.com/chienit3bk/shopify/blob/main/docs/demos/native-bundle.mp4",
+            "video_label": "Watch video"
+          }
+        },
         "demo_36": {
           "type": "demo",
           "settings": {
@@ -502,6 +514,7 @@
       },
       "block_order": [
         "demo_35",
+        "demo_37",
         "demo_36",
         "demo_24",
         "demo_25"
