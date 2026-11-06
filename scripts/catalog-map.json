@@ -1,0 +1,18 @@
+{
+  "handlePrefix": "demo-import-",
+  "tag": "catalog-demo",
+  "regions": ["Nordic", "Alpine", "Mediterranean"],
+  "concerns": ["Dryness", "Redness", "Dullness", "Breakouts"],
+  "columns": {
+    "handle": "Handle",
+    "title": "Product name",
+    "price": "Price (USD)",
+    "sku": "SKU",
+    "productType": "Type",
+    "description": "Description",
+    "region": "Origin region",
+    "concerns": "Skin concerns",
+    "ingredients": "Key ingredients",
+    "image": "Photo URL"
+  }
+}
