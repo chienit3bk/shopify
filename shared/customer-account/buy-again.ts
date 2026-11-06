@@ -45,10 +45,14 @@ export function pickBuyAgain(orders: Order[], limit = 4): BuyAgainItem[] {
   return [...items.values()].slice(0, limit);
 }
 
-/** Cart permalink for one item: `<shop>/cart/<variant>:<qty>`. */
+/**
+ * Adds one item to the current cart: `<shop>/cart/add?id=<variant>&quantity=<qty>`.
+ * A `/cart/<variant>:<qty>` permalink would replace the cart and jump to checkout,
+ * so a second click would drop the first item.
+ */
 export function cartUrl(shopUrl: string, item: BuyAgainItem): string {
   const id = item.variantId.split('/').pop();
-  return `${shopUrl.replace(/\/+$/, '')}/cart/${id}:${item.quantity}`;
+  return `${shopUrl.replace(/\/+$/, '')}/cart/add?id=${id}&quantity=${item.quantity}`;
 }
 
 /** Shopify names the only variant of a product "Default Title": not worth showing. */

@@ -58,8 +58,8 @@ describe('pickBuyAgain', () => {
 });
 
 describe('cartUrl', () => {
-  it('builds a permalink from the variant gid', () => {
+  it('builds an add-to-cart link from the variant gid', () => {
     const [item] = pickBuyAgain([order(line(42, {quantity: 2}))]);
-    expect(cartUrl('https://shop.example/', item)).toBe('https://shop.example/cart/42:2');
+    expect(cartUrl('https://shop.example/', item)).toBe('https://shop.example/cart/add?id=42&quantity=2');
   });
 });
