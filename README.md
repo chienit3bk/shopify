@@ -370,7 +370,7 @@ of the rule's variants free. Two gotchas found live:
 
 ### Week 2 recap — delivery
 
-https://github.com/user-attachments/assets/bd0a527c-8b82-4fe8-97fd-65a4bdea5947
+https://github.com/user-attachments/assets/ac3dacdd-1b8d-4e79-9881-11632cd82acd
 
 ## 11. Delivery rules — hide, rename, reorder (delivery customization Function)
 
@@ -819,7 +819,7 @@ theme code edits.** Everything is a theme app extension: app blocks on the produ
 app embed for the drawer. Blocks: [`extensions/storefront-blocks`](extensions/storefront-blocks).
 Video: [`docs/demos/product-page-pack.mp4`](docs/demos/product-page-pack.mp4).
 
-https://github.com/user-attachments/assets/b3fb3bbb-c667-4d90-a70b-a8831e1a9927
+https://github.com/user-attachments/assets/129a388f-5ae1-44fb-afc6-80fb94afdb33
 
 - **Variant swatches:** drive the theme's own picker, so price, URL and buy button keep working. A
   shade shows as sold out or unavailable for the size picked. Colors come from Shopify's option
