@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh pr merge *)",
+      "Bash(npx shopify app deploy *)",
+      "Bash(shopify app deploy *)"
+    ]
+  }
+}
