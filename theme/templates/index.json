@@ -460,7 +460,7 @@
             "text": "Swatches, sticky add to cart on phones, a cart drawer boost, related products and custom options.",
             "try_url": "/products/nourishing-lip-oil",
             "try_label": "Try it",
-            "video_url": "https://github.com/chienit3bk/shopify/blob/main/docs/demos/product-page-pack.mp4",
+            "video_url": "https://github.com/user-attachments/assets/129a388f-5ae1-44fb-afc6-80fb94afdb33",
             "video_label": "Watch video"
           }
         },
@@ -486,10 +486,23 @@
             "video_url": "https://github.com/user-attachments/assets/8d06ac5a-f249-4b22-b8cd-4d4658c80461",
             "video_label": "Watch video"
           }
+        },
+        "demo_36": {
+          "type": "demo",
+          "settings": {
+            "name": "Catalog import and filter",
+            "text": "Products from a CSV with metafields and an ingredient chart, then filter by concern or region.",
+            "try_url": "/collections/catalog-demo",
+            "try_label": "Try it",
+            "note": "Fictional products, sold out on purpose. Open one to see its chart.",
+            "video_url": "https://github.com/user-attachments/assets/8f69bdfd-1be2-4d9e-8748-388f568159d1",
+            "video_label": "Watch video"
+          }
         }
       },
       "block_order": [
         "demo_35",
+        "demo_36",
         "demo_24",
         "demo_25"
       ],
