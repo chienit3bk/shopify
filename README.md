@@ -17,6 +17,7 @@ real merchants, real customers or real results.
 | Cart rules, bundles and B2B | [Max quantity, minimum order and incompatible products](#14-max-quantity-minimum-order-and-incompatible-products), [B2B: minimum quantity, case packs, first-order minimum](#15-b2b-minimum-quantity-case-packs-first-order-minimum), [Fixed-price bundle](#16-fixed-price-bundle--cart-transform-lineexpand), [Case packs](#23-case-packs--sell-by-the-case-count-stock-by-the-bottle), [One sample kit per customer every 30 days](#28-one-sample-kit-per-customer-every-30-days), [Minimum order for wholesale-tagged customers](#29-minimum-order-for-wholesale-tagged-customers) |
 | Product page and storefront | [Buy more, save more on the product page](#24-buy-more-save-more-on-the-product-page), [Shop by concern on home and collection pages](#25-shop-by-concern-on-home-and-collection-pages) |
 | Post-purchase and tracking | [Post-purchase: attribution survey + referral code](#3-post-purchase-attribution-survey--referral-code), [Gift funnel analytics](#5-gift-funnel-analytics--analyticspublish--a-web-pixel), [Connect GA4 with customer events](#31-connect-ga4-with-customer-events) |
+| Customer accounts | [Buy again on the Orders page](#34-buy-again-on-the-orders-page) |
 | Subscriptions | [Loop Subscriptions: portal and cancellation flow](#33-loop-subscriptions-portal-and-cancellation-flow) |
 | Migration | [Scripts → Functions: three scripts side by side](#26-scripts--functions-three-scripts-side-by-side) |
 | Custom apps | [B2B price lists in a custom app](#32-b2b-price-lists-in-a-custom-app) |
@@ -781,3 +782,27 @@ an empty `selling_plan`, so the cart got a one-time item at full price. The them
 radios worked; the Loop widget needs that append removed.
 
 Not tested: a second billing cycle, the portal at phone width, and delay or pause.
+
+## 34. Buy again on the Orders page
+
+Shopify already has a Buy again button on each order. This block in customer accounts gives one
+list across recent orders instead: free gift lines are dropped, a product bought twice shows once,
+and each item is one click. Extension: [`extensions/buy-again`](extensions/buy-again), rule:
+[`shared/customer-account/buy-again.ts`](shared/customer-account/buy-again.ts). Video:
+[`docs/demos/buy-again.mp4`](docs/demos/buy-again.mp4).
+
+https://github.com/user-attachments/assets/136a741c-a564-4c92-9888-07f23f3c7df5
+
+- Reads the last 5 orders from the Customer Account API and shows up to 4 items, newest first.
+- Each link adds the item to the current cart with the quantity from its newest order.
+- Test data on a fictional store: a paid Vitamin C x2 appears, a $0 Charcoal Mask gift line does not.
+
+Found while testing on the live store:
+
+- The block was empty for real customers, though the editor preview looked fine. The app needs
+  `customer_read_customers` and `customer_read_orders`, and after the deploy the store still has to
+  approve them.
+- A `/cart/<variant>:<qty>` permalink replaces the cart and opens checkout, so a second click lost
+  the first item. The block uses `/cart/add` instead.
+
+Not tested: a customer with no orders, phone width, or an item that is out of stock.
