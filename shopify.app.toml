@@ -17,7 +17,7 @@ embedded_app_direct_api_access = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "customer_read_customers,customer_read_orders,read_products,write_discounts,write_orders,write_pixels,read_customer_events,write_validations,write_delivery_customizations,write_cart_transforms"
+scopes = "customer_read_customers,customer_read_orders,read_products,write_products,write_metaobjects,write_discounts,write_orders,write_pixels,read_customer_events,write_validations,write_delivery_customizations,write_cart_transforms"
 
 [auth]
 redirect_urls = [ "https://shopify.dev/apps/default-app-home/api/auth" ]
@@ -30,3 +30,58 @@ capabilities.cart_to_order_copyable = true
 
   [order.metafields.app.attribution.access]
   admin = "merchant_read"
+
+# Custom product options. A merchant adds entries under Content > Metaobjects and picks them on the
+# product, so the product page block needs no code or JSON.
+[metaobjects.app.product_option]
+name = "Product option"
+display_name_field = "label"
+access.admin = "merchant_read_write"
+access.storefront = "public_read"
+
+  [metaobjects.app.product_option.fields.label]
+  name = "Label"
+  description = "Shown to the buyer, and on the cart line and order."
+  type = "single_line_text_field"
+  required = true
+
+  [metaobjects.app.product_option.fields.kind]
+  name = "Kind"
+  type = "single_line_text_field"
+  required = true
+  validations.choices = ["Text", "Dropdown", "Checkbox", "Paid add-on"]
+
+  [metaobjects.app.product_option.fields.required]
+  name = "Required"
+  type = "boolean"
+
+  [metaobjects.app.product_option.fields.max_length]
+  name = "Character limit"
+  description = "Text only."
+  type = "number_integer"
+
+  [metaobjects.app.product_option.fields.choices]
+  name = "Dropdown choices"
+  type = "list.single_line_text_field"
+
+  [metaobjects.app.product_option.fields.show_when_label]
+  name = "Only show when this option..."
+  description = "Label of an option listed earlier on the product."
+  type = "single_line_text_field"
+
+  [metaobjects.app.product_option.fields.show_when_value]
+  name = "...has this value"
+  description = "A dropdown choice, or Yes for a checkbox."
+  type = "single_line_text_field"
+
+  [metaobjects.app.product_option.fields.addon_product]
+  name = "Add-on product"
+  description = "Paid add-on only. Its real price is charged as its own cart line."
+  type = "product_reference"
+
+[product.metafields.app.options]
+name = "Product options"
+type = "list.metaobject_reference<$app:product_option>"
+
+  [product.metafields.app.options.access]
+  admin = "merchant_read_write"

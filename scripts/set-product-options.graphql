@@ -1,0 +1,7 @@
+# Run after setup-product-options.graphql. value = JSON list of the new metaobject ids, in display order.
+mutation SetProductOptions($productId: ID!, $value: String!) {
+  metafieldsSet(metafields: [{ownerId: $productId, namespace: "$app", key: "options", type: "list.metaobject_reference", value: $value}]) {
+    metafields { key value }
+    userErrors { field message }
+  }
+}

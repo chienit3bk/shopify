@@ -26,5 +26,11 @@
     "unlocked": "You've unlocked {{ label }}",
     "excluded": "Some items in your cart don't count.",
     "add": "Add"
+  },
+  "product_options": {
+    "choose": "Choose",
+    "required": "{{ label }} is required.",
+    "too_long": "{{ label }} can have up to {{ count }} characters.",
+    "addon": "{{ label }} (+{{ price }} each)"
   }
 }
