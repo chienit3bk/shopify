@@ -20,7 +20,7 @@ the theme editor, then `node scripts/push-landing.mjs <theme id>`.
 | Discounts | [Buy 2, get 1 free](#8-buy-2-get-1-free--on-the-same-sku), [Tiered discounts](#9-tiered-discounts--volume-per-sku--spend-on-the-order), [Spend tiers that skip sale items and gift cards](#21-spend-tiers-that-skip-sale-items-and-gift-cards), [40 quantity-break tables from one discount](#22-40-quantity-break-tables-from-one-discount) |
 | Gifts | [Rules-based free gift](#1-rules-based-free-gift), [Gift picker + checkout validation](#6-gift-picker--checkout-validation), [Gift for a collection + out-of-stock fallback](#10-gift-for-a-collection--out-of-stock-fallback), [Gift message + gift wrap](#18-gift-message--gift-wrap) |
 | Cart rules, bundles and B2B | [Max quantity, minimum order and incompatible products](#14-max-quantity-minimum-order-and-incompatible-products), [B2B: minimum quantity, case packs, first-order minimum](#15-b2b-minimum-quantity-case-packs-first-order-minimum), [Fixed-price bundle](#16-fixed-price-bundle--cart-transform-lineexpand), [Case packs](#23-case-packs--sell-by-the-case-count-stock-by-the-bottle), [One sample kit per customer every 30 days](#28-one-sample-kit-per-customer-every-30-days), [Minimum order for wholesale-tagged customers](#29-minimum-order-for-wholesale-tagged-customers) |
-| Product page and storefront | [Buy more, save more on the product page](#24-buy-more-save-more-on-the-product-page), [Shop by concern on home and collection pages](#25-shop-by-concern-on-home-and-collection-pages), [Product page pack for a Dawn theme](#35-product-page-pack-for-a-dawn-theme) |
+| Product page and storefront | [Buy more, save more on the product page](#24-buy-more-save-more-on-the-product-page), [Shop by concern on home and collection pages](#25-shop-by-concern-on-home-and-collection-pages), [Product page pack for a Dawn theme](#35-product-page-pack-for-a-dawn-theme), [Catalog import, ingredient chart and filter](#36-catalog-import-ingredient-chart-and-filter) |
 | Post-purchase and tracking | [Post-purchase: attribution survey + referral code](#3-post-purchase-attribution-survey--referral-code), [Gift funnel analytics](#5-gift-funnel-analytics--analyticspublish--a-web-pixel), [Connect GA4 with customer events](#31-connect-ga4-with-customer-events) |
 | Customer accounts | [Buy again on the Orders page](#34-buy-again-on-the-orders-page) |
 | Subscriptions | [Loop Subscriptions: portal and cancellation flow](#33-loop-subscriptions-portal-and-cancellation-flow) |
@@ -860,3 +860,39 @@ Not tested: Shopify's own option swatches, or themes other than this Dawn-based 
 Setup: `scripts/setup-lip-oil-shades.graphql`, `scripts/create-lip-oil-variants.graphql`,
 `scripts/setup-product-options.graphql`, `scripts/set-product-options.graphql`, then add the blocks in
 the theme editor and turn on **Cart drawer boost** under App embeds.
+
+## 36. Catalog import, ingredient chart and filter
+
+**A CSV becomes products with metafields, a metaobject chart and working filters.** The script checks
+the whole file first and reports every bad row with its line number. One bad row stops the import,
+so a file never lands half applied. Script: [`scripts/import-catalog.mjs`](scripts/import-catalog.mjs),
+logic and tests: [`shared/catalog`](shared/catalog), blocks: [`extensions/storefront-blocks`](extensions/storefront-blocks).
+Video: [`docs/demos/catalog-filter.mp4`](docs/demos/catalog-filter.mp4).
+
+https://github.com/user-attachments/assets/8f69bdfd-1be2-4d9e-8748-388f568159d1
+
+- **Column mapping:** [`scripts/catalog-map.json`](scripts/catalog-map.json) links your CSV headings to fields, in any column order.
+- **Dry run:** `node scripts/import-catalog.mjs scripts/catalog-demo.csv --dry-run` writes nothing. It checks
+  price, handle, duplicates, allowed regions and concerns, the ingredient format and the image URL.
+  Try [`scripts/catalog-demo-bad.csv`](scripts/catalog-demo-bad.csv).
+- **Safe by default:** handles must start with `demo-import-`, so an import can't overwrite another product.
+  Running it again updates the same products.
+- **Metafields + metaobject:** `custom.region`, `custom.concerns` and `custom.ingredient_chart`, which
+  points to an `ingredient_chart` metaobject set per product. The **Ingredient chart** block shows it.
+- **Filter:** the **Collection filter** block uses tag URLs such as
+  `/collections/catalog-demo/concern-dryness+region-nordic`. The import writes the tags from the same columns.
+  Picking a value replaces the one in its group, and a value that would give an empty page is disabled.
+
+Why tags and not Search & Discovery: metafield filters need that app and its admin screens, with no
+API to script them. Tag URLs work in any theme with no app, and pages stay shareable.
+
+Found while testing: a sold-out variant was still accepted by `/cart/add.js`, so the fake products
+could have reached gift and discount rules. They now also require a selling plan that doesn't exist,
+and Shopify refuses the line: `Variant can only be purchased with a selling plan`.
+
+Setup: `node scripts/import-catalog.mjs <file.csv>`, then `node scripts/push-catalog-blocks.mjs <theme id>`
+to place both blocks, or add them in the theme editor.
+
+Known limits: the import sends one request per product, fine for a small file; thousands of rows
+should use `bulkOperationRunMutation`. "Buy it now" still shows on the sold-out demo products, and
+does nothing when clicked.
