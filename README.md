@@ -19,7 +19,7 @@ the theme editor, then `node scripts/push-landing.mjs <theme id>`.
 | Shipping and delivery | [Free Express shipping over $120](#7-free-express-shipping-over-120--sale-items-dont-count), [Delivery rules](#11-delivery-rules--hide-rename-reorder-delivery-customization-function), [Delivery date picker + PO Box check](#12-delivery-date-picker--po-box-check), [Carbon-neutral delivery add-on](#13-carbon-neutral-delivery-add-on), [PO Box check per item, not per carrier](#27-po-box-check-per-item-not-per-carrier), [Pickup-only items](#30-pickup-only-items) |
 | Discounts | [Buy 2, get 1 free](#8-buy-2-get-1-free--on-the-same-sku), [Tiered discounts](#9-tiered-discounts--volume-per-sku--spend-on-the-order), [Spend tiers that skip sale items and gift cards](#21-spend-tiers-that-skip-sale-items-and-gift-cards), [40 quantity-break tables from one discount](#22-40-quantity-break-tables-from-one-discount) |
 | Gifts | [Rules-based free gift](#1-rules-based-free-gift), [Gift picker + checkout validation](#6-gift-picker--checkout-validation), [Gift for a collection + out-of-stock fallback](#10-gift-for-a-collection--out-of-stock-fallback), [Gift message + gift wrap](#18-gift-message--gift-wrap) |
-| Cart rules, bundles and B2B | [Max quantity, minimum order and incompatible products](#14-max-quantity-minimum-order-and-incompatible-products), [B2B: minimum quantity, case packs, first-order minimum](#15-b2b-minimum-quantity-case-packs-first-order-minimum), [Fixed-price bundle](#16-fixed-price-bundle--cart-transform-lineexpand), [Case packs](#23-case-packs--sell-by-the-case-count-stock-by-the-bottle), [One sample kit per customer every 30 days](#28-one-sample-kit-per-customer-every-30-days), [Minimum order for wholesale-tagged customers](#29-minimum-order-for-wholesale-tagged-customers) |
+| Cart rules, bundles and B2B | [Max quantity, minimum order and incompatible products](#14-max-quantity-minimum-order-and-incompatible-products), [B2B: minimum quantity, case packs, first-order minimum](#15-b2b-minimum-quantity-case-packs-first-order-minimum), [Fixed-price bundle](#16-fixed-price-bundle--cart-transform-lineexpand), [Case packs](#23-case-packs--sell-by-the-case-count-stock-by-the-bottle), [One sample kit per customer every 30 days](#28-one-sample-kit-per-customer-every-30-days), [Minimum order for wholesale-tagged customers](#29-minimum-order-for-wholesale-tagged-customers), [Native bundles with an image picker](#37-native-bundles-with-an-image-picker) |
 | Product page and storefront | [Buy more, save more on the product page](#24-buy-more-save-more-on-the-product-page), [Shop by concern on home and collection pages](#25-shop-by-concern-on-home-and-collection-pages), [Product page pack for a Dawn theme](#35-product-page-pack-for-a-dawn-theme), [Catalog import, ingredient chart and filter](#36-catalog-import-ingredient-chart-and-filter) |
 | Post-purchase and tracking | [Post-purchase: attribution survey + referral code](#3-post-purchase-attribution-survey--referral-code), [Gift funnel analytics](#5-gift-funnel-analytics--analyticspublish--a-web-pixel), [Connect GA4 with customer events](#31-connect-ga4-with-customer-events) |
 | Customer accounts | [Buy again on the Orders page](#34-buy-again-on-the-orders-page) |
@@ -492,7 +492,8 @@ at checkout, so each component keeps its own inventory and revenue line on the o
   list price, rounded to the cent, with leftover cents added so the parts sum exactly:
   $19.17 + $38.32 + $41.51 = $99.00 (test order #1004).
 - The bundle variant has `requiresComponents: true`, so it can't be sold without the expansion.
-- `lineExpand` works on every plan; only `lineUpdate` (price override) is Plus-only.
+- `lineExpand` works on every plan through an App Store app. A custom app with any Function needs
+  Shopify Plus, and `lineUpdate` (price override) is Plus-only. Not on Plus? See [native bundles](#37-native-bundles-with-an-image-picker).
 
 Good to know: validation Functions see the **bundle line**, not its components — 4 sets carry 4
 serums past a "max 3 serums" rule. Count components in the rule if that matters.
@@ -896,3 +897,26 @@ to place both blocks, or add them in the theme editor.
 Known limits: the import sends one request per product, fine for a small file; thousands of rows
 should use `bulkOperationRunMutation`. "Buy it now" still shows on the sold-out demo products, and
 does nothing when clicked.
+
+## 37. Native bundles with an image picker
+
+**Two bundles sold as normal products, with no bundle app subscription and no Function.** Each is a
+Shopify fixed bundle: its own page, price and images, in normal collections. The buyer picks one
+image per item, and the order holds the real SKUs. Script: [`scripts/create-native-bundles.mjs`](scripts/create-native-bundles.mjs),
+block: [`bundle_picker.liquid`](extensions/storefront-blocks/blocks/bundle_picker.liquid).
+Video: [`docs/demos/native-bundle.mp4`](docs/demos/native-bundle.mp4).
+
+- **Why not Cart Transform:** a custom app with a Function needs Shopify Plus. Fixed bundles run on every plan.
+- **Picker:** each bundle option becomes images of its component. `custom.bundle_items` lists the components
+  in option order. Other products render nothing, so the block can sit on the shared template.
+- **Stock:** the bundle reads stock from its components. Test order #1017 took Sage 20 to 19 and Stripe 3 to 2.
+  The Oat / Stripe bundle then showed 2.
+- **Orders:** #1017 lists `SV-WRAP-SAGE` and `SV-CLOTH3-STRIPE`, each marked "Part of: Everyday Bundle".
+  The $29 is split by Shopify: $15.36 + $13.64.
+- **Discount code:** `WELCOME10` took $3.80 off the $38 Muslin Bundle. The demo store refuses codes on sale items,
+  so the Everyday Bundle ($34 crossed out) rejects it. That rule is this store's, not a bundle limit.
+
+Good to know: `/cart/add.js` accepted a sold-out bundle. The theme button blocks it, and checkout stopped it with
+"Out of stock". A bundle has at most 3 options and 100 variants, and stock is overall, not per location.
+Not tested: a third-party fulfilment app, and editing these bundles in the Shopify Bundles app. An app can only
+manage bundles it created, so a client's bundles should be created in the app that will manage them.

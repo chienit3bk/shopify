@@ -106,3 +106,9 @@
 .sb-filter__chip { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 16px; border: 1px solid rgb(0 0 0 / 0.3); border-radius: 22px; color: inherit; font-size: 1.4rem; text-decoration: none; }
 .sb-filter__chip[aria-current] { border-color: currentColor; background: rgb(var(--color-foreground, 0 0 0)); color: rgb(var(--color-background, 255 255 255)); }
 .sb-filter__chip--off { opacity: 0.4; cursor: not-allowed; }
+.sb-swatches--thumbs .sb-swatches__row { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 10px; }
+.sb-swatches--thumbs .sb-swatch { width: auto; height: auto; border-radius: 8px; }
+.sb-swatches--thumbs .sb-swatch__dot { aspect-ratio: 1; height: auto; border-radius: 8px; border-width: 3px; background-size: cover; background-position: center; }
+.sb-swatches--thumbs .sb-swatch__name { position: static; display: block; width: auto; height: auto; overflow: visible; clip-path: none; margin-top: 4px; font-size: 0.8em; text-align: center; white-space: normal; }
+.sb-swatches--thumbs .sb-swatch:has(input:checked) .sb-swatch__name { font-weight: 600; }
+.sb-swatches--thumbs .sb-swatch--off::after { top: 38%; }
