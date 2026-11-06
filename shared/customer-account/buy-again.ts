@@ -35,7 +35,7 @@ export function pickBuyAgain(orders: Order[], limit = 4): BuyAgainItem[] {
       items.set(line.variantId, {
         variantId: line.variantId,
         title: line.title,
-        variantTitle: line.variantTitle || null,
+        variantTitle: visibleVariantTitle(line.variantTitle),
         quantity: line.quantity,
         imageUrl: line.image?.url ?? null,
         imageAlt: line.image?.altText || line.title,
@@ -49,4 +49,9 @@ export function pickBuyAgain(orders: Order[], limit = 4): BuyAgainItem[] {
 export function cartUrl(shopUrl: string, item: BuyAgainItem): string {
   const id = item.variantId.split('/').pop();
   return `${shopUrl.replace(/\/+$/, '')}/cart/${id}:${item.quantity}`;
+}
+
+/** Shopify names the only variant of a product "Default Title": not worth showing. */
+function visibleVariantTitle(title?: string | null): string | null {
+  return title && title !== 'Default Title' ? title : null;
 }

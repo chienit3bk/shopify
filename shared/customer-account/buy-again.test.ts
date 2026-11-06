@@ -38,6 +38,14 @@ describe('pickBuyAgain', () => {
     expect(pickBuyAgain([order(line(1), line(2), line(3))], 2)).toHaveLength(2);
   });
 
+  it('hides the placeholder variant title but keeps real ones', () => {
+    const [plain, sized] = pickBuyAgain([
+      order(line(1, {variantTitle: 'Default Title'}), line(2, {variantTitle: '50 ml'})),
+    ]);
+    expect(plain.variantTitle).toBeNull();
+    expect(sized.variantTitle).toBe('50 ml');
+  });
+
   it('falls back to the title for image alt text', () => {
     const [item] = pickBuyAgain([order(line(1, {image: {url: 'https://x/y.jpg'}}))]);
     expect(item.imageAlt).toBe('Item 1');
