@@ -1,0 +1,143 @@
+{% comment %}
+  One area of the demo landing page. Each block is one demo, so a new demo is one more block:
+  theme editor, or theme/templates/index.json. Try links can be a path or a full URL.
+{% endcomment %}
+<div class="color-background-1 gradient">
+  <div class="page-width demo-area" id="{{ section.settings.anchor | handleize }}">
+    <h2 class="demo-area__title h1">{{ section.settings.title | escape }}</h2>
+    {%- if section.settings.intro != blank -%}
+      <p class="demo-area__intro">{{ section.settings.intro | escape }}</p>
+    {%- endif -%}
+    <ul class="demo-area__grid" role="list">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign external = false
+          if block.settings.try_url contains '://'
+            assign external = true
+          endif
+        -%}
+        <li class="demo-card" {{ block.shopify_attributes }}>
+          <h3 class="demo-card__name h3">{{ block.settings.name | escape }}</h3>
+          <p class="demo-card__text">{{ block.settings.text | escape }}</p>
+          {%- if block.settings.note != blank -%}
+            <p class="demo-card__note">{{ block.settings.note | escape }}</p>
+          {%- endif -%}
+          <div class="demo-card__actions">
+            {%- if block.settings.try_url != blank -%}
+              <a
+                class="button{% if block.settings.try_label != 'Try it' %} button--secondary{% endif %} demo-card__try"
+                href="{{ block.settings.try_url | escape }}"
+                {% if external %}
+                  target="_blank" rel="noopener"
+                {% endif %}
+              >
+                {{- block.settings.try_label | escape -}}
+              </a>
+            {%- endif -%}
+            {%- if block.settings.video_url != blank -%}
+              <a class="demo-card__watch" href="{{ block.settings.video_url | escape }}" target="_blank" rel="noopener">
+                {{- block.settings.video_label | escape -}}
+              </a>
+            {%- endif -%}
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{% stylesheet %}
+  .page-width.demo-area {
+    padding-bottom: 3.2rem;
+    padding-top: 3.2rem;
+    scroll-margin-top: 6rem;
+  }
+  .demo-area__title {
+    margin: 0 0 0.8rem;
+  }
+  .demo-area__intro {
+    margin: 0 0 2rem;
+    max-width: 70rem;
+  }
+  .demo-area__grid {
+    display: grid;
+    gap: 1.6rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 32rem), 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .demo-card {
+    background: rgb(var(--color-background));
+    border: 1px solid rgba(var(--color-foreground), 0.12);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    min-width: 0;
+    padding: 2rem;
+  }
+  .demo-card__name,
+  .demo-card__text,
+  .demo-card__note {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+  .demo-card__text {
+    line-height: 1.4;
+  }
+  .demo-card__note {
+    color: rgba(var(--color-foreground), 0.75);
+    font-size: 1.4rem;
+    line-height: 1.4;
+  }
+  .demo-card__actions {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.6rem;
+    margin-top: auto;
+    padding-top: 0.8rem;
+  }
+  .demo-card__try {
+    min-height: 4.4rem;
+    min-width: 0;
+    padding-inline: 2.4rem;
+  }
+  .demo-card__watch {
+    color: rgb(var(--color-foreground));
+    cursor: pointer;
+    font-size: 1.4rem;
+    text-decoration: underline;
+    text-underline-offset: 0.3rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Demo area",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Area name", "default": "Demos" },
+    { "type": "text", "id": "anchor", "label": "Link id", "default": "demos" },
+    { "type": "text", "id": "intro", "label": "Short intro" }
+  ],
+  "blocks": [
+    {
+      "type": "demo",
+      "name": "Demo",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name" },
+        { "type": "textarea", "id": "text", "label": "What it does, one plain line" },
+        { "type": "text", "id": "note", "label": "What the visitor has to do" },
+        { "type": "text", "id": "try_url", "label": "Try link (path or full URL)" },
+        { "type": "text", "id": "try_label", "label": "Button label", "default": "Try it" },
+        { "type": "text", "id": "video_url", "label": "Video URL" },
+        { "type": "text", "id": "video_label", "label": "Video link label", "default": "Watch video" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Demo area" }]
+}
+{% endschema %}

@@ -6,6 +6,11 @@ extensions, web pixels and custom apps (API 2026-10, Preact + Polaris web compon
 Every demo runs on a development store with a fictional brand and test data. Nothing here shows
 real merchants, real customers or real results.
 
+**[Try the demos on the live store](https://clark-nguyen.myshopify.com)** (store password `bfcm`):
+one card per demo, each with a link that opens it ready to test. Test checkout, no real payment.
+Cards live in [`theme/templates/index.json`](theme/templates/index.json); add a block there or in
+the theme editor, then `node scripts/push-landing.mjs <theme id>`.
+
 ## Demos by area
 
 | Area | Demos |
