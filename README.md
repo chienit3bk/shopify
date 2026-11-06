@@ -1,7 +1,25 @@
-# Shopify Checkout Demos
+# Shopify Demos
 
-Small, production-style demos of **Checkout UI Extensions** and **Shopify Functions**
-(API 2026-10 for both the checkout extension and the Function, Preact + Polaris web components).
+Small, production-style Shopify demos: **Checkout UI Extensions**, **Shopify Functions**, theme app
+extensions, web pixels and custom apps (API 2026-10, Preact + Polaris web components).
+
+Every demo runs on a development store with a fictional brand and test data. Nothing here shows
+real merchants, real customers or real results.
+
+## Demos by area
+
+| Area | Demos |
+|---|---|
+| Checkout | [BFCM checkout offer](#2-bfcm-checkout-offer--countdown--one-click-add-ons), [Shipping cut-off countdown + trust badges](#4-shipping-cut-off-countdown--trust-badges), [Required consent checkbox (final sale, age 18+)](#17-required-consent-checkbox-final-sale-age-18), [Order note templates](#19-order-note-templates), [Country-restricted products (no catalogs)](#20-country-restricted-products-no-catalogs) |
+| Shipping and delivery | [Free Express shipping over $120](#7-free-express-shipping-over-120--sale-items-dont-count), [Delivery rules](#11-delivery-rules--hide-rename-reorder-delivery-customization-function), [Delivery date picker + PO Box check](#12-delivery-date-picker--po-box-check), [Carbon-neutral delivery add-on](#13-carbon-neutral-delivery-add-on), [PO Box check per item, not per carrier](#27-po-box-check-per-item-not-per-carrier), [Pickup-only items](#30-pickup-only-items) |
+| Discounts | [Buy 2, get 1 free](#8-buy-2-get-1-free--on-the-same-sku), [Tiered discounts](#9-tiered-discounts--volume-per-sku--spend-on-the-order), [Spend tiers that skip sale items and gift cards](#21-spend-tiers-that-skip-sale-items-and-gift-cards), [40 quantity-break tables from one discount](#22-40-quantity-break-tables-from-one-discount) |
+| Gifts | [Rules-based free gift](#1-rules-based-free-gift), [Gift picker + checkout validation](#6-gift-picker--checkout-validation), [Gift for a collection + out-of-stock fallback](#10-gift-for-a-collection--out-of-stock-fallback), [Gift message + gift wrap](#18-gift-message--gift-wrap) |
+| Cart rules, bundles and B2B | [Max quantity, minimum order and incompatible products](#14-max-quantity-minimum-order-and-incompatible-products), [B2B: minimum quantity, case packs, first-order minimum](#15-b2b-minimum-quantity-case-packs-first-order-minimum), [Fixed-price bundle](#16-fixed-price-bundle--cart-transform-lineexpand), [Case packs](#23-case-packs--sell-by-the-case-count-stock-by-the-bottle), [One sample kit per customer every 30 days](#28-one-sample-kit-per-customer-every-30-days), [Minimum order for wholesale-tagged customers](#29-minimum-order-for-wholesale-tagged-customers) |
+| Product page and storefront | [Buy more, save more on the product page](#24-buy-more-save-more-on-the-product-page), [Shop by concern on home and collection pages](#25-shop-by-concern-on-home-and-collection-pages) |
+| Post-purchase and tracking | [Post-purchase: attribution survey + referral code](#3-post-purchase-attribution-survey--referral-code), [Gift funnel analytics](#5-gift-funnel-analytics--analyticspublish--a-web-pixel), [Connect GA4 with customer events](#31-connect-ga4-with-customer-events) |
+| Subscriptions | [Loop Subscriptions: portal and cancellation flow](#33-loop-subscriptions-portal-and-cancellation-flow) |
+| Migration | [Scripts → Functions: three scripts side by side](#26-scripts--functions-three-scripts-side-by-side) |
+| Custom apps | [B2B price lists in a custom app](#32-b2b-price-lists-in-a-custom-app) |
 
 ## 1. Rules-based free gift
 
@@ -745,3 +763,21 @@ Test data on a fictional store. Screenshots, setup and limits:
 [`docs/demos/catalog-pricing.mp4`](docs/demos/catalog-pricing.mp4).
 
 Stack: React Router, Prisma, Polaris web components, Admin GraphQL `2026-10`.
+
+## 33. Loop Subscriptions: portal and cancellation flow
+
+A meal-kit subscription set up in Loop on a development store, on Loop's Free plan. No custom code:
+this demo is app setup and testing. Video:
+[`docs/demos/loop-subscriptions.mp4`](docs/demos/loop-subscriptions.mp4).
+
+- Plans: weekly, every 2 weeks and every 4 weeks, 10% off.
+- Portal: change frequency, skip an order, swap a meal, add a discount code.
+- Cancellation: each reason gets its own options, and the customer can always continue to cancel.
+- Offers: `STAY15` for a customer who finds it too expensive, `WELCOME25` and `WELCOME15` for new
+  subscribers. Customers enter these codes by hand.
+
+Found while testing: a theme with custom add-to-cart JS can drop the plan. This test theme appended
+an empty `selling_plan`, so the cart got a one-time item at full price. The theme's own purchase
+radios worked; the Loop widget needs that append removed.
+
+Not tested: a second billing cycle, the portal at phone width, and delay or pause.
