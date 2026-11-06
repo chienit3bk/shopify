@@ -15,7 +15,7 @@ real merchants, real customers or real results.
 | Discounts | [Buy 2, get 1 free](#8-buy-2-get-1-free--on-the-same-sku), [Tiered discounts](#9-tiered-discounts--volume-per-sku--spend-on-the-order), [Spend tiers that skip sale items and gift cards](#21-spend-tiers-that-skip-sale-items-and-gift-cards), [40 quantity-break tables from one discount](#22-40-quantity-break-tables-from-one-discount) |
 | Gifts | [Rules-based free gift](#1-rules-based-free-gift), [Gift picker + checkout validation](#6-gift-picker--checkout-validation), [Gift for a collection + out-of-stock fallback](#10-gift-for-a-collection--out-of-stock-fallback), [Gift message + gift wrap](#18-gift-message--gift-wrap) |
 | Cart rules, bundles and B2B | [Max quantity, minimum order and incompatible products](#14-max-quantity-minimum-order-and-incompatible-products), [B2B: minimum quantity, case packs, first-order minimum](#15-b2b-minimum-quantity-case-packs-first-order-minimum), [Fixed-price bundle](#16-fixed-price-bundle--cart-transform-lineexpand), [Case packs](#23-case-packs--sell-by-the-case-count-stock-by-the-bottle), [One sample kit per customer every 30 days](#28-one-sample-kit-per-customer-every-30-days), [Minimum order for wholesale-tagged customers](#29-minimum-order-for-wholesale-tagged-customers) |
-| Product page and storefront | [Buy more, save more on the product page](#24-buy-more-save-more-on-the-product-page), [Shop by concern on home and collection pages](#25-shop-by-concern-on-home-and-collection-pages) |
+| Product page and storefront | [Buy more, save more on the product page](#24-buy-more-save-more-on-the-product-page), [Shop by concern on home and collection pages](#25-shop-by-concern-on-home-and-collection-pages), [Product page pack for a Dawn theme](#35-product-page-pack-for-a-dawn-theme) |
 | Post-purchase and tracking | [Post-purchase: attribution survey + referral code](#3-post-purchase-attribution-survey--referral-code), [Gift funnel analytics](#5-gift-funnel-analytics--analyticspublish--a-web-pixel), [Connect GA4 with customer events](#31-connect-ga4-with-customer-events) |
 | Customer accounts | [Buy again on the Orders page](#34-buy-again-on-the-orders-page) |
 | Subscriptions | [Loop Subscriptions: portal and cancellation flow](#33-loop-subscriptions-portal-and-cancellation-flow) |
@@ -806,3 +806,52 @@ Found while testing on the live store:
   the first item. The block uses `/cart/add` instead.
 
 Not tested: a customer with no orders, phone width, or an item that is out of stock.
+
+## 35. Product page pack for a Dawn theme
+
+**Swatches, sticky add to cart, a better cart drawer, related products and custom options, with no
+theme code edits.** Everything is a theme app extension: app blocks on the product template and one
+app embed for the drawer. Blocks: [`extensions/storefront-blocks`](extensions/storefront-blocks).
+Video: [`docs/demos/product-page-pack.mp4`](docs/demos/product-page-pack.mp4).
+
+https://github.com/user-attachments/assets/b3fb3bbb-c667-4d90-a70b-a8831e1a9927
+
+- **Variant swatches:** drive the theme's own picker, so price, URL and buy button keep working. A
+  shade shows as sold out or unavailable for the size picked. Colors come from Shopify's option
+  swatches, or a `Rose: #d98a94` list in the block settings.
+- **Sticky add to cart:** shows on phones once the buyer scrolls past the theme's button, and
+  presses that button, so the quantity and the drawer behave the same.
+- **Cart drawer:** free shipping progress from the config the discount Function reads (a test
+  compares both rules), plus one add-on product.
+- **Related products:** Shopify recommendations with quick add. New stores get few of these, so a
+  collection fills the gap.
+- **Custom options:** a text field with a character limit, a dropdown and a checkbox, saved as line
+  item properties. Required options block Add to cart and Buy it now. An option can depend on
+  another one.
+- **Paid add-on:** unticked by default, with its price on the label. It is a real product on its own
+  cart line, so nothing is hidden in another price. Buy it now hides while it's ticked, because that
+  button can't add a second line.
+
+A merchant sets options without code: **Content → Metaobjects → Product option**, then picks them on
+the product. The definitions ship with the app in `shopify.app.toml`.
+
+Test data on a fictional store: Nourishing Lip Oil in 4 shades and 2 sizes. Coral 8 ml is sold out
+and Berry 15 ml doesn't exist. Test order #1015 kept `Occasion`, `Add a personal label` and
+`Name on label` on the order line, with gift wrap as its own $5 line.
+
+Found while testing on the live store:
+
+- `form.id` returned the form's `<input name="id">`, not its id, so the fields weren't attached to
+  the form. `getAttribute('id')` fixed it.
+- Clearing an error on `change` moved the layout between mouse down and up, so the next click
+  missed. Errors now clear on `input`.
+- A first add into an empty cart showed a blank drawer, because the theme's own submit is what
+  removes `is-empty`.
+
+Limits: quick add on other pages skips option checks, so a product with required options should
+have several variants or no quick add. `cart-pack.js` is 14 KB, over the 10 KB theme check limit.
+Not tested: Shopify's own option swatches, or themes other than this Dawn-based one.
+
+Setup: `scripts/setup-lip-oil-shades.graphql`, `scripts/create-lip-oil-variants.graphql`,
+`scripts/setup-product-options.graphql`, `scripts/set-product-options.graphql`, then add the blocks in
+the theme editor and turn on **Cart drawer boost** under App embeds.
