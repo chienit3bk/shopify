@@ -1,0 +1,24 @@
+# Demo options for Nourishing Lip Oil. Merchants do the same in the admin:
+# Content > Metaobjects > Product option, then pick the entries on the product.
+# shopify app execute --store <shop> --query-file scripts/setup-product-options.graphql --variable-file <vars.json>
+# vars: {"giftWrapId": "gid://shopify/Product/<gift wrap>"}
+mutation SetupProductOptions($giftWrapId: String!) {
+  occasion: metaobjectCreate(metaobject: {type: "$app:product_option", handle: "occasion", fields: [
+    {key: "label", value: "Occasion"}, {key: "kind", value: "Dropdown"}, {key: "required", value: "true"},
+    {key: "choices", value: "[\"Birthday\",\"Thank you\",\"Just because\",\"Other\"]"}
+  ]}) { metaobject { id } userErrors { field message } }
+  otherOccasion: metaobjectCreate(metaobject: {type: "$app:product_option", handle: "other-occasion", fields: [
+    {key: "label", value: "Other occasion"}, {key: "kind", value: "Text"}, {key: "required", value: "true"},
+    {key: "max_length", value: "30"}, {key: "show_when_label", value: "Occasion"}, {key: "show_when_value", value: "Other"}
+  ]}) { metaobject { id } userErrors { field message } }
+  personalLabel: metaobjectCreate(metaobject: {type: "$app:product_option", handle: "personal-label", fields: [
+    {key: "label", value: "Add a personal label"}, {key: "kind", value: "Checkbox"}
+  ]}) { metaobject { id } userErrors { field message } }
+  nameOnLabel: metaobjectCreate(metaobject: {type: "$app:product_option", handle: "name-on-label", fields: [
+    {key: "label", value: "Name on label"}, {key: "kind", value: "Text"}, {key: "required", value: "true"},
+    {key: "max_length", value: "20"}, {key: "show_when_label", value: "Add a personal label"}, {key: "show_when_value", value: "Yes"}
+  ]}) { metaobject { id } userErrors { field message } }
+  giftWrap: metaobjectCreate(metaobject: {type: "$app:product_option", handle: "gift-wrap", fields: [
+    {key: "label", value: "Gift wrap"}, {key: "kind", value: "Paid add-on"}, {key: "addon_product", value: $giftWrapId}
+  ]}) { metaobject { id } userErrors { field message } }
+}

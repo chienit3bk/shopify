@@ -1,0 +1,94 @@
+{%- assign options = product.metafields["$app"].options.value -%}
+{%- if options != blank -%}
+  <div
+    class="sb-options"
+    data-options
+    data-required-message="{{ 'product_options.required' | t: label: '[label]' }}"
+    data-length-message="{{ 'product_options.too_long' | t: label: '[label]', count: '[count]' }}"
+    data-error="{{ 'volume_picker.error' | t }}"
+    {{ block.shopify_attributes }}
+  >
+    {%- for option in options -%}
+      {%- liquid
+        assign label = option.label.value
+        assign kind = option.kind.value
+        assign control_id = 'sb-option-' | append: block.id | append: '-' | append: forloop.index
+        assign addon = nil
+        if kind == 'Paid add-on'
+          assign addon = option.addon_product.value.selected_or_first_available_variant
+        endif
+      -%}
+      {%- unless kind == 'Paid add-on' and addon.available != true -%}
+        <div
+          class="sb-option"
+          data-option
+          data-kind="{{ kind | escape }}"
+          data-label="{{ label | escape }}"
+          data-required="{{ option.required.value | default: false }}"
+          data-max="{{ option.max_length.value }}"
+          data-when-label="{{ option.show_when_label.value | escape }}"
+          data-when-value="{{ option.show_when_value.value | escape }}"
+          {% if addon %}
+            data-variant-id="{{ addon.id }}"
+          {% endif %}
+        >
+          {%- case kind -%}
+            {%- when 'Text' -%}
+              <label class="sb-option__label" for="{{ control_id }}">
+                {{- label | escape -}}
+                {%- if option.required.value %} *{% endif -%}
+              </label>
+              <input
+                class="sb-option__control"
+                id="{{ control_id }}"
+                type="text"
+                name="properties[{{ label | escape }}]"
+                autocomplete="off"
+                {% if option.max_length.value %}
+                  maxlength="{{ option.max_length.value }}"
+                {% endif %}
+              >
+              {%- if option.max_length.value -%}
+                <span class="sb-option__count" data-count>0/{{ option.max_length.value }}</span>
+              {%- endif -%}
+            {%- when 'Dropdown' -%}
+              <label class="sb-option__label" for="{{ control_id }}">
+                {{- label | escape -}}
+                {%- if option.required.value %} *{% endif -%}
+              </label>
+              <select class="sb-option__control" id="{{ control_id }}" name="properties[{{ label | escape }}]">
+                <option value="">{{ 'product_options.choose' | t }}</option>
+                {%- for choice in option.choices.value -%}
+                  <option value="{{ choice | escape }}">{{ choice | escape }}</option>
+                {%- endfor -%}
+              </select>
+            {%- when 'Checkbox' -%}
+              <label class="sb-option__check">
+                <input type="checkbox" name="properties[{{ label | escape }}]" value="Yes">
+                <span>{{ label | escape }}</span>
+              </label>
+            {%- when 'Paid add-on' -%}
+              {%- assign addon_price = addon.price | money -%}
+              <label class="sb-option__check">
+                <input type="checkbox" value="Yes" data-addon>
+                <span>{{ 'product_options.addon' | t: label: label, price: addon_price }}</span>
+              </label>
+          {%- endcase -%}
+          <p class="sb-option__error" data-option-error role="alert" hidden></p>
+        </div>
+      {%- endunless -%}
+    {%- endfor -%}
+    <p class="sb-option__error" data-options-error role="alert" hidden></p>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Custom product options",
+  "target": "content",
+  "enabled_on": { "templates": ["product"] },
+  "javascript": "product-options.js",
+  "stylesheet": "storefront-blocks.css",
+  "settings": []
+}
+{% endschema %}

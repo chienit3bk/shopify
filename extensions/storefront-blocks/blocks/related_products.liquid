@@ -1,0 +1,60 @@
+{%- liquid
+  assign own = product.collections.first
+  assign extra = block.settings.fallback_collection
+-%}
+<div
+  class="sb-related"
+  data-related
+  data-product-id="{{ product.id }}"
+  data-limit="{{ block.settings.limit }}"
+  data-exclude-tag="{{ block.settings.exclude_tag | escape }}"
+  data-money-format="{{ shop.money_format | escape }}"
+  data-quick-add="{{ 'shop_by.quick_add' | t }}"
+  data-added="{{ 'shop_by.added' | t }}"
+  data-choose-options="{{ 'shop_by.choose_options' | t }}"
+  data-view-cart="{{ 'shop_by.view_cart' | t }}"
+  data-error="{{ 'volume_picker.error' | t }}"
+  hidden
+  {{ block.shopify_attributes }}
+>
+  <h2 class="sb-related__heading">{{ block.settings.heading | escape }}</h2>
+  <div class="sb-related__grid" data-grid></div>
+  <script type="application/json" data-fallback>
+    [
+      {%- for item in own.products limit: 8 -%}
+        {%- render 'related_item', item: item -%},
+      {%- endfor -%}
+      {%- for item in extra.products limit: 8 -%}
+        {%- render 'related_item', item: item -%},
+      {%- endfor -%}
+      null
+    ]
+  </script>
+</div>
+
+{% schema %}
+{
+  "name": "Pairs well with",
+  "target": "content",
+  "enabled_on": { "templates": ["product"] },
+  "javascript": "cart-pack.js",
+  "stylesheet": "storefront-blocks.css",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Pairs well with" },
+    { "type": "range", "id": "limit", "label": "Products to show", "min": 2, "max": 8, "step": 1, "default": 4 },
+    {
+      "type": "collection",
+      "id": "fallback_collection",
+      "label": "Fallback collection",
+      "info": "Used when Shopify has few recommendations for a product, which is common on a new store."
+    },
+    {
+      "type": "text",
+      "id": "exclude_tag",
+      "label": "Hide products with this tag",
+      "info": "For products that shouldn't be suggested, like gift wrap.",
+      "default": "no-recommend"
+    }
+  ]
+}
+{% endschema %}

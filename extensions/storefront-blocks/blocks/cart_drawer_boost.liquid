@@ -1,0 +1,48 @@
+{%- assign extra = block.settings.addon_collection -%}
+<div
+  hidden
+  data-cart-boost
+  data-money-format="{{ shop.money_format | escape }}"
+  data-remaining="{{ 'cart_boost.remaining' | t: amount: '[amount]', label: '[label]' }}"
+  data-unlocked="{{ 'cart_boost.unlocked' | t: label: '[label]' }}"
+  data-excluded="{{ 'cart_boost.excluded' | t }}"
+  data-addon-heading="{{ block.settings.addon_heading | escape }}"
+  data-exclude-tag="{{ block.settings.exclude_tag | escape }}"
+  data-add="{{ 'cart_boost.add' | t }}"
+  data-error="{{ 'volume_picker.error' | t }}"
+  data-show-progress="{{ block.settings.show_progress }}"
+  data-show-addon="{{ block.settings.show_addon }}"
+>
+  <script type="application/json" data-config>
+    {{ shop.metafields["$app"].free_shipping_config.value | json }}
+  </script>
+  <script type="application/json" data-fallback>
+    [
+      {%- for item in extra.products limit: 8 -%}
+        {%- render 'related_item', item: item -%},
+      {%- endfor -%}
+      null
+    ]
+  </script>
+</div>
+
+{% schema %}
+{
+  "name": "Cart drawer boost",
+  "target": "body",
+  "javascript": "cart-pack.js",
+  "stylesheet": "storefront-blocks.css",
+  "settings": [
+    { "type": "checkbox", "id": "show_progress", "label": "Show free shipping progress", "default": true },
+    { "type": "checkbox", "id": "show_addon", "label": "Show one add-on product", "default": true },
+    { "type": "text", "id": "addon_heading", "label": "Add-on heading", "default": "Add to your routine" },
+    {
+      "type": "collection",
+      "id": "addon_collection",
+      "label": "Fallback collection",
+      "info": "Used when Shopify has no recommendation for the first item in the cart."
+    },
+    { "type": "text", "id": "exclude_tag", "label": "Hide products with this tag", "default": "no-recommend" }
+  ]
+}
+{% endschema %}

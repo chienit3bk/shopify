@@ -1,0 +1,47 @@
+{%- assign variant = product.selected_or_first_available_variant -%}
+<div
+  class="sb-sticky{% if block.settings.show_on_desktop %} sb-sticky--all{% endif %}"
+  data-sticky
+  hidden
+  {{ block.shopify_attributes }}
+>
+  {%- if product.featured_image -%}
+    {{ product.featured_image | image_url: width: 96 | image_tag: class: 'sb-sticky__image', width: 48, height: 48, loading: 'lazy', alt: product.title }}
+  {%- endif -%}
+  <div class="sb-sticky__info">
+    <span class="sb-sticky__title">{{ product.title | escape }}</span>
+    <span class="sb-sticky__meta">
+      <span data-sticky-price>{{ variant.price | money }}</span>
+      {%- unless product.has_only_default_variant -%}
+        <span data-sticky-variant>{{ variant.title | escape }}</span>
+      {%- endunless -%}
+    </span>
+  </div>
+  <button type="button" class="sb-sticky__button" data-sticky-button>{{ 'sticky.add_to_cart' | t }}</button>
+  <script type="application/json" data-variants>
+    [
+      {%- for item in product.variants -%}
+        {"id": {{ item.id | json }}, "title": {{ item.title | json }}, "price": {{ item.price | money | strip_html | json }}}
+        {%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  </script>
+</div>
+
+{% schema %}
+{
+  "name": "Sticky add to cart",
+  "target": "content",
+  "enabled_on": { "templates": ["product"] },
+  "javascript": "product-pack.js",
+  "stylesheet": "storefront-blocks.css",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_on_desktop",
+      "label": "Show on desktop too",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

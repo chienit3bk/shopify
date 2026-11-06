@@ -1,0 +1,94 @@
+{%- liquid
+  assign wanted = block.settings.option_names | downcase | split: ','
+  assign has_swatches = false
+  for option in product.options_with_values
+    assign option_name = option.name | downcase
+    for name in wanted
+      assign clean = name | strip
+      if clean == option_name
+        assign has_swatches = true
+      endif
+    endfor
+  endfor
+-%}
+{%- if has_swatches -%}
+  <div
+    class="sb-swatches"
+    data-swatches
+    data-colors="{{ block.settings.colors | escape }}"
+    data-sold-out="{{ 'swatches.sold_out' | t }}"
+    data-unavailable="{{ 'swatches.unavailable' | t }}"
+    {{ block.shopify_attributes }}
+  >
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        assign option_name = option.name | downcase
+        assign show = false
+        for name in wanted
+          assign clean = name | strip
+          if clean == option_name
+            assign show = true
+          endif
+        endfor
+      -%}
+      {%- if show -%}
+        <fieldset class="sb-swatches__group" data-option="{{ option.name | escape }}" data-index="{{ forloop.index0 }}">
+          <legend class="sb-swatches__legend">
+            {{ option.name | escape }}: <span data-selected>{{ option.selected_value | escape }}</span>
+            <span class="sb-swatches__note" data-note></span>
+          </legend>
+          <div class="sb-swatches__row">
+            {%- for value in option.values -%}
+              <label class="sb-swatch" title="{{ value | escape }}">
+                <input
+                  type="radio"
+                  name="sb-swatch-{{ block.id }}-{{ option.position }}"
+                  value="{{ value | escape }}"
+                  {% if option.selected_value == value %}
+                    checked
+                  {% endif %}
+                >
+                <span
+                  class="sb-swatch__dot"
+                  data-native-color="{{ value.swatch.color }}"
+                  {% if value.swatch.image %}
+                    data-native-image="{{ value.swatch.image | image_url: width: 72 }}"
+                  {% endif %}
+                ></span>
+                <span class="sb-swatch__name">{{ value | escape }}</span>
+              </label>
+            {%- endfor -%}
+          </div>
+        </fieldset>
+      {%- endif -%}
+    {%- endfor -%}
+    <script type="application/json" data-variants>
+      {{ product.variants | json }}
+    </script>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Variant swatches",
+  "target": "content",
+  "enabled_on": { "templates": ["product"] },
+  "javascript": "product-pack.js",
+  "stylesheet": "storefront-blocks.css",
+  "settings": [
+    {
+      "type": "text",
+      "id": "option_names",
+      "label": "Options shown as swatches",
+      "info": "Comma-separated option names. Other options stay in the theme's picker.",
+      "default": "Shade, Color, Colour"
+    },
+    {
+      "type": "textarea",
+      "id": "colors",
+      "label": "Swatch colors",
+      "info": "One per line, like Rose: #c9808a. Shopify's own option swatches are used first. A value with no color shows as text."
+    }
+  ]
+}
+{% endschema %}

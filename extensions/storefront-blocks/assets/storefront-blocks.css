@@ -22,3 +22,69 @@
 .sb-card__title { color: inherit; font-weight: 600; text-decoration: none; }
 .sb-card .sb-button { width: 100%; padding-block: 8px; }
 .sb-shop__grid[hidden] { display: none; }
+.sb-replaced { display: none !important; }
+.sb-swatches:not([data-ready]) { display: none; }
+.sb-swatches { display: grid; gap: 16px; margin-block: 16px; }
+.sb-swatches__group { border: 0; margin: 0; padding: 0; min-width: 0; }
+.sb-swatches__legend { padding: 0; margin-bottom: 10px; font-size: 0.95em; }
+.sb-swatches__note { opacity: 0.7; }
+.sb-swatches__row { display: flex; flex-wrap: wrap; gap: 10px; }
+.sb-swatch { position: relative; display: block; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; }
+.sb-swatch input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.sb-swatch__dot { display: block; width: 100%; height: 100%; border-radius: 50%; border: 4px solid rgb(var(--color-background, 255, 255, 255)); box-shadow: 0 0 0 1px rgb(0 0 0 / 0.25); background-size: cover; background-position: center; }
+.sb-swatch__name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.sb-swatch:has(input:checked) .sb-swatch__dot { box-shadow: 0 0 0 2px currentColor; }
+.sb-swatch:has(input:focus-visible) { outline: 2px solid currentColor; outline-offset: 3px; }
+.sb-swatch--off .sb-swatch__dot { opacity: 0.45; }
+.sb-swatch--off::after { content: ''; position: absolute; top: 50%; left: 6px; right: 6px; height: 2px; background: currentColor; transform: rotate(-45deg); pointer-events: none; }
+.sb-swatch--text { width: auto; height: auto; min-height: 44px; border-radius: 8px; }
+.sb-swatch--text .sb-swatch__dot { display: none; }
+.sb-swatch--text .sb-swatch__name { position: static; display: block; width: auto; height: auto; padding: 11px 14px; border: 1px solid rgb(0 0 0 / 0.25); border-radius: 8px; clip-path: none; }
+.sb-swatch--text:has(input:checked) .sb-swatch__name { box-shadow: inset 0 0 0 1px currentColor; border-color: currentColor; }
+.sb-sticky { position: fixed; z-index: 90; inset: auto 0 0; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgb(var(--color-background, 255, 255, 255)); color: rgb(var(--color-foreground, 18, 18, 18)); box-shadow: 0 -2px 12px rgb(0 0 0 / 0.12); }
+.sb-sticky[hidden] { display: none; }
+.sb-sticky__image { display: block; width: 48px; height: 48px; object-fit: cover; border-radius: 6px; }
+.sb-sticky__info { display: grid; gap: 2px; min-width: 0; line-height: 1.3; }
+.sb-sticky__title { overflow: hidden; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.sb-sticky__meta { display: flex; gap: 8px; overflow: hidden; font-size: 0.85em; white-space: nowrap; }
+.sb-sticky__meta [hidden] { display: none; }
+.sb-sticky__meta > [data-sticky-variant] { overflow: hidden; text-overflow: ellipsis; opacity: 0.7; }
+.sb-sticky__button { min-height: 44px; padding: 0 18px; border: 0; border-radius: 8px; background: rgb(var(--color-button, 18, 18, 18)); color: rgb(var(--color-button-text, 255, 255, 255)); font: inherit; font-weight: 600; white-space: nowrap; cursor: pointer; }
+.sb-sticky__button:disabled { opacity: 0.5; cursor: default; }
+.sb-sticky-open body { padding-bottom: var(--sb-sticky-height, 0); }
+@media (min-width: 750px) { .sb-sticky:not(.sb-sticky--all) { display: none; } }
+.sb-related { display: grid; gap: 20px; padding-block: 32px; }
+.sb-related[hidden] { display: none; }
+.sb-related__heading { margin: 0; }
+.sb-related__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.sb-related .sb-button { display: block; box-sizing: border-box; width: 100%; padding-block: 10px; min-height: 44px; text-align: center; text-decoration: none; }
+.sb-related .sb-card__title { display: grid; gap: 8px; }
+@media (max-width: 749px) { .sb-related__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
+.sb-ship { display: grid; gap: 6px; padding-bottom: 12px; font-size: 1.3rem; }
+.sb-ship[hidden], .sb-addon[hidden] { display: none; }
+.sb-ship__message, .sb-ship__note, .sb-addon__heading { margin: 0; }
+.sb-ship__note { font-size: 0.9em; opacity: 0.7; }
+.sb-ship__note:empty { display: none; }
+.sb-ship__track { height: 6px; overflow: hidden; border-radius: 3px; background: rgb(0 0 0 / 0.1); }
+.sb-ship__track span { display: block; height: 100%; width: 0; background: currentColor; transition: width 0.3s ease; }
+.sb-ship--done .sb-ship__track span { background: #0a6b3d; }
+.sb-addon { display: grid; gap: 8px; padding-block: 12px; border-top: 1px solid rgb(0 0 0 / 0.1); font-size: 1.3rem; }
+.sb-addon__heading { font-weight: 600; }
+.sb-addon__row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+.sb-addon__row img { display: block; width: 48px; height: 48px; object-fit: cover; border-radius: 6px; }
+.sb-addon__row a { color: inherit; text-decoration: none; }
+.sb-addon .sb-button { min-height: 44px; padding: 8px 14px; }
+.sb-addon .sb-status:empty { display: none; }
+.sb-options { display: grid; gap: 14px; margin-block: 16px; }
+.sb-options:not([data-ready]) { display: none; }
+.sb-option { display: grid; gap: 6px; }
+.sb-option[hidden], .sb-option__error[hidden] { display: none; }
+.sb-option__label { font-size: 0.95em; }
+.sb-option__control { box-sizing: border-box; width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid rgb(0 0 0 / 0.3); border-radius: 8px; background: transparent; color: inherit; font: inherit; }
+.sb-option__control[aria-invalid] { border-color: #b3261e; }
+.sb-option__count { justify-self: end; font-size: 0.8em; opacity: 0.7; }
+.sb-option__check { display: flex; gap: 10px; align-items: center; min-height: 44px; cursor: pointer; }
+.sb-option__check input { width: 20px; height: 20px; margin: 0; flex: none; }
+.sb-option__error { margin: 0; color: #b3261e; font-size: 0.9em; }
+.sb-has-addon .shopify-payment-button { display: none; }
+.sb-options { max-width: 440px; }
