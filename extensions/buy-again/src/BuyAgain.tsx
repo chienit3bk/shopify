@@ -34,6 +34,7 @@ const QUERY = `query BuyAgain {
 
 interface Result {
   data?: {shop: {url: string}; customer: {orders: {nodes: Order[]}}};
+  errors?: unknown[];
 }
 
 function Extension() {
@@ -48,7 +49,8 @@ function Extension() {
       body: JSON.stringify({query: QUERY}),
     })
       .then((response) => response.json())
-      .then(({data}: Result) => {
+      .then(({data, errors}: Result) => {
+        if (errors) console.error('buy-again', JSON.stringify(errors));
         if (!data) return;
         setShopUrl(data.shop.url);
         setItems(pickBuyAgain(data.customer.orders.nodes));
