@@ -1,0 +1,17 @@
+# Run after setup-lip-oil-shades.graphql, same productId.
+mutation CreateLipOilVariants($productId: ID!) {
+  productVariantsBulkCreate(
+    productId: $productId
+    variants: [
+      {price: "19.00", inventoryItem: {tracked: false}, optionValues: [{optionName: "Shade", name: "Rose"}, {optionName: "Size", name: "8 ml"}]}
+      {price: "19.00", inventoryItem: {tracked: false}, optionValues: [{optionName: "Shade", name: "Berry"}, {optionName: "Size", name: "8 ml"}]}
+      {price: "19.00", inventoryItem: {tracked: true}, inventoryPolicy: DENY, optionValues: [{optionName: "Shade", name: "Coral"}, {optionName: "Size", name: "8 ml"}]}
+      {price: "29.00", inventoryItem: {tracked: false}, optionValues: [{optionName: "Shade", name: "Clear"}, {optionName: "Size", name: "15 ml"}]}
+      {price: "29.00", inventoryItem: {tracked: false}, optionValues: [{optionName: "Shade", name: "Rose"}, {optionName: "Size", name: "15 ml"}]}
+      {price: "29.00", inventoryItem: {tracked: false}, optionValues: [{optionName: "Shade", name: "Coral"}, {optionName: "Size", name: "15 ml"}]}
+    ]
+  ) {
+    productVariants { id title availableForSale price }
+    userErrors { field message }
+  }
+}

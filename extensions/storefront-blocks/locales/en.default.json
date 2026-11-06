@@ -13,5 +13,18 @@
     "choose_options": "Choose options",
     "sold_out": "Sold out",
     "empty": "Pick a collection for this tab in the theme editor."
+  },
+  "swatches": {
+    "sold_out": "Sold out",
+    "unavailable": "Unavailable"
+  },
+  "sticky": {
+    "add_to_cart": "Add to cart"
+  },
+  "cart_boost": {
+    "remaining": "Spend {{ amount }} more for {{ label }}",
+    "unlocked": "You've unlocked {{ label }}",
+    "excluded": "Some items in your cart don't count.",
+    "add": "Add"
   }
 }

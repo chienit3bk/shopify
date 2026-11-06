@@ -1,0 +1,13 @@
+# Demo data for variant swatches: Nourishing Lip Oil in 4 shades x 2 sizes.
+# Coral 8 ml is sold out (tracked, 0 in stock). Berry 15 ml was never created.
+# shopify store execute --store <shop> --allow-mutations --query-file scripts/setup-lip-oil-shades.graphql -v '{"productId":"gid://shopify/Product/<id>"}'
+mutation AddShadeOption($productId: ID!) {
+  productOptionsCreate(
+    productId: $productId
+    options: [{name: "Shade", position: 1, values: [{name: "Clear"}, {name: "Rose"}, {name: "Berry"}, {name: "Coral"}]}]
+    variantStrategy: LEAVE_AS_IS
+  ) {
+    product { options { name values } }
+    userErrors { field message }
+  }
+}
