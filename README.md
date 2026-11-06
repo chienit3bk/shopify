@@ -795,9 +795,10 @@ and each item is one click. Extension: [`extensions/buy-again`](extensions/buy-a
 - Each link adds the item to the current cart with the quantity from its newest order.
 - Test data on a fictional store: a paid Vitamin C x2 appears, a $0 Charcoal Mask gift line does not.
 
-Found while testing, both invisible in the editor preview:
+Found while testing on the live store:
 
-- The block was empty for real customers. The app needs `customer_read_customers` and
+- The block was empty for real customers, though the editor preview looked fine. The app needs
+  `customer_read_customers` and
   `customer_read_orders`, and after the deploy the store still has to approve them.
 - A `/cart/<variant>:<qty>` permalink replaces the cart and opens checkout, so a second click lost
   the first item. The block uses `/cart/add` instead.
