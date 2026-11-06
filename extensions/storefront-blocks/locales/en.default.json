@@ -32,5 +32,15 @@
     "required": "{{ label }} is required.",
     "too_long": "{{ label }} can have up to {{ count }} characters.",
     "addon": "{{ label }} (+{{ price }} each)"
+  },
+  "ingredient_chart": {
+    "ingredient": "Ingredient",
+    "amount": "Amount",
+    "role": "What it does",
+    "region": "Origin: {{ region }}",
+    "concerns": "Good for: {{ concerns }}"
+  },
+  "collection_filter": {
+    "clear": "Clear filters"
   }
 }

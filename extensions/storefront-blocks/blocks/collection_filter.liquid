@@ -1,0 +1,94 @@
+{%- comment -%}
+  Filters a collection with tag URLs (/collections/x/concern-dryness+region-nordic), which every
+  theme supports with no app. Each group is single choice: picking a value replaces that group's
+  tag and keeps the others. While a group has no choice yet, a value with no products under the
+  other group is disabled, so a click never lands on an empty page.
+{%- endcomment -%}
+{%- liquid
+  assign labels = block.settings.label_1 | append: '|' | append: block.settings.label_2 | split: '|'
+  assign prefixes = block.settings.prefix_1 | append: '|' | append: block.settings.prefix_2 | split: '|'
+-%}
+{%- capture groups -%}
+  {%- for prefix in prefixes -%}
+    {%- liquid
+      assign group_index = forloop.index0
+      assign others = ''
+      assign group_active = false
+      for current in current_tags
+        if current contains prefix
+          assign group_active = true
+        else
+          assign others = others | append: current | append: '+'
+        endif
+      endfor
+      assign values = ''
+      for tag in collection.all_tags
+        assign start = tag | slice: 0, prefix.size
+        if start == prefix
+          assign values = values | append: tag | append: ','
+        endif
+      endfor
+      assign values = values | split: ','
+    -%}
+    {%- if values.size > 0 -%}
+      <div class="sb-filter__group" role="group" aria-label="{{ labels[group_index] | escape }}">
+        <span class="sb-filter__label">{{ labels[group_index] | escape }}</span>
+        <ul class="sb-filter__values" role="list">
+          {%- for tag in values -%}
+            {%- liquid
+              assign name = tag | remove_first: prefix | replace: '-', ' ' | capitalize
+              assign selected = false
+              if current_tags contains tag
+                assign selected = true
+              endif
+              assign path = others | append: tag
+              if selected
+                assign path = others | split: '+' | join: '+'
+              endif
+              assign href = collection.url
+              if path != blank
+                assign href = collection.url | append: '/' | append: path
+              endif
+            -%}
+            <li>
+              {%- if selected or others == blank or group_active or collection.tags contains tag -%}
+                <a class="sb-filter__chip" href="{{ href | escape }}"{% if selected %} aria-current="true"{% endif %}>
+                  {{- name | escape -}}
+                </a>
+              {%- else -%}
+                <span class="sb-filter__chip sb-filter__chip--off" aria-disabled="true">{{ name | escape }}</span>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- if groups != blank -%}
+  <nav class="sb-filter" aria-label="{{ block.settings.heading | escape }}" {{ block.shopify_attributes }}>
+    <div class="sb-filter__head">
+      <h2 class="sb-filter__heading">{{ block.settings.heading | escape }}</h2>
+      {%- if current_tags != blank -%}
+        <a class="sb-filter__clear" href="{{ collection.url }}">{{ 'collection_filter.clear' | t }}</a>
+      {%- endif -%}
+    </div>
+    {{ groups }}
+  </nav>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Collection filter",
+  "target": "section",
+  "enabled_on": { "templates": ["collection"] },
+  "stylesheet": "storefront-blocks.css",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Filter products" },
+    { "type": "text", "id": "label_1", "label": "First group label", "default": "Concern" },
+    { "type": "text", "id": "prefix_1", "label": "First group tag prefix", "default": "concern-", "info": "Products tagged concern-dryness show as Dryness." },
+    { "type": "text", "id": "label_2", "label": "Second group label", "default": "Region" },
+    { "type": "text", "id": "prefix_2", "label": "Second group tag prefix", "default": "region-" }
+  ]
+}
+{% endschema %}
