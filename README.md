@@ -791,6 +791,8 @@ and each item is one click. Extension: [`extensions/buy-again`](extensions/buy-a
 [`shared/customer-account/buy-again.ts`](shared/customer-account/buy-again.ts). Video:
 [`docs/demos/buy-again.mp4`](docs/demos/buy-again.mp4).
 
+https://github.com/user-attachments/assets/136a741c-a564-4c92-9888-07f23f3c7df5
+
 - Reads the last 5 orders from the Customer Account API and shows up to 4 items, newest first.
 - Each link adds the item to the current cart with the quantity from its newest order.
 - Test data on a fictional store: a paid Vitamin C x2 appears, a $0 Charcoal Mask gift line does not.
@@ -798,8 +800,8 @@ and each item is one click. Extension: [`extensions/buy-again`](extensions/buy-a
 Found while testing on the live store:
 
 - The block was empty for real customers, though the editor preview looked fine. The app needs
-  `customer_read_customers` and
-  `customer_read_orders`, and after the deploy the store still has to approve them.
+  `customer_read_customers` and `customer_read_orders`, and after the deploy the store still has to
+  approve them.
 - A `/cart/<variant>:<qty>` permalink replaces the cart and opens checkout, so a second click lost
   the first item. The block uses `/cart/add` instead.
 
