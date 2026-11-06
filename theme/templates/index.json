@@ -1,0 +1,662 @@
+{
+  "sections": {
+    "hero": {
+      "type": "image-banner",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Shopify demos you can try",
+            "heading_size": "h1"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "35 checkout, Functions, theme and app demos by Clark Nguyen, built on Solvane, a fictional skincare store with test data.",
+            "text_style": "body"
+          }
+        },
+        "buttons": {
+          "type": "buttons",
+          "settings": {
+            "button_label_1": "See the code on GitHub",
+            "button_link_1": "https://github.com/chienit3bk/shopify",
+            "button_style_secondary_1": false,
+            "button_label_2": "Hire me on Upwork",
+            "button_link_2": "https://www.upwork.com/freelancers/chienn6",
+            "button_style_secondary_2": true
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "text",
+        "buttons"
+      ],
+      "custom_css": [],
+      "settings": {
+        "image": "shopify://shop_images/solvane-hero.jpg",
+        "image_overlay_opacity": 0,
+        "image_height": "medium",
+        "desktop_content_position": "middle-left",
+        "show_text_box": true,
+        "desktop_content_alignment": "left",
+        "color_scheme": "background-1",
+        "image_behavior": "none",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": true,
+        "show_text_below": true
+      }
+    },
+    "how": {
+      "type": "rich-text",
+      "blocks": {
+        "h": {
+          "type": "heading",
+          "settings": {
+            "heading": "How to try a demo",
+            "heading_size": "h1"
+          }
+        },
+        "t": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Each Try it button opens a ready-made cart or product page. Checkout is in test mode: the address is filled in with fake data, and test card number 1 works with any future date and any 3-digit code. No real payment is taken.</p>"
+          }
+        },
+        "n": {
+          "type": "text",
+          "settings": {
+            "text": "<p><a href=\"#checkout\">Checkout</a> · <a href=\"#shipping\">Shipping and delivery</a> · <a href=\"#discounts\">Discounts</a> · <a href=\"#gifts\">Gifts</a> · <a href=\"#cart-rules\">Cart rules, bundles and B2B</a> · <a href=\"#storefront\">Product page and storefront</a> · <a href=\"#tracking\">Post-purchase and tracking</a> · <a href=\"#accounts\">Customer accounts</a> · <a href=\"#subscriptions\">Subscriptions</a> · <a href=\"#migration\">Migration</a> · <a href=\"#custom-apps\">Custom apps</a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "h",
+        "t",
+        "n"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "background-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 16
+      }
+    },
+    "area_checkout": {
+      "type": "demo-area",
+      "blocks": {
+        "demo_02": {
+          "type": "demo",
+          "settings": {
+            "name": "Black Friday checkout offer",
+            "text": "A live countdown and discounted add-ons the buyer adds with one click.",
+            "try_url": "/cart/53265036247322:1",
+            "try_label": "Try it",
+            "video_url": "https://github.com/user-attachments/assets/7d7917ce-b09e-4b6d-8f0a-fb9bcfd35ae5",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_04": {
+          "type": "demo",
+          "settings": {
+            "name": "Shipping cut-off and trust badges",
+            "text": "Shows when the order ships by the warehouse clock, plus badges under the payment methods.",
+            "try_url": "/cart/53265036116250:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "video_url": "https://github.com/user-attachments/assets/65c8ce4b-3606-4a55-941c-1d1072a320d2",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_17": {
+          "type": "demo",
+          "settings": {
+            "name": "Required consent checkbox",
+            "text": "A final-sale box appears only for those products, and the order is refused without it.",
+            "try_url": "/cart/53265036181786:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "note": "Leave the box empty, enter test card 1 and press Pay now.",
+            "video_url": "https://github.com/user-attachments/assets/0b709b22-9f46-4430-a1b3-7ca7219533cb",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_19": {
+          "type": "demo",
+          "settings": {
+            "name": "Order note templates",
+            "text": "Delivery instructions in one tap, saved as the order note.",
+            "try_url": "/cart/53265036247322:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "video_url": "https://github.com/user-attachments/assets/d69d9fe4-7a5c-49dd-abbc-b4124337aa1c",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_20": {
+          "type": "demo",
+          "settings": {
+            "name": "Country-restricted products",
+            "text": "A product field lists where an item ships. Other countries are blocked with a clear message.",
+            "try_url": "/cart/53265036083482:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=100+Queen+St+W&checkout[shipping_address][city]=Toronto&checkout[shipping_address][province]=ON&checkout[shipping_address][zip]=M5H+2N2&checkout[shipping_address][country]=CA",
+            "try_label": "Try it",
+            "note": "The cart opens with a Canadian address, so the error shows on the page.",
+            "video_url": "https://github.com/user-attachments/assets/5cd03e75-9b78-4e5d-bca4-1a63b333a528",
+            "video_label": "Watch video"
+          }
+        }
+      },
+      "block_order": [
+        "demo_02",
+        "demo_04",
+        "demo_17",
+        "demo_19",
+        "demo_20"
+      ],
+      "settings": {
+        "title": "Checkout",
+        "anchor": "checkout"
+      }
+    },
+    "area_shipping": {
+      "type": "demo-area",
+      "blocks": {
+        "demo_07": {
+          "type": "demo",
+          "settings": {
+            "name": "Free Express shipping over $120",
+            "text": "Sale items do not count towards the free Express threshold.",
+            "try_url": "/cart/53265036181786:1,53265036116250:1,53265036280090:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "video_url": "https://github.com/user-attachments/assets/b63773f8-7181-46b0-9f75-830c8cf45e06",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_11": {
+          "type": "demo",
+          "settings": {
+            "name": "Delivery rules",
+            "text": "Hide, rename and reorder delivery options by cart and address.",
+            "try_url": "/cart/53265036116250:1,53265036280090:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "video_url": "https://github.com/user-attachments/assets/a873b668-87cb-4761-bc95-74085cdbe0fe",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_12": {
+          "type": "demo",
+          "settings": {
+            "name": "Delivery date picker and PO Box check",
+            "text": "Pick a date on the warehouse calendar. Express to a PO Box gets an error on the address field.",
+            "try_url": "/cart/53265036247322:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=PO+Box+123&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "note": "The cart opens with a PO Box. Choose Express to see the error.",
+            "video_url": "https://github.com/user-attachments/assets/a83e6875-e539-4167-9e92-b007ed2e8900",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_13": {
+          "type": "demo",
+          "settings": {
+            "name": "Carbon-neutral delivery add-on",
+            "text": "One checkbox adds or removes a small service line.",
+            "try_url": "/cart/53265036247322:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "video_url": "https://github.com/user-attachments/assets/5792d9cb-96ef-4d1e-abbb-f7726c3369b9",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_27": {
+          "type": "demo",
+          "settings": {
+            "name": "PO Box check per item",
+            "text": "Some items cannot go to a PO Box on any delivery option.",
+            "try_url": "/cart/53265036181786:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=PO+Box+123&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "note": "The cart opens with a PO Box address.",
+            "video_url": "https://github.com/user-attachments/assets/07eef043-dde3-482e-9c12-0a349903e2b5",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_30": {
+          "type": "demo",
+          "settings": {
+            "name": "Pickup-only items",
+            "text": "A product field forces Pickup. Shipping is refused with a message.",
+            "try_url": "/cart/53265037000986:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "note": "The error shows with shipping selected. Choose Pickup to clear it.",
+            "video_url": "https://github.com/user-attachments/assets/0f9c05d9-80fb-489c-a0f8-b6d291faf972",
+            "video_label": "Watch video"
+          }
+        }
+      },
+      "block_order": [
+        "demo_07",
+        "demo_11",
+        "demo_12",
+        "demo_13",
+        "demo_27",
+        "demo_30"
+      ],
+      "settings": {
+        "title": "Shipping and delivery",
+        "anchor": "shipping"
+      }
+    },
+    "area_discounts": {
+      "type": "demo-area",
+      "blocks": {
+        "demo_08": {
+          "type": "demo",
+          "settings": {
+            "name": "Buy 2, get 1 free",
+            "text": "One unit of the same product goes free, and the others keep their price.",
+            "try_url": "/cart/53265035985178:3?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "video_url": "https://github.com/user-attachments/assets/0690cba6-51bb-40f0-89ef-f1b6f6754471",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_09": {
+          "type": "demo",
+          "settings": {
+            "name": "Tiered discounts",
+            "text": "Volume discounts per product and spend tiers on the order, from one config.",
+            "try_url": "/cart/53265035952410:4,53265036116250:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "video_url": "https://github.com/user-attachments/assets/a87a98b2-30ad-4248-a268-68ee8e1a6368",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_21": {
+          "type": "demo",
+          "settings": {
+            "name": "Spend tiers that skip sale items",
+            "text": "Sale items and gift cards do not count, so there is no discount on a discount.",
+            "try_url": "/cart/53265036116250:1,53265036280090:1,53265037066522:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "video_url": "https://github.com/user-attachments/assets/acc39262-6a9c-48e1-b82f-6269acf8c098",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_22": {
+          "type": "demo",
+          "settings": {
+            "name": "40 quantity-break tables, one discount",
+            "text": "Many product tables run from one automatic discount.",
+            "try_url": "/cart/53265036935450:3?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "video_url": "https://github.com/user-attachments/assets/b0802f42-b07a-45f5-a0f8-ef49d73647bd",
+            "video_label": "Watch video"
+          }
+        }
+      },
+      "block_order": [
+        "demo_08",
+        "demo_09",
+        "demo_21",
+        "demo_22"
+      ],
+      "settings": {
+        "title": "Discounts",
+        "anchor": "discounts"
+      }
+    },
+    "area_gifts": {
+      "type": "demo-area",
+      "blocks": {
+        "demo_01": {
+          "type": "demo",
+          "settings": {
+            "name": "Rules-based free gift",
+            "text": "A gift adds itself in checkout, and a Function re-checks the rules before it is free.",
+            "try_url": "/cart/53265036280090:1,53265035952410:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "video_url": "https://github.com/chienit3bk/shopify#1-rules-based-free-gift",
+            "video_label": "See screenshots"
+          }
+        },
+        "demo_06": {
+          "type": "demo",
+          "settings": {
+            "name": "Gift picker and validation",
+            "text": "The buyer picks one free mini, and an order with a gift the cart no longer earns is refused.",
+            "try_url": "/cart/53265035952410:1,53265036280090:1,53265036116250:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "video_url": "https://github.com/user-attachments/assets/1d46add7-a5d4-4378-b188-cac5a1e3bc96",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_10": {
+          "type": "demo",
+          "settings": {
+            "name": "Gift for a collection",
+            "text": "Any item from one collection unlocks a free mini. The out-of-stock fallback is shown in the video.",
+            "try_url": "/cart/53265037066522:2?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "video_url": "https://github.com/user-attachments/assets/fd280553-5f93-4b0c-93af-1598f0483c20",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_18": {
+          "type": "demo",
+          "settings": {
+            "name": "Gift message and gift wrap",
+            "text": "A card message on the order, and gift wrap as its own $5 line.",
+            "try_url": "/cart/53265036247322:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "video_url": "https://github.com/user-attachments/assets/84448f0d-cc4a-4be5-8d69-648a70976259",
+            "video_label": "Watch video"
+          }
+        }
+      },
+      "block_order": [
+        "demo_01",
+        "demo_06",
+        "demo_10",
+        "demo_18"
+      ],
+      "settings": {
+        "title": "Gifts",
+        "anchor": "gifts"
+      }
+    },
+    "area_cart_rules": {
+      "type": "demo-area",
+      "blocks": {
+        "demo_14": {
+          "type": "demo",
+          "settings": {
+            "name": "Maximum quantity and incompatible products",
+            "text": "One validation Function with clear messages. This cart has 4 of a product limited to 3.",
+            "try_url": "/cart/53265036116250:4?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "note": "Enter test card 1 and press Pay now to see the message.",
+            "video_url": "https://github.com/user-attachments/assets/9a92db60-b20b-4370-8947-5797c819ff04",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_16": {
+          "type": "demo",
+          "settings": {
+            "name": "Fixed-price bundle",
+            "text": "One product in the cart, expanded into its parts at checkout with the price split exactly.",
+            "try_url": "/cart/53283379314970:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "video_url": "https://github.com/user-attachments/assets/bdd332f5-62b6-499c-8838-76694fc6f89f",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_23": {
+          "type": "demo",
+          "settings": {
+            "name": "Case packs",
+            "text": "Sell by the case and count stock by the bottle.",
+            "try_url": "/cart/53292266488090:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "video_url": "https://github.com/user-attachments/assets/e3fb8680-6f0d-479f-8604-0d41b75b1d62",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_28": {
+          "type": "demo",
+          "settings": {
+            "name": "One sample kit per customer",
+            "text": "A repeat email inside 30 days is refused at checkout.",
+            "try_url": "/cart/53309528768794:1?checkout[email]=sample.demo%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "note": "The cart opens with a demo email that already claimed a kit, so the error shows on the page.",
+            "video_url": "https://github.com/user-attachments/assets/743d2fe4-6e1a-40b6-8d4a-2780bf285440",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_29": {
+          "type": "demo",
+          "settings": {
+            "name": "Minimum order for wholesale customers",
+            "text": "Customers tagged wholesale need $100, and everyone else does not.",
+            "try_url": "/cart/53265036247322:1?checkout[email]=wholesale.demo%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "note": "The cart opens with a demo wholesale email and a $38 cart, so the error shows on the page.",
+            "video_url": "https://github.com/user-attachments/assets/1dc1507c-32a4-4ac5-b5d9-a6a6aaa4c0db",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_15": {
+          "type": "demo",
+          "settings": {
+            "name": "B2B quantity, case and first-order rules",
+            "text": "Minimum quantity, case sizes and a first-order minimum for company buyers.",
+            "try_url": "/products/hydrogel-eye-patches",
+            "try_label": "Needs sign-in",
+            "note": "Needs a company login, so you cannot run the rules as a guest. This opens the product; the video shows them.",
+            "video_url": "https://github.com/user-attachments/assets/1df9c0c5-f285-469c-b9bc-33b2537283b3",
+            "video_label": "Watch video"
+          }
+        }
+      },
+      "block_order": [
+        "demo_14",
+        "demo_16",
+        "demo_23",
+        "demo_28",
+        "demo_29",
+        "demo_15"
+      ],
+      "settings": {
+        "title": "Cart rules, bundles and B2B",
+        "anchor": "cart-rules"
+      }
+    },
+    "area_storefront": {
+      "type": "demo-area",
+      "blocks": {
+        "demo_35": {
+          "type": "demo",
+          "settings": {
+            "name": "Product page pack",
+            "text": "Swatches, sticky add to cart on phones, a cart drawer boost, related products and custom options.",
+            "try_url": "/products/nourishing-lip-oil",
+            "try_label": "Try it",
+            "video_url": "https://github.com/user-attachments/assets/b3fb3bbb-c667-4d90-a70b-a8831e1a9927",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_24": {
+          "type": "demo",
+          "settings": {
+            "name": "Buy more, save more",
+            "text": "Quantity options on the product page, from the same config as the discount.",
+            "try_url": "/products/gentle-gel-cleanser",
+            "try_label": "Try it",
+            "video_url": "https://github.com/user-attachments/assets/36e7e588-f9e1-4ca9-a888-e97010d9076f",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_25": {
+          "type": "demo",
+          "settings": {
+            "name": "Shop by concern",
+            "text": "Tabs from a collection list, with quick add and no page load.",
+            "try_url": "/collections/moisturizers",
+            "try_label": "Try it",
+            "note": "Scroll below the products on this collection page.",
+            "video_url": "https://github.com/user-attachments/assets/8d06ac5a-f249-4b22-b8cd-4d4658c80461",
+            "video_label": "Watch video"
+          }
+        }
+      },
+      "block_order": [
+        "demo_35",
+        "demo_24",
+        "demo_25"
+      ],
+      "settings": {
+        "title": "Product page and storefront",
+        "anchor": "storefront"
+      }
+    },
+    "area_tracking": {
+      "type": "demo-area",
+      "blocks": {
+        "demo_03": {
+          "type": "demo",
+          "settings": {
+            "name": "Attribution survey and referral code",
+            "text": "\"How did you hear about us?\" saved on the order, and a share code on the thank-you page.",
+            "try_url": "/cart/53265036247322:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "note": "Pay with test card 1 to reach the thank-you page.",
+            "video_url": "https://github.com/user-attachments/assets/d198b4ed-9966-4d5f-b7aa-fb27226ea8a7",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_05": {
+          "type": "demo",
+          "settings": {
+            "name": "Gift funnel analytics",
+            "text": "Which free gift moves order value, measured by a web pixel.",
+            "try_url": "/cart/53265036280090:1,53265035952410:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "note": "The events run in the background, so this cart looks like a normal gift cart. The video shows the data.",
+            "video_url": "https://github.com/user-attachments/assets/74b7c141-09e2-42cc-a7e5-8e5089c7d8fd",
+            "video_label": "Watch video"
+          }
+        },
+        "demo_31": {
+          "type": "demo",
+          "settings": {
+            "name": "GA4 with customer events",
+            "text": "Send page_view through purchase to GA4 without editing the theme.",
+            "try_url": "https://github.com/chienit3bk/shopify/blob/main/docs/ga4-pixel.md",
+            "try_label": "Read the guide",
+            "note": "Not connected to a GA4 property on this store. No video yet, the guide has the steps.",
+            "video_label": "Watch video"
+          }
+        }
+      },
+      "block_order": [
+        "demo_03",
+        "demo_05",
+        "demo_31"
+      ],
+      "settings": {
+        "title": "Post-purchase and tracking",
+        "anchor": "tracking"
+      }
+    },
+    "area_accounts": {
+      "type": "demo-area",
+      "blocks": {
+        "demo_34": {
+          "type": "demo",
+          "settings": {
+            "name": "Buy again on the Orders page",
+            "text": "One list across recent orders, free gifts removed, one click per item.",
+            "try_url": "/account",
+            "try_label": "Needs sign-in",
+            "note": "Needs a customer login with past orders. A new account has none, so the video shows the block.",
+            "video_url": "https://github.com/user-attachments/assets/136a741c-a564-4c92-9888-07f23f3c7df5",
+            "video_label": "Watch video"
+          }
+        }
+      },
+      "block_order": [
+        "demo_34"
+      ],
+      "settings": {
+        "title": "Customer accounts",
+        "anchor": "accounts"
+      }
+    },
+    "area_subscriptions": {
+      "type": "demo-area",
+      "blocks": {
+        "demo_33": {
+          "type": "demo",
+          "settings": {
+            "name": "Subscription portal and cancellation flow",
+            "text": "App setup and testing in Loop: plans, portal, and a cancellation flow with offers.",
+            "try_url": "https://github.com/chienit3bk/shopify#33-loop-subscriptions-portal-and-cancellation-flow",
+            "try_label": "Read the notes",
+            "note": "Set up on a separate test store, so there is nothing to try here.",
+            "video_url": "https://github.com/chienit3bk/shopify/blob/main/docs/demos/loop-subscriptions.mp4",
+            "video_label": "Watch video"
+          }
+        }
+      },
+      "block_order": [
+        "demo_33"
+      ],
+      "settings": {
+        "title": "Subscriptions",
+        "anchor": "subscriptions"
+      }
+    },
+    "area_migration": {
+      "type": "demo-area",
+      "blocks": {
+        "demo_26": {
+          "type": "demo",
+          "settings": {
+            "name": "Scripts to Functions",
+            "text": "Three Plus scripts next to their Function config. Here, a code is refused when a sale item is in the cart.",
+            "try_url": "/cart/53265037066522:1,53265036116250:1?checkout[email]=demo.visitor%40example.com&checkout[shipping_address][first_name]=Demo&checkout[shipping_address][last_name]=Visitor&checkout[shipping_address][address1]=350+5th+Ave&checkout[shipping_address][city]=New+York&checkout[shipping_address][province]=NY&checkout[shipping_address][zip]=10018&checkout[shipping_address][country]=US",
+            "try_label": "Try it",
+            "note": "Type WELCOME10 in the discount field and press Apply.",
+            "video_url": "https://github.com/user-attachments/assets/5b98d906-e721-4cac-b300-78748fadf4b4",
+            "video_label": "Watch video"
+          }
+        }
+      },
+      "block_order": [
+        "demo_26"
+      ],
+      "settings": {
+        "title": "Migration",
+        "anchor": "migration"
+      }
+    },
+    "area_custom_apps": {
+      "type": "demo-area",
+      "blocks": {
+        "demo_32": {
+          "type": "demo",
+          "settings": {
+            "name": "B2B price lists in a custom app",
+            "text": "An embedded app that gives a company location its own catalog and prices.",
+            "try_url": "https://github.com/chienit3bk/shopify/tree/main/apps/clark-catalog-pricing",
+            "try_label": "Read the code",
+            "note": "Runs inside the Shopify admin, so there is nothing to try here.",
+            "video_url": "https://github.com/chienit3bk/shopify/blob/main/docs/demos/catalog-pricing.mp4",
+            "video_label": "Watch video"
+          }
+        }
+      },
+      "block_order": [
+        "demo_32"
+      ],
+      "settings": {
+        "title": "Custom apps",
+        "anchor": "custom-apps"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "how",
+    "area_checkout",
+    "area_shipping",
+    "area_discounts",
+    "area_gifts",
+    "area_cart_rules",
+    "area_storefront",
+    "area_tracking",
+    "area_accounts",
+    "area_subscriptions",
+    "area_migration",
+    "area_custom_apps"
+  ]
+}
