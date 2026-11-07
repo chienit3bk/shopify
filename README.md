@@ -19,9 +19,9 @@ the theme editor, then `node scripts/push-landing.mjs <theme id>`.
 | Shipping and delivery | [Free Express shipping over $120](#7-free-express-shipping-over-120--sale-items-dont-count), [Delivery rules](#11-delivery-rules--hide-rename-reorder-delivery-customization-function), [Delivery date picker + PO Box check](#12-delivery-date-picker--po-box-check), [Carbon-neutral delivery add-on](#13-carbon-neutral-delivery-add-on), [PO Box check per item, not per carrier](#27-po-box-check-per-item-not-per-carrier), [Pickup-only items](#30-pickup-only-items) |
 | Discounts | [Buy 2, get 1 free](#8-buy-2-get-1-free--on-the-same-sku), [Tiered discounts](#9-tiered-discounts--volume-per-sku--spend-on-the-order), [Spend tiers that skip sale items and gift cards](#21-spend-tiers-that-skip-sale-items-and-gift-cards), [40 quantity-break tables from one discount](#22-40-quantity-break-tables-from-one-discount) |
 | Gifts | [Rules-based free gift](#1-rules-based-free-gift), [Gift picker + checkout validation](#6-gift-picker--checkout-validation), [Gift for a collection + out-of-stock fallback](#10-gift-for-a-collection--out-of-stock-fallback), [Gift message + gift wrap](#18-gift-message--gift-wrap) |
-| Cart rules, bundles and B2B | [Max quantity, minimum order and incompatible products](#14-max-quantity-minimum-order-and-incompatible-products), [B2B: minimum quantity, case packs, first-order minimum](#15-b2b-minimum-quantity-case-packs-first-order-minimum), [Fixed-price bundle](#16-fixed-price-bundle--cart-transform-lineexpand), [Case packs](#23-case-packs--sell-by-the-case-count-stock-by-the-bottle), [One sample kit per customer every 30 days](#28-one-sample-kit-per-customer-every-30-days), [Minimum order for wholesale-tagged customers](#29-minimum-order-for-wholesale-tagged-customers), [Native bundles with an image picker](#37-native-bundles-with-an-image-picker) |
+| Cart rules, bundles and B2B | [Max quantity, minimum order and incompatible products](#14-max-quantity-minimum-order-and-incompatible-products), [B2B: minimum quantity, case packs, first-order minimum](#15-b2b-minimum-quantity-case-packs-first-order-minimum), [Fixed-price bundle](#16-fixed-price-bundle--cart-transform-lineexpand), [Case packs](#23-case-packs--sell-by-the-case-count-stock-by-the-bottle), [One sample kit per customer every 30 days](#28-one-sample-kit-per-customer-every-30-days), [Minimum order for wholesale-tagged customers](#29-minimum-order-for-wholesale-tagged-customers), [Native bundles with an image picker](#37-native-bundles-with-an-image-picker), [Build your own bundle](#38-build-your-own-bundle--cart-transform-linesmerge) |
 | Product page and storefront | [Buy more, save more on the product page](#24-buy-more-save-more-on-the-product-page), [Shop by concern on home and collection pages](#25-shop-by-concern-on-home-and-collection-pages), [Product page pack for a Dawn theme](#35-product-page-pack-for-a-dawn-theme), [Catalog import, ingredient chart and filter](#36-catalog-import-ingredient-chart-and-filter) |
-| Post-purchase and tracking | [Post-purchase: attribution survey + referral code](#3-post-purchase-attribution-survey--referral-code), [Gift funnel analytics](#5-gift-funnel-analytics--analyticspublish--a-web-pixel), [Connect GA4 with customer events](#31-connect-ga4-with-customer-events) |
+| Post-purchase and tracking | [Post-purchase: attribution survey + referral code](#3-post-purchase-attribution-survey--referral-code), [Gift funnel analytics](#5-gift-funnel-analytics--analyticspublish--a-web-pixel), [Connect GA4 with customer events](#31-connect-ga4-with-customer-events), [Affiliate ref tracking](#39-affiliate-ref-tracking--cart-attribute--web-pixel) |
 | Customer accounts | [Buy again on the Orders page](#34-buy-again-on-the-orders-page) |
 | Subscriptions | [Loop Subscriptions: portal and cancellation flow](#33-loop-subscriptions-portal-and-cancellation-flow) |
 | Migration | [Scripts → Functions: three scripts side by side](#26-scripts--functions-three-scripts-side-by-side) |
@@ -920,3 +920,49 @@ Good to know: `/cart/add.js` accepted a sold-out bundle. The theme button blocks
 "Out of stock". A bundle has at most 3 options and 100 variants, and stock is overall, not per location.
 Not tested: a third-party fulfilment app, and editing these bundles in the Shopify Bundles app. An app can only
 manage bundles it created, so a client's bundles should be created in the app that will manage them.
+
+## 38. Build your own bundle — Cart Transform `linesMerge`
+
+VIDEO_BUNDLE
+
+**"Pick any 3 for $69".** The buyer picks three items on the product page; the `bundle-expand` Function
+merges them into one cart line at the set price. List price was $124 (Night Cream + Serum + Cleanser), the cart
+and checkout show $69.00, and order #1018 keeps three real line items: $28.93 + $26.71 + $13.36.
+Block: [`bundle_builder.liquid`](extensions/storefront-blocks/blocks/bundle_builder.liquid), logic:
+[`shared/bundle/builder.ts`](shared/bundle/builder.ts). Video: [`docs/demos/bundle-builder.mp4`](docs/demos/bundle-builder.mp4).
+
+- **A store has one cart transform**, so this lives in the same Function as the fixed-price bundle (section 16):
+  `lineExpand` for a fixed set, `linesMerge` for a mix the buyer builds.
+- **Nothing the browser sends sets the price.** The block only tags each picked line `_builder=<id>`. Size,
+  price and the eligible products come from an app-owned shop metafield (`bundle_builder`) that the block also reads.
+  A group with the wrong unit count, or one product outside the list, stays at list price.
+- **`linesMerge` takes a percent, not a price**, so the Function turns $69 into the percent that lands on it
+  (44.3548% off $124) and converts the price with `presentmentCurrencyRate` for other currencies.
+- The merged line needs a published placeholder product ("Build your own Ritual Set"); its own price is never charged.
+- Unlike `lineUpdate`, `linesMerge` is not Plus-only.
+
+Good to know: a half-built bundle is not blocked by the Function, it just costs list price. The block disables
+the button until N items are picked.
+
+Setup: `scripts/create-bundle-builder.graphql`, `scripts/setup-bundle-builder.graphql`, then
+`scripts/set-bundle-builder-config.graphql` with `scripts/bundle-builder-config.json`, then
+`node scripts/push-builder-blocks.mjs <theme id>`.
+
+## 39. Affiliate ref tracking — cart attribute + web pixel
+
+VIDEO_AFF
+
+**`?ref=mia_demo` on any URL becomes a field on the order and an event at checkout.** An app embed
+([`affiliate_ref.liquid`](extensions/storefront-blocks/blocks/affiliate_ref.liquid)) keeps the ref for 30 days
+(last click wins) and writes it to the cart attribute `affiliate_ref`. Shopify copies it to the order:
+#1018 shows `affiliate_ref: mia_demo` under Additional details. The existing web pixel reads the same attribute
+at `checkout_completed` and sends `affiliate_conversion` (ref, order id, subtotal) to the collector, and keeps
+orders and revenue per ref in storage. Logic: [`shared/affiliate/ref.ts`](shared/affiliate/ref.ts).
+Video: [`docs/demos/affiliate-ref.mp4`](docs/demos/affiliate-ref.mp4).
+
+- **The ref is cut down to `[A-Za-z0-9_-]`, 40 characters** before it is stored or sent. `<script>` or a long string is dropped.
+- **No underscore prefix on the attribute**: a `_`-prefixed key is hidden, and this one must show on the order.
+- **One web pixel per app**, so the event is added to the gift funnel pixel instead of a second extension.
+- The pixel only runs for buyers whose privacy settings allow analytics (the extension declares `analytics = true`).
+
+Setup: switch on the embed under Theme settings > App embeds (`node scripts/push-builder-blocks.mjs <theme id>` does it).

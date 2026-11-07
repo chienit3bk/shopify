@@ -68,7 +68,7 @@
         "n": {
           "type": "text",
           "settings": {
-            "text": "<p><a href=\"#checkout\">Checkout</a> · <a href=\"#shipping\">Shipping and delivery</a> · <a href=\"#discounts\">Discounts</a> · <a href=\"#gifts\">Gifts</a> · <a href=\"#cart-rules\">Cart rules, bundles and B2B</a> · <a href=\"#storefront\">Product page and storefront</a> · <a href=\"#tracking\">Post-purchase and tracking</a> · <a href=\"#accounts\">Customer accounts</a> · <a href=\"#subscriptions\">Subscriptions</a> · <a href=\"#migration\">Migration</a> · <a href=\"#custom-apps\">Custom apps</a></p>"
+            "text": "<p><a href=\"#checkout\">Checkout</a> \u00b7 <a href=\"#shipping\">Shipping and delivery</a> \u00b7 <a href=\"#discounts\">Discounts</a> \u00b7 <a href=\"#gifts\">Gifts</a> \u00b7 <a href=\"#cart-rules\">Cart rules, bundles and B2B</a> \u00b7 <a href=\"#storefront\">Product page and storefront</a> \u00b7 <a href=\"#tracking\">Post-purchase and tracking</a> \u00b7 <a href=\"#accounts\">Customer accounts</a> \u00b7 <a href=\"#subscriptions\">Subscriptions</a> \u00b7 <a href=\"#migration\">Migration</a> \u00b7 <a href=\"#custom-apps\">Custom apps</a></p>"
           }
         }
       },
@@ -435,6 +435,17 @@
             "video_url": "https://github.com/user-attachments/assets/1df9c0c5-f285-469c-b9bc-33b2537283b3",
             "video_label": "Watch video"
           }
+        },
+        "demo_38": {
+          "type": "demo",
+          "settings": {
+            "name": "Build your own bundle",
+            "text": "Pick any 3 items on the product page; the cart transform prices them as one bundle.",
+            "try_url": "/products/build-your-own-ritual-set",
+            "try_label": "Try it",
+            "video_url": "https://github.com/chienit3bk/shopify/blob/main/docs/demos/bundle-builder.mp4",
+            "video_label": "Watch video"
+          }
         }
       },
       "block_order": [
@@ -443,7 +454,8 @@
         "demo_23",
         "demo_28",
         "demo_29",
-        "demo_15"
+        "demo_15",
+        "demo_38"
       ],
       "settings": {
         "title": "Cart rules, bundles and B2B",
@@ -561,12 +573,25 @@
             "note": "Not connected to a GA4 property on this store. No video yet, the guide has the steps.",
             "video_label": "Watch video"
           }
+        },
+        "demo_39": {
+          "type": "demo",
+          "settings": {
+            "name": "Affiliate ref tracking",
+            "text": "A ?ref= link is remembered, put on the order and sent by the web pixel at checkout.",
+            "try_url": "/products/build-your-own-ritual-set?ref=demo",
+            "try_label": "Open a ref link",
+            "video_url": "https://github.com/chienit3bk/shopify/blob/main/docs/demos/affiliate-ref.mp4",
+            "video_label": "Watch video",
+            "note": "Place a test order afterwards: the order shows affiliate_ref under Additional details."
+          }
         }
       },
       "block_order": [
         "demo_03",
         "demo_05",
-        "demo_31"
+        "demo_31",
+        "demo_39"
       ],
       "settings": {
         "title": "Post-purchase and tracking",

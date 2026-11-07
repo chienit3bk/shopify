@@ -21,9 +21,12 @@ import {
   viewItem,
 } from '../../../shared/analytics/ga4';
 import {GIFT_ATTRIBUTE_KEY} from '../../../shared/free-gift/rules';
+import {type RefTotals, parseRefTotals, recordRefOrder, refFromAttributes} from '../../../shared/affiliate/ref';
 
 /** Running totals in the storefront's localStorage — readable on the store's own pages, no backend. */
 const STORAGE_KEY = 'free_gift_funnel';
+/** Orders and revenue per affiliate ref, kept the same way. */
+const REF_TOTALS_KEY = 'affiliate_ref_totals';
 
 register(({analytics, browser, settings}) => {
   // Optional: also POST each event to the merchant's collector (GA4 proxy, Segment, …).
@@ -38,6 +41,16 @@ register(({analytics, browser, settings}) => {
         await browser.localStorage.setItem(STORAGE_KEY, JSON.stringify(change(state)));
       })
       .catch((error) => console.error('[gift-funnel] storage failed', error));
+  }
+
+  let refQueue = Promise.resolve();
+  function updateRefTotals(change: (totals: RefTotals) => RefTotals) {
+    refQueue = refQueue
+      .then(async () => {
+        const totals = parseRefTotals(await browser.localStorage.getItem(REF_TOTALS_KEY));
+        await browser.localStorage.setItem(REF_TOTALS_KEY, JSON.stringify(change(totals)));
+      })
+      .catch((error) => console.error('[affiliate] storage failed', error));
   }
 
   function forward(payload: Record<string, unknown>) {
@@ -96,5 +109,19 @@ register(({analytics, browser, settings}) => {
     };
     update((state) => recordOrder(state, order, GIFT_ATTRIBUTE_KEY));
     forward({event: 'checkout_completed', timestamp: event.timestamp, subtotal: order.subtotal, currencyCode: order.currencyCode});
+
+    // Affiliate: the ref the storefront put on the cart (?ref=) comes back as a checkout attribute.
+    const ref = refFromAttributes(checkout.attributes);
+    if (ref) {
+      updateRefTotals((totals) => recordRefOrder(totals, ref, order.subtotal, order.currencyCode));
+      forward({
+        event: 'affiliate_conversion',
+        timestamp: event.timestamp,
+        ref,
+        orderId: checkout.order?.id ?? null,
+        subtotal: order.subtotal,
+        currencyCode: order.currencyCode,
+      });
+    }
   });
 });

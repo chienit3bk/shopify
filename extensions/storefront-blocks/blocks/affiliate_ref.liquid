@@ -1,0 +1,14 @@
+{%- comment -%}
+  App embed: remembers `?ref=` from any storefront URL for 30 days and writes it to the cart as the
+  attribute `affiliate_ref`, which Shopify copies to the order ("Additional details"). The web
+  pixel reads the same attribute at checkout_completed. Switch it on under Theme settings > App embeds.
+{%- endcomment -%}
+<script src="{{ 'affiliate-ref.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Affiliate ref tracking",
+  "target": "body",
+  "settings": []
+}
+{% endschema %}
