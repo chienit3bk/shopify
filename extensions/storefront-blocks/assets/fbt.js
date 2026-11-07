@@ -136,7 +136,6 @@
           image.alt = '';
           image.width = 64;
           image.height = 64;
-          image.loading = 'lazy';
           image.src = sized(item.image, 128);
           var name = node('span', 'sb-fbt__name', i === 0 ? el.dataset.thisItem + ': ' + item.title : item.title);
           label.appendChild(box);
