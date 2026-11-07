@@ -15,7 +15,7 @@ the theme editor, then `node scripts/push-landing.mjs <theme id>`.
 
 | Area | Demos |
 |---|---|
-| Checkout | [BFCM checkout offer](#2-bfcm-checkout-offer--countdown--one-click-add-ons), [Shipping cut-off countdown + trust badges](#4-shipping-cut-off-countdown--trust-badges), [Required consent checkbox (final sale, age 18+)](#17-required-consent-checkbox-final-sale-age-18), [Order note templates](#19-order-note-templates), [Country-restricted products (no catalogs)](#20-country-restricted-products-no-catalogs) |
+| Checkout | [BFCM checkout offer](#2-bfcm-checkout-offer--countdown--one-click-add-ons), [Shipping cut-off countdown + trust badges](#4-shipping-cut-off-countdown--trust-badges), [Required consent checkbox (final sale, age 18+)](#17-required-consent-checkbox-final-sale-age-18), [Order note templates](#19-order-note-templates), [Country-restricted products (no catalogs)](#20-country-restricted-products-no-catalogs), [Address autocomplete and bad-address blocking](#42-address-autocomplete-and-bad-address-blocking--what-works-on-plus-and-what-doesnt) |
 | Shipping and delivery | [Free Express shipping over $120](#7-free-express-shipping-over-120--sale-items-dont-count), [Delivery rules](#11-delivery-rules--hide-rename-reorder-delivery-customization-function), [Delivery date picker + PO Box check](#12-delivery-date-picker--po-box-check), [Carbon-neutral delivery add-on](#13-carbon-neutral-delivery-add-on), [PO Box check per item, not per carrier](#27-po-box-check-per-item-not-per-carrier), [Pickup-only items](#30-pickup-only-items) |
 | Discounts | [Buy 2, get 1 free](#8-buy-2-get-1-free--on-the-same-sku), [Tiered discounts](#9-tiered-discounts--volume-per-sku--spend-on-the-order), [Spend tiers that skip sale items and gift cards](#21-spend-tiers-that-skip-sale-items-and-gift-cards), [40 quantity-break tables from one discount](#22-40-quantity-break-tables-from-one-discount) |
 | Gifts | [Rules-based free gift](#1-rules-based-free-gift), [Gift picker + checkout validation](#6-gift-picker--checkout-validation), [Gift for a collection + out-of-stock fallback](#10-gift-for-a-collection--out-of-stock-fallback), [Gift message + gift wrap](#18-gift-message--gift-wrap) |
@@ -1034,3 +1034,100 @@ Setup: same script as above (`node scripts/push-ab-fbt-blocks.mjs <theme id>`).
 The picker images in section 38 had `loading="lazy"`. In a background tab (and in the screenshots the demo is recorded
 from) the browser never starts lazy loads, so the tiles stayed empty. The images are 240 px thumbnails of a block the
 buyer came for, so they now load eagerly.
+
+## 42. Address autocomplete and bad-address blocking — what works on Plus and what doesn't
+
+https://github.com/user-attachments/assets/30a394f9-718c-492a-a589-bac56a95d7c0
+
+**Block addresses that can't be delivered to, and plug in an address-lookup service.** Two pieces, on purpose kept apart:
+
+- [`address-validation`](extensions/address-validation) is a **Cart and Checkout Validation Function**. It puts an error on the
+  address field itself for: no house number (US and CA, where the number comes first), a PO Box, and a US ZIP that belongs to
+  another state. Rules and the ZIP table: [`shared/address/rules.ts`](shared/address/rules.ts); merchant settings
+  ([`scripts/address-rules-config.json`](scripts/address-rules-config.json)): countries, `requireHouseNumber`, `allowPoBox`, `checkZipState`.
+- [`address-autocomplete`](extensions/address-autocomplete) is a **checkout UI extension** with the two address targets,
+  `purchase.address-autocomplete.suggest` (rows while the buyer types) and `purchase.address-autocomplete.format-suggestion` (fills the
+  form when a row is picked). The provider is one adapter, [`shared/address/autocomplete.ts`](shared/address/autocomplete.ts); the demo
+  uses a static list of made-up addresses, so there is no API key and no network call.
+
+Video: [`docs/demos/address-validation.mp4`](docs/demos/address-validation.mp4) (the validation half; see "What I could not show" below).
+
+### What works on Plus and what doesn't
+
+| Piece | Plus store | Non-Plus store | Source |
+|---|---|---|---|
+| Checkout UI extension in the information, shipping or payment step (including both address-autocomplete targets) | Yes | No | [Checkout UI extensions](https://shopify.dev/docs/api/checkout-ui-extensions/2026-10), [About checkout app extensions](https://shopify.dev/docs/api/checkout-extensions) |
+| Address autocomplete targets also need | Protected customer data access (address field) | n/a | [Address targets](https://shopify.dev/docs/api/checkout-ui-extensions/2026-10/targets/checkout/address), [tutorial](https://shopify.dev/docs/apps/build/checkout/delivery-shipping/address-autocomplete/build-autocomplete) |
+| Checkout UI extension on the thank-you and order status pages | Yes | Yes (every plan except Starter) | [Technologies for customizing checkout](https://shopify.dev/docs/apps/build/checkout/technologies) |
+| Cart and Checkout Validation Function, from a public App Store app | Yes | Yes (every plan except Starter) | [About Shopify Functions](https://shopify.dev/docs/apps/build/functions) |
+| The same Function from a custom app (one merchant's app, like this demo) | Yes | No | [About Shopify Functions](https://shopify.dev/docs/apps/build/functions) |
+| Validation error shown on `address1`, `zip`, `provinceCode`, `countryCode`... | Yes | Yes (same rule as the line above) | [Validation API: supported checkout fields](https://shopify.dev/docs/api/functions/2026-10/cart-and-checkout-validation) |
+| A Validation Function that calls an address API (network access) | Only enterprise plans with a custom app, and Shopify has to enable it | No | [Network access for Functions](https://shopify.dev/docs/apps/build/functions/network-access) |
+
+So: on a non-Plus store you can **block** a bad address (through a public app) but you cannot add **lookup/autocomplete** to the form;
+there the buyer gets Shopify's built-in address suggestions only. And a Function can't look an address up: it has no network, so
+"does this street exist" is out of reach on every plan but enterprise. The rules here only use what's in the cart input.
+
+### What the checkout already does by itself
+
+In the live checkout of this store, with no app involved, Shopify answered a New York ZIP (10118) with the state set to California:
+"Enter a valid ZIP / postal code for California". It also offered "Did you mean 10018?" under 10118, and a soft
+"Add a house number if you have one" under `Fifth Ave`. Those are hints, not blocks. The Function adds the hard parts:
+
+- the **house number is required** (the error replaces the hint and stops the order);
+- a **PO Box is refused** for merchants that can't ship to one;
+- the ZIP/state check **also runs where the form doesn't**: the docs say validation covers express checkouts (Shop Pay, PayPal, Apple
+  Pay, Google Pay) and carts built on custom storefronts. That is the reason to keep it even though the form catches the same mistake
+  (not tested here).
+
+### Choices worth knowing
+
+- **Never block on what it can't judge.** Empty field, a country the merchant didn't list (house number after the street in DE, NL...),
+  a ZIP prefix outside the table (territories, military) all pass. A wrong block loses an order; a missed block is caught at fulfilment.
+- **A coarse ZIP table, said plainly.** First three digits to a state, with the few known exceptions (for example 055 is MA, 005 and 063 are NY).
+  A production rule would load USPS data, but a Function can't call out, so it would have to live in a metafield. ZIPs near a state
+  border are the risk, which is why the error says what the ZIP belongs to.
+- **"Has a house number" means the line starts with a digit** (or is a rural route). `Main St Apt 5` is refused, `12B Baker St` isn't.
+- **Autocomplete must never block checkout.** `safeSuggest` returns no rows when the provider throws or times out, and the
+  format target returns an empty address (nothing overwritten) when it can't resolve an id.
+- **Two-step on purpose.** The static provider's rows carry only `id` and `label`; `format-suggestion` resolves the id to the full
+  address. A provider that returns the whole address in the row can skip that target.
+
+### Swap in a real provider
+
+```ts
+// extensions/address-autocomplete/src/provider.ts (needs network_access = true and Shopify's approval)
+export const provider: AddressProvider = {
+  async suggest({field, value, countryCode}, signal) {
+    const res = await fetch(`https://api.example-geocoder.test/v1/suggest?q=${encodeURIComponent(value)}&country=${countryCode}`, {signal});
+    const {results} = await res.json();
+    return results.map((r) => ({id: r.id, label: r.text}));
+  },
+  async resolve(id, signal) {
+    const res = await fetch(`https://api.example-geocoder.test/v1/place/${id}`, {signal});
+    const a = await res.json();
+    return {address1: a.line1, city: a.city, provinceCode: a.state, zip: a.postcode, countryCode: a.country};
+  },
+};
+```
+
+Keep the key out of the extension code: call your own endpoint, which holds it. Network access for checkout extensions is also an
+approval in the Partner Dashboard.
+
+### What I could not show
+
+The demo store is a Plus development store (`Shopify Plus App Development`), the app is released with both targets and the
+address field is selected under protected customer data, but **no autocomplete rows appeared in the live checkout** in my test
+(US, typing a street from the list). I did not find the cause, so I don't claim the autocomplete runs: what is proven is the
+provider logic (unit tests), strict type-checking against the SDK's target types, and a successful release. The validation half is
+shown running live in the video: house number, PO Box, then `350 5th Ave` passing.
+
+### Tests
+
+- `shared/address/*.test.ts`: 25 unit tests (ZIP table, house number, PO Box, the "never block what it can't judge" cases, provider limits and failures).
+- `extensions/address-validation/tests`: 11 wasm fixtures (valid, no number, PO Box, PO Box allowed, ZIP mismatch, two errors at once,
+  other country, cart page, no config, no address yet, re-check at order placement).
+- Mutation check: flipping the ZIP comparison fails 6 unit tests; pointing the ZIP error at `address1` fails 2 fixtures.
+
+Setup: `scripts/set-address-rules-config.graphql` writes the config to the app metafield, `scripts/activate-address-validation.graphql`
+turns the Function on.

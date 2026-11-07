@@ -1,0 +1,22 @@
+query CartValidationsGenerateRunInput {
+  buyerJourney {
+    step
+  }
+  cart {
+    deliveryGroups {
+      deliveryAddress {
+        address1
+        address2
+        zip
+        provinceCode
+        countryCode
+      }
+    }
+  }
+  shop {
+    # App-owned rules (scripts/address-rules-config.json).
+    config: metafield(key: "address_rules_config") {
+      jsonValue
+    }
+  }
+}

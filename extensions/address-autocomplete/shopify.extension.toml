@@ -1,0 +1,20 @@
+api_version = "2026-10"
+
+[[extensions]]
+name = "address-autocomplete"
+handle = "address-autocomplete"
+uid = "1a57f3e4-2ce5-3c90-835b-d95646c26bac0133a86a"
+type = "ui_extension"
+
+# Both targets must live in the same file. Needs Shopify Plus and level 1 protected customer data.
+[[extensions.targeting]]
+module = "./src/suggest.ts"
+target = "purchase.address-autocomplete.suggest"
+
+[[extensions.targeting]]
+module = "./src/format-suggestion.ts"
+target = "purchase.address-autocomplete.format-suggestion"
+
+# network_access = true is only needed once the static provider is swapped for a real address API.
+[extensions.capabilities]
+network_access = false

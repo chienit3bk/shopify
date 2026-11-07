@@ -138,8 +138,8 @@
 .sb-ab__badges li { padding: 4px 10px; border: 1px solid currentColor; border-radius: 999px; }
 .sb-ab-results { margin: 16px 0; }
 .sb-ab-results__title { margin: 0 0 8px; font-size: 1.8rem; }
-.sb-ab-results__table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 1.2rem; }
-.sb-ab-results__table th, .sb-ab-results__table td { padding: 6px 4px; border-bottom: 1px solid rgb(0 0 0 / 0.15); text-align: left; overflow-wrap: anywhere; }
+.sb-ab-results__table { width: 100%; border-collapse: collapse; font-size: 1.3rem; }
+.sb-ab-results__table th, .sb-ab-results__table td { padding: 6px 8px 6px 0; border-bottom: 1px solid rgb(0 0 0 / 0.15); text-align: left; white-space: nowrap; }
 .sb-ab-results__verdict { margin: 8px 0 0; font-weight: 600; }
 
 /* Frequently bought together */

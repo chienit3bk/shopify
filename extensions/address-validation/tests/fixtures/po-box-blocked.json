@@ -1,0 +1,52 @@
+{
+  "payload": {
+    "export": "cart-validations-generate-run",
+    "target": "cart.validations.generate.run",
+    "input": {
+      "buyerJourney": {
+        "step": "CHECKOUT_INTERACTION"
+      },
+      "cart": {
+        "deliveryGroups": [
+          {
+            "deliveryAddress": {
+              "address1": "PO Box 123",
+              "address2": null,
+              "zip": "10118",
+              "provinceCode": "NY",
+              "countryCode": "US"
+            }
+          }
+        ]
+      },
+      "shop": {
+        "config": {
+          "jsonValue": {
+            "version": 1,
+            "countries": [
+              "US",
+              "CA"
+            ],
+            "requireHouseNumber": true,
+            "allowPoBox": false,
+            "checkZipState": true
+          }
+        }
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "validationAdd": {
+            "errors": [
+              {
+                "message": "We can't deliver to a PO Box. Please enter a street address.",
+                "target": "$.cart.deliveryGroups[0].deliveryAddress.address1"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
