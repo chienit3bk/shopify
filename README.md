@@ -1037,7 +1037,7 @@ buyer came for, so they now load eagerly.
 
 ## 42. Address autocomplete and bad-address blocking — what works on Plus and what doesn't
 
-https://github.com/user-attachments/assets/VIDEO_ID_PLACEHOLDER
+https://github.com/user-attachments/assets/30a394f9-718c-492a-a589-bac56a95d7c0
 
 **Block addresses that can't be delivered to, and plug in an address-lookup service.** Two pieces, on purpose kept apart:
 
