@@ -969,7 +969,7 @@ Setup: switch on the embed under Theme settings > App embeds (`node scripts/push
 
 ## 40. Product-page A/B test without an app — cookie split + web pixel
 
-VIDEO_AB
+https://github.com/user-attachments/assets/f5ad8ba2-e390-4b2f-8245-97cc392d13e9
 
 **Two versions of the trust message on the product page, split 50/50 by a cookie, counted per variant.** The block
 ([`ab_variant.liquid`](extensions/storefront-blocks/blocks/ab_variant.liquid)) holds both variants in the HTML; a 90-day
@@ -999,7 +999,7 @@ Setup: `node scripts/push-ab-fbt-blocks.mjs <theme id>` places the blocks; the e
 
 ## 41. Frequently bought together — one small request, no app script
 
-VIDEO_FBT
+https://github.com/user-attachments/assets/51ab9790-3db6-4dc5-ac60-5d38e4a16304
 
 **"Bought together" on the product page without an app's JavaScript bundle.** The block
 ([`frequently_bought_together.liquid`](extensions/storefront-blocks/blocks/frequently_bought_together.liquid) + 6.6 KB
