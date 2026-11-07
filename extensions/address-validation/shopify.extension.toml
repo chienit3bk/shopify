@@ -1,0 +1,18 @@
+api_version = "2026-10"
+
+[[extensions]]
+name = "t:name"
+handle = "address-validation"
+uid = "bf34a3ce-1da4-9c2e-dc79-e2ee4cd7539fe62fc738"
+type = "function"
+description = "t:description"
+
+  # Runs on the delivery address as soon as the buyer has entered it, and again at order placement.
+  [[extensions.targeting]]
+  target = "cart.validations.generate.run"
+  input_query = "src/cart_validations_generate_run.graphql"
+  export = "cart-validations-generate-run"
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"

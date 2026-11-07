@@ -1,0 +1,4 @@
+{
+  "name": "Address validation",
+  "description": "Blocks addresses without a house number, PO Boxes, and a ZIP that doesn't belong to the chosen state"
+}

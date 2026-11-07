@@ -1,0 +1,8 @@
+# Turns on the address-validation Function for the store (once per install).
+# shopify app execute --store <shop> --query-file scripts/activate-address-validation.graphql
+mutation ActivateAddressValidation {
+  validationCreate(validation: {functionHandle: "address-validation", title: "Address validation", enable: true, blockOnFailure: false}) {
+    validation { id title enabled }
+    userErrors { field message code }
+  }
+}

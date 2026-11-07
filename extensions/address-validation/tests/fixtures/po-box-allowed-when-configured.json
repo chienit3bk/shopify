@@ -1,0 +1,47 @@
+{
+  "payload": {
+    "export": "cart-validations-generate-run",
+    "target": "cart.validations.generate.run",
+    "input": {
+      "buyerJourney": {
+        "step": "CHECKOUT_INTERACTION"
+      },
+      "cart": {
+        "deliveryGroups": [
+          {
+            "deliveryAddress": {
+              "address1": "PO Box 123",
+              "address2": null,
+              "zip": "10118",
+              "provinceCode": "NY",
+              "countryCode": "US"
+            }
+          }
+        ]
+      },
+      "shop": {
+        "config": {
+          "jsonValue": {
+            "version": 1,
+            "countries": [
+              "US",
+              "CA"
+            ],
+            "requireHouseNumber": true,
+            "allowPoBox": true,
+            "checkZipState": true
+          }
+        }
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "validationAdd": {
+            "errors": []
+          }
+        }
+      ]
+    }
+  }
+}

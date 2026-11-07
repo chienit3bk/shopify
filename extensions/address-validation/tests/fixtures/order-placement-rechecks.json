@@ -1,0 +1,52 @@
+{
+  "payload": {
+    "export": "cart-validations-generate-run",
+    "target": "cart.validations.generate.run",
+    "input": {
+      "buyerJourney": {
+        "step": "CHECKOUT_COMPLETION"
+      },
+      "cart": {
+        "deliveryGroups": [
+          {
+            "deliveryAddress": {
+              "address1": "Fifth Ave",
+              "address2": null,
+              "zip": "10118",
+              "provinceCode": "NY",
+              "countryCode": "US"
+            }
+          }
+        ]
+      },
+      "shop": {
+        "config": {
+          "jsonValue": {
+            "version": 1,
+            "countries": [
+              "US",
+              "CA"
+            ],
+            "requireHouseNumber": true,
+            "allowPoBox": false,
+            "checkZipState": true
+          }
+        }
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "validationAdd": {
+            "errors": [
+              {
+                "message": "Add your house or building number before the street name, e.g. \"350 5th Ave\".",
+                "target": "$.cart.deliveryGroups[0].deliveryAddress.address1"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "countries": ["US", "CA"],
+  "requireHouseNumber": true,
+  "allowPoBox": false,
+  "checkZipState": true
+}
