@@ -1,0 +1,40 @@
+{%- comment -%}
+  Product-page A/B test, no app: both variants are in the HTML, a 50/50 cookie decides which one the
+  visitor sees (see assets/ab-test.js). Needs the "gift funnel" web pixel, which counts views,
+  add-to-carts and orders per variant. QA link: add ?ab=A or ?ab=B to force a variant.
+{%- endcomment -%}
+<div class="sb-ab" data-ab-test data-experiment="{{ block.settings.experiment | escape }}" {{ block.shopify_attributes }}>
+  <div class="sb-ab__variant" data-variant="A" hidden>
+    <p class="sb-ab__title">{{ block.settings.title_a | escape }}</p>
+    <p class="sb-ab__text">{{ block.settings.text_a | escape }}</p>
+  </div>
+  <div class="sb-ab__variant sb-ab__variant--b" data-variant="B" hidden>
+    <p class="sb-ab__title">{{ block.settings.title_b | escape }}</p>
+    <p class="sb-ab__text">{{ block.settings.text_b | escape }}</p>
+    {%- if block.settings.show_badges_b -%}
+      <ul class="sb-ab__badges">
+        <li>{{ 'ab_test.badge_returns' | t }}</li>
+        <li>{{ 'ab_test.badge_shipping' | t }}</li>
+        <li>{{ 'ab_test.badge_vegan' | t }}</li>
+      </ul>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "A/B test: product message",
+  "target": "content",
+  "enabled_on": { "templates": ["product"] },
+  "javascript": "ab-test.js",
+  "stylesheet": "storefront-blocks.css",
+  "settings": [
+    { "type": "text", "id": "experiment", "label": "Experiment id", "info": "Letters, digits, - and _. Change it to start a fresh test.", "default": "pdp-trust" },
+    { "type": "text", "id": "title_a", "label": "A: headline", "default": "Dermatologist tested" },
+    { "type": "textarea", "id": "text_a", "label": "A: text", "default": "Gentle formulas for sensitive skin." },
+    { "type": "text", "id": "title_b", "label": "B: headline", "default": "Love it or your money back" },
+    { "type": "textarea", "id": "text_b", "label": "B: text", "default": "60 days to try it. Free returns, no questions." },
+    { "type": "checkbox", "id": "show_badges_b", "label": "B: show trust badges", "default": true }
+  ]
+}
+{% endschema %}

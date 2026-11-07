@@ -1,0 +1,43 @@
+{%- comment -%}
+  Results readout for the A/B test. The web pixel keeps the totals in the visitor's browser storage,
+  so this shows the numbers of the browser you are viewing it in (a quick check, not a report).
+  Orders carry the attribute ab_test, so the full count is also in Admin > Orders.
+{%- endcomment -%}
+<section
+  class="sb-ab-results"
+  data-ab-results
+  data-experiment="{{ block.settings.experiment | escape }}"
+  data-empty="{{ 'ab_test.empty' | t }}"
+  data-collecting="{{ 'ab_test.collecting' | t: min: '__MIN__' }}"
+  data-winner="{{ 'ab_test.winner' | t: variant: '__V__', p: '__P__' }}"
+  data-tie="{{ 'ab_test.tie' | t: p: '__P__' }}"
+  {{ block.shopify_attributes }}
+>
+  <h2 class="sb-ab-results__title">{{ 'ab_test.results_title' | t: experiment: block.settings.experiment }}</h2>
+  <table class="sb-ab-results__table">
+    <thead>
+      <tr>
+        <th scope="col">{{ 'ab_test.variant' | t }}</th>
+        <th scope="col">{{ 'ab_test.views' | t }}</th>
+        <th scope="col">{{ 'ab_test.carts' | t }}</th>
+        <th scope="col">{{ 'ab_test.orders' | t }}</th>
+        <th scope="col">{{ 'ab_test.conversion' | t }}</th>
+        <th scope="col">{{ 'ab_test.revenue' | t }}</th>
+      </tr>
+    </thead>
+    <tbody data-rows></tbody>
+  </table>
+  <p class="sb-ab-results__verdict" data-verdict role="status"></p>
+</section>
+
+{% schema %}
+{
+  "name": "A/B test: results",
+  "target": "section",
+  "javascript": "ab-results.js",
+  "stylesheet": "storefront-blocks.css",
+  "settings": [
+    { "type": "text", "id": "experiment", "label": "Experiment id", "default": "pdp-trust" }
+  ]
+}
+{% endschema %}
