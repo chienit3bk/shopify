@@ -52,5 +52,31 @@
     "remove": "Remove one {{ title }}",
     "more": "Add one {{ title }}",
     "error": "Couldn't add the bundle. Please try again."
+  },
+  "ab_test": {
+    "badge_returns": "60-day returns",
+    "badge_shipping": "Free shipping over $50",
+    "badge_vegan": "Vegan and cruelty-free",
+    "results_title": "A/B test results: {{ experiment }}",
+    "variant": "Variant",
+    "views": "Views",
+    "carts": "Add to cart",
+    "orders": "Orders",
+    "conversion": "Conversion",
+    "revenue": "Revenue",
+    "empty": "No data in this browser yet. Visit a product page, add to cart and check out.",
+    "collecting": "Keep collecting: a call needs at least {{ min }} views per variant.",
+    "winner": "Variant {{ variant }} wins (p = {{ p }}).",
+    "tie": "No clear difference yet (p = {{ p }})."
+  },
+  "fbt": {
+    "title": "Frequently bought together",
+    "this_item": "This item",
+    "total": "Total",
+    "add_all": "Add {{ count }} items to cart",
+    "adding": "Adding...",
+    "added": "Added",
+    "view_cart": "View cart",
+    "error": "Couldn't add these to your cart. Please try again."
   }
 }
