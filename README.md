@@ -923,7 +923,7 @@ manage bundles it created, so a client's bundles should be created in the app th
 
 ## 38. Build your own bundle — Cart Transform `linesMerge`
 
-VIDEO_BUNDLE
+https://github.com/user-attachments/assets/ba0bfac2-8f23-487d-8193-641e590ee2f8
 
 **"Pick any 3 for $69".** The buyer picks three items on the product page; the `bundle-expand` Function
 merges them into one cart line at the set price. List price was $124 (Night Cream + Serum + Cleanser), the cart
@@ -950,7 +950,7 @@ Setup: `scripts/create-bundle-builder.graphql`, `scripts/setup-bundle-builder.gr
 
 ## 39. Affiliate ref tracking — cart attribute + web pixel
 
-VIDEO_AFF
+https://github.com/user-attachments/assets/9b63be92-0272-4454-a0c9-f891ddee6d8c
 
 **`?ref=mia_demo` on any URL becomes a field on the order and an event at checkout.** An app embed
 ([`affiliate_ref.liquid`](extensions/storefront-blocks/blocks/affiliate_ref.liquid)) keeps the ref for 30 days
