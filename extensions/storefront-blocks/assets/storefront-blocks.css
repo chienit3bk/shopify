@@ -138,8 +138,8 @@
 .sb-ab__badges li { padding: 4px 10px; border: 1px solid currentColor; border-radius: 999px; }
 .sb-ab-results { margin: 16px 0; }
 .sb-ab-results__title { margin: 0 0 8px; font-size: 1.8rem; }
-.sb-ab-results__table { width: 100%; border-collapse: collapse; font-size: 1.4rem; }
-.sb-ab-results__table th, .sb-ab-results__table td { padding: 6px 8px; border-bottom: 1px solid rgb(0 0 0 / 0.15); text-align: left; }
+.sb-ab-results__table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 1.2rem; }
+.sb-ab-results__table th, .sb-ab-results__table td { padding: 6px 4px; border-bottom: 1px solid rgb(0 0 0 / 0.15); text-align: left; overflow-wrap: anywhere; }
 .sb-ab-results__verdict { margin: 8px 0 0; font-weight: 600; }
 
 /* Frequently bought together */
@@ -152,6 +152,6 @@
 .sb-fbt__check { width: 20px; height: 20px; flex: none; }
 .sb-fbt__image { width: 64px; height: 64px; flex: none; object-fit: cover; border-radius: 8px; background: rgb(0 0 0 / 0.05); }
 .sb-fbt__name { font-size: 1.4rem; font-weight: 600; }
-.sb-fbt__variant { grid-column: 1; font-size: 1.2rem; opacity: 0.7; }
+.sb-fbt__variant { grid-column: 1; padding-left: 94px; font-size: 1.2rem; opacity: 0.7; }
 .sb-fbt__price { grid-row: 1; grid-column: 2; font-size: 1.4rem; }
 .sb-fbt__total { margin: 0 0 10px; font-size: 1.5rem; }
