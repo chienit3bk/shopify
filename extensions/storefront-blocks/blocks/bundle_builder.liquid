@@ -37,7 +37,7 @@
         {%- if item != blank and variant.available -%}
           <li class="sb-builder__item" data-item data-variant-id="{{ variant.id }}" data-cents="{{ variant.price }}">
             {%- if item.featured_image -%}
-              <img class="sb-builder__image" src="{{ item.featured_image | image_url: width: 240 }}" alt="" width="120" height="120" loading="lazy">
+              <img class="sb-builder__image" src="{{ item.featured_image | image_url: width: 240 }}" alt="" width="120" height="120">
             {%- endif -%}
             <span class="sb-builder__name">{{ item.title | escape }}</span>
             <span class="sb-builder__price">{{ variant.price | money }}</span>

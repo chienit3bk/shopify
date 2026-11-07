@@ -128,3 +128,30 @@
 .sb-builder__summary { margin: 0; font-size: 1.5rem; font-weight: 600; }
 .sb-builder__add { justify-self: start; }
 .sb-builder__add:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* A/B test */
+.sb-ab { margin: 16px 0; }
+.sb-ab__variant { padding: 12px 16px; border: 1px solid rgb(0 0 0 / 0.2); border-radius: 10px; }
+.sb-ab__title { margin: 0 0 4px; font-size: 1.6rem; font-weight: 700; }
+.sb-ab__text { margin: 0; font-size: 1.4rem; opacity: 0.8; }
+.sb-ab__badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; padding: 0; list-style: none; font-size: 1.2rem; font-weight: 600; }
+.sb-ab__badges li { padding: 4px 10px; border: 1px solid currentColor; border-radius: 999px; }
+.sb-ab-results { margin: 16px 0; }
+.sb-ab-results__title { margin: 0 0 8px; font-size: 1.8rem; }
+.sb-ab-results__table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 1.2rem; }
+.sb-ab-results__table th, .sb-ab-results__table td { padding: 6px 4px; border-bottom: 1px solid rgb(0 0 0 / 0.15); text-align: left; overflow-wrap: anywhere; }
+.sb-ab-results__verdict { margin: 8px 0 0; font-weight: 600; }
+
+/* Frequently bought together */
+.sb-fbt { margin: 20px 0; padding: 16px; border: 1px solid rgb(0 0 0 / 0.2); border-radius: 12px; }
+.sb-fbt[hidden] { display: none; }
+.sb-fbt__title { margin: 0 0 10px; font-size: 1.8rem; }
+.sb-fbt__list { display: grid; gap: 8px; margin: 0 0 10px; padding: 0; list-style: none; }
+.sb-fbt__item { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; align-items: center; }
+.sb-fbt__label { display: flex; gap: 10px; align-items: center; cursor: pointer; }
+.sb-fbt__check { width: 20px; height: 20px; flex: none; }
+.sb-fbt__image { width: 64px; height: 64px; flex: none; object-fit: cover; border-radius: 8px; background: rgb(0 0 0 / 0.05); }
+.sb-fbt__name { font-size: 1.4rem; font-weight: 600; }
+.sb-fbt__variant { grid-column: 1; padding-left: 94px; font-size: 1.2rem; opacity: 0.7; }
+.sb-fbt__price { grid-row: 1; grid-column: 2; font-size: 1.4rem; }
+.sb-fbt__total { margin: 0 0 10px; font-size: 1.5rem; }

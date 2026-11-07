@@ -1,0 +1,60 @@
+{%- comment -%}
+  Frequently bought together without an app script: ~3 KB of JavaScript asks Shopify's own
+  /recommendations/products.json (complementary, set in Search & Discovery) and adds the ticked set in
+  one /cart/add.js call. Nothing loads until the block is on a product page, and the block stays
+  hidden when Shopify has no recommendation, so an empty store costs one small request.
+{%- endcomment -%}
+{%- assign variant = product.selected_or_first_available_variant -%}
+<div
+  class="sb-fbt"
+  data-fbt
+  data-product-id="{{ product.id }}"
+  data-variant-id="{{ variant.id }}"
+  data-cents="{{ variant.price }}"
+  data-title="{{ product.title | escape }}"
+  data-url="{{ product.url }}"
+  data-image="{{ product.featured_image | image_url: width: 128 }}"
+  data-limit="{{ block.settings.limit }}"
+  data-intent="{{ block.settings.intent }}"
+  data-fallback="{{ block.settings.fallback_related }}"
+  data-currency="{{ cart.currency.iso_code }}"
+  data-locale="{{ request.locale.iso_code }}"
+  data-this-item="{{ 'fbt.this_item' | t }}"
+  data-add-all="{{ 'fbt.add_all' | t: count: '__COUNT__' }}"
+  data-adding="{{ 'fbt.adding' | t }}"
+  data-error="{{ 'fbt.error' | t }}"
+  hidden
+  {{ block.shopify_attributes }}
+>
+  <h2 class="sb-fbt__title">{{ block.settings.heading | escape }}</h2>
+  <ul class="sb-fbt__list" data-list></ul>
+  <p class="sb-fbt__total">{{ 'fbt.total' | t }}: <strong data-total></strong></p>
+  <button type="button" class="sb-button sb-fbt__add" data-add-all></button>
+  <p class="sb-status" data-status role="status"></p>
+</div>
+
+{% schema %}
+{
+  "name": "Bought together",
+  "target": "content",
+  "enabled_on": { "templates": ["product"] },
+  "javascript": "fbt.js",
+  "stylesheet": "storefront-blocks.css",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Frequently bought together" },
+    { "type": "range", "id": "limit", "label": "Products to offer", "min": 1, "max": 4, "step": 1, "default": 2 },
+    {
+      "type": "select",
+      "id": "intent",
+      "label": "Recommendation type",
+      "info": "Complementary products are set per product in the Shopify Search & Discovery app.",
+      "options": [
+        { "value": "complementary", "label": "Complementary" },
+        { "value": "related", "label": "Related" }
+      ],
+      "default": "complementary"
+    },
+    { "type": "checkbox", "id": "fallback_related", "label": "Use related products when there are no complementary ones", "default": true }
+  ]
+}
+{% endschema %}

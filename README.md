@@ -966,3 +966,71 @@ Video: [`docs/demos/affiliate-ref.mp4`](docs/demos/affiliate-ref.mp4).
 - The pixel only runs for buyers whose privacy settings allow analytics (the extension declares `analytics = true`).
 
 Setup: switch on the embed under Theme settings > App embeds (`node scripts/push-builder-blocks.mjs <theme id>` does it).
+
+## 40. Product-page A/B test without an app — cookie split + web pixel
+
+https://github.com/user-attachments/assets/f5ad8ba2-e390-4b2f-8245-97cc392d13e9
+
+**Two versions of the trust message on the product page, split 50/50 by a cookie, counted per variant.** The block
+([`ab_variant.liquid`](extensions/storefront-blocks/blocks/ab_variant.liquid)) holds both variants in the HTML; a 90-day
+cookie `ab_test=pdp-trust:B` decides which one shows. The visitor's variant goes on the cart as the attribute
+`ab_test` (so it reaches the order) and the existing gift-funnel web pixel counts views, add-to-carts and orders
+per variant. A second block ([`ab_results.liquid`](extensions/storefront-blocks/blocks/ab_results.liquid)) shows the table and a
+verdict. Logic: [`shared/ab/test.ts`](shared/ab/test.ts). Video: [`docs/demos/ab-test.mp4`](docs/demos/ab-test.mp4).
+
+- **One pixel, not two**: the exposure is a custom event (`Shopify.analytics.publish('ab_exposure', …)`) the pixel subscribes
+  to; the add-to-cart reads the cookie with `browser.cookie.get`; the order reads the cart attribute (cookie as fallback).
+- **Both variants ship in the HTML**, hidden until the cookie decides. No second request and no layout jump below the block;
+  the cost is that the block appears a few milliseconds after the page. A flash-free swap of the whole page would need an edge worker.
+- **The verdict is a two-proportion z-test** and says "keep collecting" under 100 views per variant, so a lucky first order
+  never calls a winner.
+- **Add-to-carts count once per action**: one `/cart/add.js` with three items fires three events, so adds within 3 seconds are one.
+- **Limits, stated plainly**: the pixel keeps its totals in the visitor's browser storage, so the table shows the numbers of
+  the browser you view it in (the demo and a quick check). For a real test send the events to a collector
+  (the pixel's existing `endpoint` setting gets `ab_view`, `ab_cart`, `ab_order`) and count the orders from Admin: every
+  order has `ab_test` under Additional details. Only add-to-carts by a visitor who already has the cookie count.
+- **What the demo showed**: one visitor per variant. A: 1 view, 1 add-to-cart. B: 1 view, 3 lines added with the bundled block, then test order
+  #1019 ($137.00 subtotal), which carries `ab_test: pdp-trust:B` under Additional details (read back through the Admin API); the
+  pixel counted 1 order / 137 USD for B. That is a mechanism check, not a result: the readout says "keep collecting" under 100 views per variant.
+- QA link: `?ab=A` or `?ab=B` forces a variant.
+
+Setup: `node scripts/push-ab-fbt-blocks.mjs <theme id>` places the blocks; the experiment id is a block setting
+(change it to start a fresh test).
+
+## 41. Frequently bought together — one small request, no app script
+
+https://github.com/user-attachments/assets/51ab9790-3db6-4dc5-ac60-5d38e4a16304
+
+**"Bought together" on the product page without an app's JavaScript bundle.** The block
+([`frequently_bought_together.liquid`](extensions/storefront-blocks/blocks/frequently_bought_together.liquid) + 6.6 KB
+[`fbt.js`](extensions/storefront-blocks/assets/fbt.js)) asks Shopify's own `/recommendations/products.json` for the
+complementary products of the page's product, shows them with checkboxes and a running total, and adds the ticked set
+with one `/cart/add.js` call. Night Cream + Serum + Face Oil: 3 lines in one click.
+
+What it costs on the product page (measured in Chrome on the live store, 3 recommended products):
+
+| Piece | Over the wire | Unzipped |
+|---|---|---|
+| `fbt.js` (deferred, non-blocking) | 2.2 KB | 6.6 KB |
+| `recommendations/products.json` | 1.6 KB | 6.4 KB |
+| 3 thumbnails (128 px) | about 3 KB each | |
+| Third-party scripts | 0 | 0 |
+
+- **JSON, not Section Rendering.** `/recommendations/products?section_id=` returns a whole theme section rendered with the
+  recommendations: the theme's `main-product` section is 3.9 KB over the wire and 15.4 KB unzipped, 2.4 times the JSON
+  answer, and an app block cannot be named as `section_id` (only a file in the theme's `sections/` can).
+- **Complementary is a field, not a guess.** Shopify returns complementary products only after they are set for a product
+  (Search & Discovery app, or the metafield `shopify--discovery--product_recommendation.complementary_products`;
+  `scripts/set-complementary.graphql` sets it). A new store has none, so the block falls back to `related`
+  (a setting) and stays hidden when Shopify has nothing.
+- **Honest limit**: a recommended product with several variants is offered as its first available variant, and the
+  current product uses the variant selected in the theme's form when you press the button.
+- Thumbnails are `loading="eager"`: they are 64 px, and lazy images never load in a tab the browser treats as hidden.
+
+Setup: same script as above (`node scripts/push-ab-fbt-blocks.mjs <theme id>`).
+
+### Fix: bundle builder pictures were blank
+
+The picker images in section 38 had `loading="lazy"`. In a background tab (and in the screenshots the demo is recorded
+from) the browser never starts lazy loads, so the tiles stayed empty. The images are 240 px thumbnails of a block the
+buyer came for, so they now load eagerly.

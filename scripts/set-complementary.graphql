@@ -1,0 +1,8 @@
+# Marks the complementary products for one product, the same field Shopify's Search & Discovery app writes.
+# Variables: {"metafields":[{"ownerId":"gid://shopify/Product/…","namespace":"shopify--discovery--product_recommendation","key":"complementary_products","type":"list.product_reference","value":"[\"gid://shopify/Product/…\"]"}]}
+mutation SetComplementary($metafields: [MetafieldsSetInput!]!) {
+  metafieldsSet(metafields: $metafields) {
+    metafields { key value }
+    userErrors { field message code }
+  }
+}
