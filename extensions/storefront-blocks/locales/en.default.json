@@ -42,5 +42,15 @@
   },
   "collection_filter": {
     "clear": "Clear filters"
+  },
+  "bundle_builder": {
+    "title": "Pick any {{ size }} for {{ price }}",
+    "hint": "Choose {{ size }} items. The price drops to the bundle price in your cart.",
+    "picked": "{{ n }} of {{ size }} picked",
+    "add": "Add bundle to cart",
+    "save": "You save {{ amount }}",
+    "remove": "Remove one {{ title }}",
+    "more": "Add one {{ title }}",
+    "error": "Couldn't add the bundle. Please try again."
   }
 }

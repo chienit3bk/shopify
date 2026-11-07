@@ -1,0 +1,68 @@
+{%- comment -%}
+  Build-your-own bundle: the buyer picks N items and the cart transform Function prices them as one
+  bundle. Reads the same app-owned config (`bundle_builder`) as the Function, so the page and the
+  checkout cannot disagree. Shows only on the config's own product, so the block can sit on the
+  shared product template. Each picked item is added with the line property `_builder`, which the
+  Function groups by; the Function checks size, price and eligible products itself.
+{%- endcomment -%}
+{%- liquid
+  assign config = shop.metafields["$app"].bundle_builder.value
+  assign gid = 'gid://shopify/Product/' | append: product.id
+  assign show = false
+  if config.landingProductId == gid
+    assign show = true
+  endif
+  assign price_cents = config.price | times: 100
+-%}
+{%- if show -%}
+  <div
+    class="sb-builder"
+    data-bundle-builder
+    data-size="{{ config.size }}"
+    data-bundle-cents="{{ price_cents | round }}"
+    data-currency="{{ cart.currency.iso_code }}"
+    data-locale="{{ request.locale.iso_code }}"
+    data-picked="{{ 'bundle_builder.picked' | t: n: '__N__', size: config.size }}"
+    data-add="{{ 'bundle_builder.add' | t }}"
+    data-save="{{ 'bundle_builder.save' | t: amount: '__AMOUNT__' }}"
+    data-error="{{ 'bundle_builder.error' | t }}"
+    {{ block.shopify_attributes }}
+  >
+    <h2 class="sb-builder__title">{{ 'bundle_builder.title' | t: size: config.size, price: price_cents | money_without_trailing_zeros }}</h2>
+    <p class="sb-builder__hint">{{ 'bundle_builder.hint' | t: size: config.size }}</p>
+    <ul class="sb-builder__grid">
+      {%- for handle in config.handles -%}
+        {%- assign item = all_products[handle] -%}
+        {%- assign variant = item.selected_or_first_available_variant -%}
+        {%- if item != blank and variant.available -%}
+          <li class="sb-builder__item" data-item data-variant-id="{{ variant.id }}" data-cents="{{ variant.price }}">
+            {%- if item.featured_image -%}
+              <img class="sb-builder__image" src="{{ item.featured_image | image_url: width: 240 }}" alt="" width="120" height="120" loading="lazy">
+            {%- endif -%}
+            <span class="sb-builder__name">{{ item.title | escape }}</span>
+            <span class="sb-builder__price">{{ variant.price | money }}</span>
+            <span class="sb-builder__stepper">
+              <button type="button" class="sb-builder__step" data-minus aria-label="{{ 'bundle_builder.remove' | t: title: item.title }}" disabled>-</button>
+              <output class="sb-builder__count" data-count>0</output>
+              <button type="button" class="sb-builder__step" data-plus aria-label="{{ 'bundle_builder.more' | t: title: item.title }}">+</button>
+            </span>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+    <p class="sb-builder__summary" data-summary aria-live="polite"></p>
+    <button type="button" class="sb-button sb-builder__add" data-add-bundle disabled></button>
+    <p class="sb-status" data-status role="status"></p>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Build your own bundle",
+  "target": "content",
+  "enabled_on": { "templates": ["product"] },
+  "javascript": "bundle-builder.js",
+  "stylesheet": "storefront-blocks.css",
+  "settings": []
+}
+{% endschema %}

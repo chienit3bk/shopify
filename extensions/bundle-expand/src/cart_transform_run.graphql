@@ -1,7 +1,20 @@
 query CartTransformRunInput {
+  # Cart currency vs shop currency, for the build-your-own bundle price.
+  presentmentCurrencyRate
+  shop {
+    # App-owned config of the build-your-own bundle (scripts/set-bundle-builder-config.graphql).
+    builder: metafield(key: "bundle_builder") {
+      jsonValue
+    }
+  }
   cart {
     lines {
       id
+      quantity
+      # Set by the product page block on every item the buyer picked.
+      group: attribute(key: "_builder") {
+        value
+      }
       cost {
         # One bundle, in the buyer's currency (market prices included).
         amountPerQuantity {
@@ -11,6 +24,9 @@ query CartTransformRunInput {
       merchandise {
         __typename
         ... on ProductVariant {
+          product {
+            id
+          }
           # Components + list-price weights (scripts/create-bundle.graphql).
           bundle: metafield(namespace: "custom", key: "bundle_components") {
             jsonValue

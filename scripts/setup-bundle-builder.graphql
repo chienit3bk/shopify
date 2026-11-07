@@ -1,0 +1,14 @@
+# Step 2 of the "Build your own Ritual Set" setup: a placeholder price, stock not tracked, published
+# to the Online Store. Ids come from scripts/create-bundle-builder.graphql.
+mutation SetupBundleBuilder {
+  productVariantsBulkUpdate(
+    productId: "gid://shopify/Product/10509632962842"
+    variants: [{id: "gid://shopify/ProductVariant/53385699590426", price: "69.00", inventoryItem: {tracked: false}}]
+  ) {
+    productVariants { id price }
+    userErrors { field message }
+  }
+  publishablePublish(id: "gid://shopify/Product/10509632962842", input: [{publicationId: "gid://shopify/Publication/322667872538"}]) {
+    userErrors { message }
+  }
+}

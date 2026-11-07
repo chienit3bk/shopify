@@ -1,0 +1,23 @@
+# Step 1 of the "Build your own Ritual Set" setup (shopify store execute --allow-mutations).
+# The product is the page the buyer builds the set on, and its variant is the placeholder the cart
+# transform merges the picked items into. Its price is never charged: the merged line is the
+# picked items at the bundle price from scripts/bundle-builder-config.json.
+# Step 2: scripts/setup-bundle-builder.graphql (price, untracked stock, publish).
+mutation CreateBundleBuilder {
+  productCreate(
+    product: {
+      title: "Build your own Ritual Set"
+      handle: "build-your-own-ritual-set"
+      productType: "Bundle"
+      vendor: "Solvane"
+      status: ACTIVE
+      descriptionHtml: "<p>Pick any three Solvane essentials and pay one set price.</p>"
+    }
+  ) {
+    product {
+      id
+      variants(first: 1) { nodes { id } }
+    }
+    userErrors { field message }
+  }
+}

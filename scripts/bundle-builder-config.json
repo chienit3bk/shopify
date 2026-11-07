@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "parentVariantId": "gid://shopify/ProductVariant/53385699590426",
+  "landingProductId": "gid://shopify/Product/10509632962842",
+  "title": "Build your own Ritual Set",
+  "size": 3,
+  "price": 69,
+  "productIds": [
+    "gid://shopify/Product/10490410500378",
+    "gid://shopify/Product/10490410533146",
+    "gid://shopify/Product/10490410598682",
+    "gid://shopify/Product/10490410664218",
+    "gid://shopify/Product/10490410729754",
+    "gid://shopify/Product/10490410762522",
+    "gid://shopify/Product/10490410860826",
+    "gid://shopify/Product/10490410926362"
+  ],
+  "handles": [
+    "gentle-gel-cleanser",
+    "purifying-clay-mask",
+    "vitamin-c-brightening-serum",
+    "squalane-face-oil",
+    "ceramide-barrier-cream",
+    "restorative-night-cream",
+    "hydrogel-eye-patches",
+    "jade-facial-roller"
+  ]
+}
