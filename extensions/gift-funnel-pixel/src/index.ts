@@ -133,8 +133,13 @@ register(({analytics, browser, settings}) => {
     const assignment = parseAssignment(`${data?.experiment}:${data?.variant}`);
     if (assignment) countAb(assignment, 'view', event.timestamp);
   });
-  // ...an add to cart counts for the variant in the visitor's cookie.
+  // ...an add to cart counts for the variant in the visitor's cookie. One /cart/add.js with three
+  // items fires three events, so adds within 3 seconds of the last counted one are the same action.
+  let lastCartAt = 0;
   analytics.subscribe('product_added_to_cart', async (event) => {
+    const at = Date.parse(event.timestamp);
+    if (!Number.isNaN(at) && at - lastCartAt < 3000 && at >= lastCartAt) return;
+    lastCartAt = at;
     const assignment = parseAssignment(await browser.cookie.get(AB_COOKIE));
     if (assignment) countAb(assignment, 'cart', event.timestamp);
   });
