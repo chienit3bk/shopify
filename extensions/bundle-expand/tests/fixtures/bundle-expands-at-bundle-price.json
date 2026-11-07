@@ -35,8 +35,13 @@
                     }
                   ]
                 }
+              },
+              "product": {
+                "id": "gid://shopify/Product/1"
               }
-            }
+            },
+            "quantity": 1,
+            "group": null
           },
           {
             "id": "gid://shopify/CartLine/2",
@@ -47,10 +52,19 @@
             },
             "merchandise": {
               "__typename": "ProductVariant",
-              "bundle": null
-            }
+              "bundle": null,
+              "product": {
+                "id": "gid://shopify/Product/1"
+              }
+            },
+            "quantity": 1,
+            "group": null
           }
         ]
+      },
+      "presentmentCurrencyRate": 1.0,
+      "shop": {
+        "builder": null
       }
     },
     "output": {
