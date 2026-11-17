@@ -1135,7 +1135,7 @@ turns the Function on.
 
 ## 43. Payment rules — bank transfer only on big orders, no COD by state or cap
 
-VIDEO_URL_TBD
+https://github.com/user-attachments/assets/0fbb5ff2-66da-41d1-a369-e0918f0137d9
 
 **The ask** (a Basic-plan merchant): "add a card fee above an order value, force ACH / bank transfer over a threshold or by
 location". The fee part can't be done natively (see below), so this ships what can: one
