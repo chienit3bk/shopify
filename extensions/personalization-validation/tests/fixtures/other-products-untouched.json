@@ -1,0 +1,78 @@
+{
+  "payload": {
+    "export": "cart-validations-generate-run",
+    "target": "cart.validations.generate.run",
+    "input": {
+      "buyerJourney": {
+        "step": "CHECKOUT_INTERACTION"
+      },
+      "cart": {
+        "lines": [
+          {
+            "name": null,
+            "number": null,
+            "initials": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "product": {
+                "title": "Vitamin C Brightening Serum",
+                "personalization": null
+              }
+            }
+          },
+          {
+            "name": null,
+            "number": null,
+            "initials": null,
+            "merchandise": {
+              "__typename": "CustomProduct"
+            }
+          },
+          {
+            "name": {
+              "value": "Mia"
+            },
+            "number": null,
+            "initials": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "product": {
+                "title": "Engraved Gua Sha",
+                "personalization": {
+                  "jsonValue": {
+                    "fields": [
+                      {
+                        "key": "Name",
+                        "label": "Name to engrave",
+                        "required": true,
+                        "maxLength": 12,
+                        "format": "letters"
+                      },
+                      {
+                        "key": "Number",
+                        "label": "Number (0-99)",
+                        "required": false,
+                        "format": "number",
+                        "min": 0,
+                        "max": 99
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "validationAdd": {
+            "errors": []
+          }
+        }
+      ]
+    }
+  }
+}

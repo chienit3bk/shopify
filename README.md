@@ -21,7 +21,7 @@ the theme editor, then `node scripts/push-landing.mjs <theme id>`.
 | Discounts | [Buy 2, get 1 free](#8-buy-2-get-1-free--on-the-same-sku), [Tiered discounts](#9-tiered-discounts--volume-per-sku--spend-on-the-order), [Spend tiers that skip sale items and gift cards](#21-spend-tiers-that-skip-sale-items-and-gift-cards), [40 quantity-break tables from one discount](#22-40-quantity-break-tables-from-one-discount) |
 | Gifts | [Rules-based free gift](#1-rules-based-free-gift), [Gift picker + checkout validation](#6-gift-picker--checkout-validation), [Gift for a collection + out-of-stock fallback](#10-gift-for-a-collection--out-of-stock-fallback), [Gift message + gift wrap](#18-gift-message--gift-wrap) |
 | Cart rules, bundles and B2B | [Max quantity, minimum order and incompatible products](#14-max-quantity-minimum-order-and-incompatible-products), [B2B: minimum quantity, case packs, first-order minimum](#15-b2b-minimum-quantity-case-packs-first-order-minimum), [Fixed-price bundle](#16-fixed-price-bundle--cart-transform-lineexpand), [Case packs](#23-case-packs--sell-by-the-case-count-stock-by-the-bottle), [One sample kit per customer every 30 days](#28-one-sample-kit-per-customer-every-30-days), [Minimum order for wholesale-tagged customers](#29-minimum-order-for-wholesale-tagged-customers), [Native bundles with an image picker](#37-native-bundles-with-an-image-picker), [Build your own bundle](#38-build-your-own-bundle--cart-transform-linesmerge) |
-| Product page and storefront | [Buy more, save more on the product page](#24-buy-more-save-more-on-the-product-page), [Shop by concern on home and collection pages](#25-shop-by-concern-on-home-and-collection-pages), [Product page pack for a Dawn theme](#35-product-page-pack-for-a-dawn-theme), [Catalog import, ingredient chart and filter](#36-catalog-import-ingredient-chart-and-filter) |
+| Product page and storefront | [Buy more, save more on the product page](#24-buy-more-save-more-on-the-product-page), [Shop by concern on home and collection pages](#25-shop-by-concern-on-home-and-collection-pages), [Product page pack for a Dawn theme](#35-product-page-pack-for-a-dawn-theme), [Catalog import, ingredient chart and filter](#36-catalog-import-ingredient-chart-and-filter), [Custom text that reaches the order](#44-custom-text-that-reaches-the-order--name-and-number-with-a-checkout-backstop) |
 | Post-purchase and tracking | [Post-purchase: attribution survey + referral code](#3-post-purchase-attribution-survey--referral-code), [Gift funnel analytics](#5-gift-funnel-analytics--analyticspublish--a-web-pixel), [Connect GA4 with customer events](#31-connect-ga4-with-customer-events), [Affiliate ref tracking](#39-affiliate-ref-tracking--cart-attribute--web-pixel) |
 | Customer accounts | [Buy again on the Orders page](#34-buy-again-on-the-orders-page) |
 | Subscriptions | [Loop Subscriptions: portal and cancellation flow](#33-loop-subscriptions-portal-and-cancellation-flow) |
@@ -1227,3 +1227,85 @@ not reordered, and a store can have at most 25 active payment customizations.
 Setup: create the manual payment methods "Bank transfer" and "Cash on Delivery (COD)" (Settings → Payments → Manual payment
 methods), then `scripts/activate-payment-rules.graphql` creates the customization with its config metafield in one call
 (scope `write_payment_customizations`). Later config changes: `scripts/set-payment-rules.graphql`.
+
+## 44. Custom text that reaches the order — name and number, with a checkout backstop
+
+VIDEO_URL_TBD
+
+**From a job post: "the player name and number buyers type on the product page are missing from orders."** The usual causes:
+
+- the inputs sit outside `<form action="/cart/add">` (an app block, a section below the form) and have no `form="..."` attribute,
+  so the browser never sends them;
+- they are named `player_name` instead of `properties[Player name]`, and Shopify drops anything that isn't a line item property;
+- the line never went through the form at all: Buy it now, a wallet button, quick add on a collection page, a cart permalink or
+  a `/cart/add.js` call from another app.
+
+The first two are a form fix. The third can't be fixed on the product page, so a **validation Function** checks every line in
+checkout. Two pieces, one set of rules:
+
+- **[`personalization` block](extensions/storefront-blocks/blocks/personalization.liquid)** (theme app extension) draws the fields
+  with `name="properties[Name]"` and `form="product-form-<section id>"`, so they reach the cart even though the block is outside
+  the form. [`personalization.js`](extensions/storefront-blocks/assets/personalization.js) fixes the `form` id on themes that use
+  another one, shows a counter, and stops Add to cart and Buy it now with an inline error.
+- **[`personalization-validation`](extensions/personalization-validation)** (`cart.validations.generate.run`) reads each line's
+  `attribute(key: "Name")` / `attribute(key: "Number")` and the product's rules, and blocks checkout:
+  *"Engraved Gua Sha needs "Name to engrave". Remove Engraved Gua Sha from your cart and add it again from its product page."*
+
+Which products need it is a **product metafield, `custom.personalization` (JSON)**: empty means no fields, no check. Demo product
+**Engraved Gua Sha** ($38) uses [`scripts/personalization-gua-sha.json`](scripts/personalization-gua-sha.json):
+
+| Property (cart and order) | Buyer sees | Rule |
+|---|---|---|
+| `Name` | Name to engrave * | required, up to 12 characters, letters (any alphabet), spaces, `'` `-` `.` |
+| `Number` | Number (0-99) (optional) | digits only, 0 to 99, `07` allowed |
+
+Formats: `text` (anything), `letters`, `number` (with `min` / `max`); plus `required` and `maxLength` on any field. The block and the
+Function share these rules: the Function's copy is [`shared/personalization/rules.ts`](shared/personalization/rules.ts), and a test runs
+the block's copy on the same cases, so the product page never lets through what checkout refuses.
+
+### Where the text shows up
+
+Line item properties need no extra code to show: the cart page lists `Name: Mia`, checkout shows it under the item, and the order
+and its notification emails carry it. A key that starts with `_` (`_engraving_font`) is the Ajax API convention for a private
+property: Dawn's cart skips it and checkout hides it, but it is still saved on the order for the admin, the API and webhooks.
+Don't use `_` for what the buyer typed: they need to see it to catch a typo.
+
+### Buy it now and other ways around the form
+
+| Path into checkout | Product page check | Function |
+|---|---|---|
+| Add to cart, then check out | Yes (submit, capture phase) | Yes |
+| Buy it now (unbranded button) | Yes (click, capture phase) | Yes |
+| Wallet buttons drawn in an iframe (PayPal, Apple Pay...) | Not reliably: the click happens inside their frame | Yes |
+| Cart permalink, `/cart/add.js`, quick add on a collection page | No form at all | Yes |
+
+So the block is help for the buyer and the Function is the rule. Not tested live yet: whether Buy it now carries inputs linked by
+`form=` (rather than nested in the form) into checkout. If it doesn't, the Function stops that order, and the fix is to hide Buy it
+now on personalized products.
+
+### Choices worth knowing
+
+- **The Function only reads keys it knows.** A Function input has no "all properties" field, only `attribute(key:)`, so the
+  keys are fixed aliases in the input query: `Name`, `Number`, `Initials` (`FUNCTION_KEYS`; a test keeps both lists equal). A field
+  with another key still works on the product page, but checkout never blocks on it. Adding a key = one line in the query and a deploy.
+- **Never block on what it can't judge.** No metafield, bad JSON or an unknown key: the line passes.
+- **The cart page stays editable** (`CART_INTERACTION` is skipped, like the other validation Functions here), and every checkout step
+  blocks. Checkout can't point an error at one line, so it goes on `$.cart` and names the product. Two lines with the same gap show one error.
+- **The message says how to fix it.** A buyer can't edit a property in checkout, so it says to remove the item and add it again from
+  its product page.
+- **Characters are counted as the buyer sees them** (`Zoë` is 3), and spaces around the text don't count.
+- **`blockOnFailure: false`**, like the other validations: if the Function itself failed, checkout would go through rather than
+  stop every buyer.
+
+### Tests
+
+- `shared/personalization/rules.test.ts`: 21 unit tests (parsing and bad config, required, the 12-character limit, letters in other
+  alphabets, 0-99 with a leading zero, the key list against the input query, and parity with the block's JavaScript).
+- `extensions/personalization-validation/tests`: 16 wasm fixtures (through the form, optional number empty, accented name,
+  permalink without a name, spaces only, too long, digits in the name, number out of range, not a number, two problems, two lines,
+  other products, bad config, unknown key, cart page, re-check at order placement).
+- Mutation check: making a required field pass when empty fails 4 unit tests and 4 fixtures.
+
+Setup: `scripts/setup-personalization.graphql` (metafield definition + the demo product), `scripts/publish-engraved-gua-sha.graphql`,
+`scripts/activate-personalization-validation.graphql`, then add the **Personalization** block to the product template in the theme
+editor, under the variant picker.

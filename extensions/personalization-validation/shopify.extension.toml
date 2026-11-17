@@ -1,0 +1,18 @@
+api_version = "2026-10"
+
+[[extensions]]
+name = "t:name"
+handle = "personalization-validation"
+uid = "1e19125e-bb86-4cb6-9c73-e47558e77d9672fb4141"
+type = "function"
+description = "t:description"
+
+  # Every checkout step (not the cart page): a line whose product needs personalization must carry it.
+  [[extensions.targeting]]
+  target = "cart.validations.generate.run"
+  input_query = "src/cart_validations_generate_run.graphql"
+  export = "cart-validations-generate-run"
+
+  [extensions.build]
+  command = ""
+  path = "dist/function.wasm"
