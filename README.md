@@ -1220,6 +1220,9 @@ not reordered, and a store can have at most 25 active payment customizations.
   address yet, Canada in CAD under the converted threshold, no config).
 - Mutation check: making the bank-transfer threshold strict (`>`) and ignoring the currency rate fails 2 unit tests and
   1 fixture.
+- Live on the demo store (public checkout, cart permalinks): a $594 cart to New York shows only "Bank transfer"; a $125
+  cart to Anchorage, Alaska shows Bank transfer first and the card, no COD; the same $125 cart to New York shows Bank
+  transfer, card and COD.
 
 Setup: create the manual payment methods "Bank transfer" and "Cash on Delivery (COD)" (Settings → Payments → Manual payment
 methods), then `scripts/activate-payment-rules.graphql` creates the customization with its config metafield in one call
