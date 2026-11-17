@@ -1230,7 +1230,7 @@ methods), then `scripts/activate-payment-rules.graphql` creates the customizatio
 
 ## 44. Custom text that reaches the order — name and number, with a checkout backstop
 
-VIDEO_URL_TBD
+https://github.com/user-attachments/assets/5118d06c-f447-4296-b5de-5c7405ae80a4
 
 **From a job post: "the player name and number buyers type on the product page are missing from orders."** The usual causes:
 
@@ -1279,9 +1279,19 @@ Don't use `_` for what the buyer typed: they need to see it to catch a typo.
 | Wallet buttons drawn in an iframe (PayPal, Apple Pay...) | Not reliably: the click happens inside their frame | Yes |
 | Cart permalink, `/cart/add.js`, quick add on a collection page | No form at all | Yes |
 
-So the block is help for the buyer and the Function is the rule. Not tested live yet: whether Buy it now carries inputs linked by
-`form=` (rather than nested in the form) into checkout. If it doesn't, the Function stops that order, and the fix is to hide Buy it
-now on personalized products.
+So the block is help for the buyer and the Function is the rule.
+
+Live check on this store (Dawn-based theme, 2026-11-17):
+
+- Add to cart with the name empty: inline "Name to engrave is required.", nothing added. With "Mia" and "7": the cart, checkout
+  and the order's line item (`customAttributes`, read from the Admin API) all carry `Name: Mia` and `Number: 7`.
+- **Buy it now carries the inputs linked by `form=`.** The block sits outside the product `<form>`, and Buy it now still went
+  straight to checkout with `Name: Mia` and `Number: 7` on the line, and the Function let it through. With the name empty, Buy it
+  now is stopped on the product page with the same inline error. So there is no need to hide Buy it now on personalized products.
+- `/cart/clear`, then the permalink `/cart/<variant id>:1`: checkout shows "Engraved Gua Sha needs "Name to engrave". Remove
+  Engraved Gua Sha from your cart and add it again from its product page." and the order can't be placed.
+
+Not tested: wallet buttons (PayPal, Apple Pay), quick add on a collection page, and themes other than this Dawn-based one.
 
 ### Choices worth knowing
 
