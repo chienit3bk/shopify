@@ -1,0 +1,98 @@
+{
+  "payload": {
+    "export": "cart-payment-methods-transform-run",
+    "target": "cart.payment-methods.transform.run",
+    "input": {
+      "cart": {
+        "cost": {
+          "subtotalAmount": {
+            "amount": "80.0"
+          }
+        },
+        "deliveryGroups": []
+      },
+      "localization": {
+        "country": {
+          "isoCode": "CA"
+        }
+      },
+      "presentmentCurrencyRate": "1.38",
+      "paymentMethods": [
+        {
+          "id": "gid://shopify/PaymentCustomizationPaymentMethod/1",
+          "name": "Credit card"
+        },
+        {
+          "id": "gid://shopify/PaymentCustomizationPaymentMethod/2",
+          "name": "PayPal"
+        },
+        {
+          "id": "gid://shopify/PaymentCustomizationPaymentMethod/3",
+          "name": "Bank transfer"
+        },
+        {
+          "id": "gid://shopify/PaymentCustomizationPaymentMethod/4",
+          "name": "Cash on Delivery (COD)"
+        }
+      ],
+      "paymentCustomization": {
+        "config": {
+          "jsonValue": {
+            "version": 1,
+            "bankTransferOnly": {
+              "methods": [
+                "Bank transfer",
+                "Bank Deposit"
+              ],
+              "minSubtotal": 500,
+              "keep": []
+            },
+            "cashOnDelivery": {
+              "methods": [
+                "Cash on Delivery (COD)"
+              ],
+              "maxSubtotal": 300,
+              "blockedRegions": [
+                {
+                  "countryCode": "US",
+                  "provinceCodes": [
+                    "AK",
+                    "HI"
+                  ]
+                }
+              ]
+            },
+            "orderByCountry": [
+              {
+                "countries": [
+                  "US"
+                ],
+                "order": [
+                  "Bank transfer"
+                ]
+              },
+              {
+                "countries": [
+                  "CA"
+                ],
+                "order": [
+                  "Cash on Delivery (COD)"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "paymentMethodMove": {
+            "paymentMethodId": "gid://shopify/PaymentCustomizationPaymentMethod/4",
+            "index": 0
+          }
+        }
+      ]
+    }
+  }
+}

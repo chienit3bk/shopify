@@ -1,0 +1,31 @@
+query CartPaymentMethodsTransformRunInput {
+  cart {
+    cost {
+      subtotalAmount {
+        amount
+      }
+    }
+    deliveryGroups {
+      deliveryAddress {
+        countryCode
+        provinceCode
+      }
+    }
+  }
+  localization {
+    country {
+      isoCode
+    }
+  }
+  presentmentCurrencyRate
+  paymentMethods {
+    id
+    name
+  }
+  paymentCustomization {
+    # Written with the customization (scripts/activate-payment-rules.graphql).
+    config: metafield(namespace: "$app", key: "payment_rules_config") {
+      jsonValue
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "name": "Payment rules",
+  "description": "Bank transfer only on big orders, hides cash on delivery by cap and state, orders methods by country"
+}

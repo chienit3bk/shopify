@@ -1,0 +1,9 @@
+# Updates the config of an existing payment-rules customization (id from activate-payment-rules.graphql).
+# shopify app execute --store <shop> --query-file scripts/set-payment-rules.graphql --variable-file <vars.json>
+# vars.json: {"customizationId": "gid://shopify/PaymentCustomization/<id>", "config": "<payment-rules-config.json as a string>"}
+mutation SetPaymentRules($customizationId: ID!, $config: String!) {
+  metafieldsSet(metafields: [{ownerId: $customizationId, namespace: "$app", key: "payment_rules_config", type: "json", value: $config}]) {
+    metafields { key updatedAt }
+    userErrors { field message }
+  }
+}
