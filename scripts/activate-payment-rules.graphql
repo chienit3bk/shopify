@@ -1,0 +1,17 @@
+# Turns on the payment-rules Function and writes its config (scripts/payment-rules-config.json) to an
+# app-owned metafield on the customization itself, in one call (once per install).
+# shopify app execute --store <shop> --query-file scripts/activate-payment-rules.graphql --variable-file <vars.json>
+# vars.json: {"config": "<payment-rules-config.json as a string>"}
+mutation ActivatePaymentRules($config: String!) {
+  paymentCustomizationCreate(
+    paymentCustomization: {
+      functionHandle: "payment-rules"
+      title: "Payment rules"
+      enabled: true
+      metafields: [{namespace: "$app", key: "payment_rules_config", type: "json", value: $config}]
+    }
+  ) {
+    paymentCustomization { id title enabled }
+    userErrors { field message code }
+  }
+}

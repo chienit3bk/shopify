@@ -1,0 +1,53 @@
+{
+  "payload": {
+    "export": "cart-payment-methods-transform-run",
+    "target": "cart.payment-methods.transform.run",
+    "input": {
+      "cart": {
+        "cost": {
+          "subtotalAmount": {
+            "amount": "900.0"
+          }
+        },
+        "deliveryGroups": [
+          {
+            "deliveryAddress": {
+              "countryCode": "US",
+              "provinceCode": "HI"
+            }
+          }
+        ]
+      },
+      "localization": {
+        "country": {
+          "isoCode": "US"
+        }
+      },
+      "presentmentCurrencyRate": "1.0",
+      "paymentMethods": [
+        {
+          "id": "gid://shopify/PaymentCustomizationPaymentMethod/1",
+          "name": "Credit card"
+        },
+        {
+          "id": "gid://shopify/PaymentCustomizationPaymentMethod/2",
+          "name": "PayPal"
+        },
+        {
+          "id": "gid://shopify/PaymentCustomizationPaymentMethod/3",
+          "name": "Bank transfer"
+        },
+        {
+          "id": "gid://shopify/PaymentCustomizationPaymentMethod/4",
+          "name": "Cash on Delivery (COD)"
+        }
+      ],
+      "paymentCustomization": {
+        "config": null
+      }
+    },
+    "output": {
+      "operations": []
+    }
+  }
+}

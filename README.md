@@ -17,6 +17,7 @@ the theme editor, then `node scripts/push-landing.mjs <theme id>`.
 |---|---|
 | Checkout | [BFCM checkout offer](#2-bfcm-checkout-offer--countdown--one-click-add-ons), [Shipping cut-off countdown + trust badges](#4-shipping-cut-off-countdown--trust-badges), [Required consent checkbox (final sale, age 18+)](#17-required-consent-checkbox-final-sale-age-18), [Order note templates](#19-order-note-templates), [Country-restricted products (no catalogs)](#20-country-restricted-products-no-catalogs), [Address autocomplete and bad-address blocking](#42-address-autocomplete-and-bad-address-blocking--what-works-on-plus-and-what-doesnt) |
 | Shipping and delivery | [Free Express shipping over $120](#7-free-express-shipping-over-120--sale-items-dont-count), [Delivery rules](#11-delivery-rules--hide-rename-reorder-delivery-customization-function), [Delivery date picker + PO Box check](#12-delivery-date-picker--po-box-check), [Carbon-neutral delivery add-on](#13-carbon-neutral-delivery-add-on), [PO Box check per item, not per carrier](#27-po-box-check-per-item-not-per-carrier), [Pickup-only items](#30-pickup-only-items) |
+| Payments | [Payment rules: bank transfer only on big orders, no COD by state or cap](#43-payment-rules--bank-transfer-only-on-big-orders-no-cod-by-state-or-cap) |
 | Discounts | [Buy 2, get 1 free](#8-buy-2-get-1-free--on-the-same-sku), [Tiered discounts](#9-tiered-discounts--volume-per-sku--spend-on-the-order), [Spend tiers that skip sale items and gift cards](#21-spend-tiers-that-skip-sale-items-and-gift-cards), [40 quantity-break tables from one discount](#22-40-quantity-break-tables-from-one-discount) |
 | Gifts | [Rules-based free gift](#1-rules-based-free-gift), [Gift picker + checkout validation](#6-gift-picker--checkout-validation), [Gift for a collection + out-of-stock fallback](#10-gift-for-a-collection--out-of-stock-fallback), [Gift message + gift wrap](#18-gift-message--gift-wrap) |
 | Cart rules, bundles and B2B | [Max quantity, minimum order and incompatible products](#14-max-quantity-minimum-order-and-incompatible-products), [B2B: minimum quantity, case packs, first-order minimum](#15-b2b-minimum-quantity-case-packs-first-order-minimum), [Fixed-price bundle](#16-fixed-price-bundle--cart-transform-lineexpand), [Case packs](#23-case-packs--sell-by-the-case-count-stock-by-the-bottle), [One sample kit per customer every 30 days](#28-one-sample-kit-per-customer-every-30-days), [Minimum order for wholesale-tagged customers](#29-minimum-order-for-wholesale-tagged-customers), [Native bundles with an image picker](#37-native-bundles-with-an-image-picker), [Build your own bundle](#38-build-your-own-bundle--cart-transform-linesmerge) |
@@ -1131,3 +1132,95 @@ shown running live in the video: house number, PO Box, then `350 5th Ave` passin
 
 Setup: `scripts/set-address-rules-config.graphql` writes the config to the app metafield, `scripts/activate-address-validation.graphql`
 turns the Function on.
+
+## 43. Payment rules — bank transfer only on big orders, no COD by state or cap
+
+VIDEO_URL_TBD
+
+**The ask** (a Basic-plan merchant): "add a card fee above an order value, force ACH / bank transfer over a threshold or by
+location". The fee part can't be done natively (see below), so this ships what can: one
+[`payment-rules`](extensions/payment-rules) **payment customization Function** (`cart.payment-methods.transform.run`)
+that hides and reorders payment methods. Logic: [`shared/payment/rules.ts`](shared/payment/rules.ts).
+
+| Rule | Demo setting | What the buyer sees |
+|---|---|---|
+| Bank transfer only | subtotal ≥ $500 | every other method hidden (card, PayPal, COD, wallets), "Bank transfer" first |
+| No cash on delivery above a cap | subtotal > $300 | "Cash on Delivery (COD)" hidden |
+| No cash on delivery to some states | shipping to US `AK`, `HI` | "Cash on Delivery (COD)" hidden |
+| Order by country | US: Bank transfer first; CA: COD first | listed methods moved to the top, the rest keep Shopify's order |
+
+### How it works
+
+- **Matched by name**, because a payment method has no stable handle in the Function input: `{id, name}` only. Names are
+  compared trimmed and case-insensitively, and each rule takes a list (`["Bank transfer", "Bank Deposit"]`), so a store that
+  named its manual method differently only edits the config.
+- **Never leaves the buyer with no way to pay.** If the bank-transfer method isn't in the input (not set up, or not offered in
+  that market), the bank-transfer-only rule does nothing instead of hiding everything.
+- **Amounts are in the shop currency.** The cart subtotal arrives in the buyer's currency, so the Function multiplies the
+  thresholds by `presentmentCurrencyRate` first: $500 is CA$690 at 1.38.
+- **Subtotal = `cart.cost.subtotalAmount`**: before taxes, shipping and cart-level discounts.
+- **Location = the delivery address** (`countryCode` + `provinceCode` of the first delivery group). Before an address is
+  entered, the country falls back to the buyer's localization country and the state rule doesn't fire.
+- A hidden COD is never moved, and bank-transfer-only wins over the country order (it's the only method left).
+
+### Config
+
+A JSON metafield **on the payment customization itself** (`$app` / `payment_rules_config`), so each customization can carry
+its own rules. Demo values: [`scripts/payment-rules-config.json`](scripts/payment-rules-config.json).
+
+```json
+{
+  "version": 1,
+  "bankTransferOnly": {"methods": ["Bank transfer", "Bank Deposit"], "minSubtotal": 500, "keep": []},
+  "cashOnDelivery": {"methods": ["Cash on Delivery (COD)"], "maxSubtotal": 300,
+                     "blockedRegions": [{"countryCode": "US", "provinceCodes": ["AK", "HI"]}]},
+  "orderByCountry": [{"countries": ["US"], "order": ["Bank transfer"]}, {"countries": ["CA"], "order": ["Cash on Delivery (COD)"]}]
+}
+```
+
+`keep` lists methods that stay visible on big orders too (for example a gift card). A section that doesn't validate is
+dropped and the others still run; a missing or broken document changes nothing.
+
+### The card fee: not possible natively, and why
+
+There is no way to add a per-order fee that depends on the payment method chosen:
+
+- The payment customization Function can only **hide, move and rename** methods, set payment terms and add a review
+  requirement ([Payment Customization API](https://shopify.dev/docs/api/functions/2026-10/payment-customization)). There is no
+  operation that adds an amount.
+- The Functions that change prices (Cart Transform, Discount) don't get the selected payment method in their input, and a
+  discount can only take money off.
+- A fake "fee" line (a product added to the cart) can't know the payment method either, so bank-transfer buyers would pay it
+  too; and a checkout UI extension that adds it in the checkout steps is Plus only.
+
+The workaround is to **steer instead of charge**: above the threshold the card isn't offered at all, and below it the cheap
+method is listed first. A rename such as "Bank transfer — no card fee" is the other honest lever (manual methods can be
+renamed; Shop Pay, Apple Pay, Google Pay and other logo methods can't).
+
+### Plans and limits
+
+| | Plus store | Non-Plus store (Basic, Shopify, Advanced) | Source |
+|---|---|---|---|
+| Payment customization Function from a public App Store app | Yes | Yes | [About Shopify Functions](https://shopify.dev/docs/apps/build/functions) |
+| The same Function in a custom app (like this demo) | Yes | **No**: custom apps with Functions need Plus | [About Shopify Functions](https://shopify.dev/docs/apps/build/functions) |
+| Hide one placement only (Express button vs payment list) | Yes | No: hiding removes the method everywhere | [About functions in payments](https://shopify.dev/docs/apps/build/checkout/payments) |
+| Payment terms operation | Yes | No | same |
+
+So for the Basic-plan merchant this has to ship inside a **public app** (or they use an App Store app that does the same).
+Other limits from the same page: "plan and geographical restrictions apply" (operations on a restricted method are ignored),
+the Function doesn't run in Point of Sale, inside Shop Pay it only affects the gift card field, wallets can be hidden but
+not reordered, and a store can have at most 25 active payment customizations.
+
+### Tests
+
+- `shared/payment/rules.test.ts`: 20 unit tests (threshold edge at $499.99 / $500, cap edge at $300 / $300.01, AK/HI vs NY,
+  province matched within its country only, no address yet, currency conversion, "never hide everything", `keep`, compact
+  reorder indexes, config validation).
+- `extensions/payment-rules/tests`: 7 wasm fixtures (US over $500, Alaska, over the COD cap, US under the cap, Canada with no
+  address yet, Canada in CAD under the converted threshold, no config).
+- Mutation check: making the bank-transfer threshold strict (`>`) and ignoring the currency rate fails 2 unit tests and
+  1 fixture.
+
+Setup: create the manual payment methods "Bank transfer" and "Cash on Delivery (COD)" (Settings → Payments → Manual payment
+methods), then `scripts/activate-payment-rules.graphql` creates the customization with its config metafield in one call
+(scope `write_payment_customizations`). Later config changes: `scripts/set-payment-rules.graphql`.
