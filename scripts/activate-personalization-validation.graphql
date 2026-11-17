@@ -1,0 +1,8 @@
+# Turns on the personalization-validation Function for the store (once per install).
+# shopify app execute --store <shop> --query-file scripts/activate-personalization-validation.graphql
+mutation ActivatePersonalizationValidation {
+  validationCreate(validation: {functionHandle: "personalization-validation", title: "Personalization check", enable: true, blockOnFailure: false}) {
+    validation { id title enabled }
+    userErrors { field message code }
+  }
+}

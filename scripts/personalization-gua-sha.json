@@ -1,0 +1,6 @@
+{
+  "fields": [
+    {"key": "Name", "label": "Name to engrave", "required": true, "maxLength": 12, "format": "letters", "placeholder": "e.g. Mia"},
+    {"key": "Number", "label": "Number (0-99)", "required": false, "format": "number", "min": 0, "max": 99, "placeholder": "e.g. 7"}
+  ]
+}

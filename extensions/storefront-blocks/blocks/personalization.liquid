@@ -1,0 +1,102 @@
+{%- comment -%}
+  Text the buyer types (a name, a number) saved as line item properties, so it shows in the cart,
+  checkout and order. Which products get it, and the rules, come from the product metafield
+  custom.personalization (JSON). The personalization-validation Function reads the same metafield
+  and blocks checkout when a line skipped these fields.
+
+  The block can sit outside the theme's <form>, so every input carries form="...": Dawn's product
+  form id here, corrected by personalization.js on themes that use another id.
+{%- endcomment -%}
+{%- assign config = product.metafields.custom.personalization.value -%}
+{%- if config.fields != blank -%}
+  {%- assign form_id = 'product-form-' | append: section.id -%}
+  <div
+    class="sb-personalize"
+    data-personalization
+    data-block-id="{{ block.id }}"
+    data-required-message="{{ 'personalization.required' | t: label: '[label]' }}"
+    data-length-message="{{ 'personalization.too_long' | t: label: '[label]', count: '[count]' }}"
+    data-letters-message="{{ 'personalization.letters' | t: label: '[label]' }}"
+    data-number-message="{{ 'personalization.number' | t: label: '[label]' }}"
+    data-range-message="{{ 'personalization.range' | t: label: '[label]', min: '[min]', max: '[max]' }}"
+    {{ block.shopify_attributes }}
+  >
+    {%- if block.settings.heading != blank -%}
+      <p class="sb-personalize__heading">{{ block.settings.heading | escape }}</p>
+    {%- endif -%}
+    {%- for field in config.fields -%}
+      {%- if field.key != blank -%}
+        {%- liquid
+          assign key = field.key | strip
+          assign label = field.label | default: key
+          assign control_id = 'sb-personalize-' | append: block.id | append: '-' | append: forloop.index
+        -%}
+        <div class="sb-personalize__field" data-field="{{ key | escape }}">
+          <label class="sb-personalize__label" for="{{ control_id }}">
+            {{- label | escape -}}
+            {%- if field.required %} *{% else %} <span class="sb-personalize__optional">{{ 'personalization.optional' | t }}</span>{% endif -%}
+          </label>
+          <input
+            class="sb-personalize__input"
+            id="{{ control_id }}"
+            type="text"
+            name="properties[{{ key | escape }}]"
+            form="{{ form_id }}"
+            autocomplete="off"
+            aria-describedby="{{ control_id }}-error"
+            {% if field.required %}
+              required
+            {% endif %}
+            {% if field.maxLength %}
+              maxlength="{{ field.maxLength }}"
+            {% endif %}
+            {% if field.format == 'number' %}
+              inputmode="numeric" pattern="[0-9]*"
+            {% endif %}
+            {% if field.placeholder != blank %}
+              placeholder="{{ field.placeholder | escape }}"
+            {% endif %}
+          >
+          {%- if field.maxLength -%}
+            <span class="sb-personalize__count" data-count aria-hidden="true">0/{{ field.maxLength }}</span>
+          {%- endif -%}
+          <p class="sb-personalize__error" id="{{ control_id }}-error" data-field-error role="alert" hidden></p>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if block.settings.note != blank -%}
+      <p class="sb-personalize__note">{{ block.settings.note | escape }}</p>
+    {%- endif -%}
+    <script type="application/json" data-personalization-config>
+      {{ config | json }}
+    </script>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Personalization",
+  "target": "content",
+  "enabled_on": { "templates": ["product"] },
+  "javascript": "personalization.js",
+  "stylesheet": "storefront-blocks.css",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Personalize it"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Note under the fields",
+      "default": "Engraved items are made for you and can't be returned."
+    },
+    {
+      "type": "paragraph",
+      "content": "Shows only on products whose custom.personalization metafield lists fields."
+    }
+  ]
+}
+{% endschema %}

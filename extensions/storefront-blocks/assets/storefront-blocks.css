@@ -155,3 +155,16 @@
 .sb-fbt__variant { grid-column: 1; padding-left: 94px; font-size: 1.2rem; opacity: 0.7; }
 .sb-fbt__price { grid-row: 1; grid-column: 2; font-size: 1.4rem; }
 .sb-fbt__total { margin: 0 0 10px; font-size: 1.5rem; }
+
+/* Personalization (line item properties) */
+.sb-personalize { display: grid; gap: 14px; margin-block: 16px; }
+.sb-personalize__heading { margin: 0; font-weight: 600; }
+.sb-personalize__field { display: grid; gap: 6px; }
+.sb-personalize__label { font-size: 0.95em; }
+.sb-personalize__optional { opacity: 0.7; }
+.sb-personalize__input { box-sizing: border-box; width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid rgb(0 0 0 / 0.3); border-radius: 8px; background: transparent; color: inherit; font: inherit; }
+.sb-personalize__input[aria-invalid] { border-color: #b3261e; }
+.sb-personalize__count { justify-self: end; font-size: 0.8em; opacity: 0.7; }
+.sb-personalize__error { margin: 0; color: #b3261e; font-size: 0.9em; }
+.sb-personalize__error[hidden] { display: none; }
+.sb-personalize__note { margin: 0; font-size: 0.85em; opacity: 0.75; }

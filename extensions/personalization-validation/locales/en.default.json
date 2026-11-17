@@ -1,0 +1,4 @@
+{
+  "name": "Personalization check",
+  "description": "Blocks checkout when a product that needs a name or number reaches it without one, or with one that breaks its rules"
+}

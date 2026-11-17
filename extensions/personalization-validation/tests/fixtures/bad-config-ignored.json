@@ -1,0 +1,38 @@
+{
+  "payload": {
+    "export": "cart-validations-generate-run",
+    "target": "cart.validations.generate.run",
+    "input": {
+      "buyerJourney": {
+        "step": "CHECKOUT_INTERACTION"
+      },
+      "cart": {
+        "lines": [
+          {
+            "name": null,
+            "number": null,
+            "initials": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "product": {
+                "title": "Engraved Gua Sha",
+                "personalization": {
+                  "jsonValue": "oops"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "validationAdd": {
+            "errors": []
+          }
+        }
+      ]
+    }
+  }
+}

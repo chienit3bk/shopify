@@ -78,5 +78,13 @@
     "added": "Added",
     "view_cart": "View cart",
     "error": "Couldn't add these to your cart. Please try again."
+  },
+  "personalization": {
+    "optional": "(optional)",
+    "required": "{{ label }} is required.",
+    "too_long": "{{ label }} can have up to {{ count }} characters.",
+    "letters": "{{ label }} can only use letters, spaces, apostrophes and hyphens.",
+    "number": "{{ label }} must be a number.",
+    "range": "{{ label }} must be from {{ min }} to {{ max }}."
   }
 }

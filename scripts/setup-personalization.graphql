@@ -1,0 +1,37 @@
+# One-time setup for the personalization demo (run with `shopify store execute --allow-mutations`):
+# the product field a merchant fills in to switch personalization on for a product, and a new demo
+# product "Engraved Gua Sha" with the rules from scripts/personalization-gua-sha.json.
+# Next: publish it (scripts/publish-engraved-gua-sha.graphql with the returned id), then turn the
+# Function on (scripts/activate-personalization-validation.graphql).
+# shopify store execute --store <shop> --allow-mutations --query-file scripts/setup-personalization.graphql \
+#   -v "$(jq -c '{value: tojson}' scripts/personalization-gua-sha.json)"
+# A new product on purpose: Jade Facial Roller is pickup-only and the Beauty Bag is a free gift line,
+# which would be blocked for having no name.
+mutation SetupPersonalization($value: String!) {
+  metafieldDefinitionCreate(definition: {
+    name: "Personalization"
+    namespace: "custom"
+    key: "personalization"
+    description: "Fields the buyer fills in on the product page (name, number...). Empty = no personalization. Format: scripts/personalization-gua-sha.json."
+    type: "json"
+    ownerType: PRODUCT
+    pin: true
+  }) {
+    createdDefinition { id }
+    userErrors { field message code }
+  }
+  productSet(synchronous: true, input: {
+    title: "Engraved Gua Sha"
+    handle: "engraved-gua-sha"
+    status: ACTIVE
+    productType: "Tool"
+    vendor: "Solvane"
+    descriptionHtml: "<p>A rose quartz gua sha with a name and an optional number engraved on the back. Made to order: allow 2 extra days.</p>"
+    productOptions: [{name: "Title", values: [{name: "Default Title"}]}]
+    variants: [{optionValues: [{optionName: "Title", name: "Default Title"}], price: "38.00", inventoryPolicy: CONTINUE}]
+    metafields: [{namespace: "custom", key: "personalization", type: "json", value: $value}]
+  }) {
+    product { id handle }
+    userErrors { field message code }
+  }
+}

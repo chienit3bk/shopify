@@ -1,0 +1,65 @@
+{
+  "payload": {
+    "export": "cart-validations-generate-run",
+    "target": "cart.validations.generate.run",
+    "input": {
+      "buyerJourney": {
+        "step": "CHECKOUT_INTERACTION"
+      },
+      "cart": {
+        "lines": [
+          {
+            "name": {
+              "value": "Mia"
+            },
+            "number": {
+              "value": "120"
+            },
+            "initials": null,
+            "merchandise": {
+              "__typename": "ProductVariant",
+              "product": {
+                "title": "Engraved Gua Sha",
+                "personalization": {
+                  "jsonValue": {
+                    "fields": [
+                      {
+                        "key": "Name",
+                        "label": "Name to engrave",
+                        "required": true,
+                        "maxLength": 12,
+                        "format": "letters"
+                      },
+                      {
+                        "key": "Number",
+                        "label": "Number (0-99)",
+                        "required": false,
+                        "format": "number",
+                        "min": 0,
+                        "max": 99
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "validationAdd": {
+            "errors": [
+              {
+                "message": "\"Number (0-99)\" on Engraved Gua Sha must be from 0 to 99. Remove Engraved Gua Sha from your cart and add it again from its product page.",
+                "target": "$.cart"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

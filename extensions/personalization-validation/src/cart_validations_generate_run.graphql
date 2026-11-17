@@ -1,0 +1,32 @@
+query CartValidationsGenerateRunInput {
+  buyerJourney {
+    step
+  }
+  cart {
+    lines {
+      # One alias per key in FUNCTION_KEYS (shared/personalization/rules.ts): a Function can only
+      # read a line item property by its exact key.
+      name: attribute(key: "Name") {
+        value
+      }
+      number: attribute(key: "Number") {
+        value
+      }
+      initials: attribute(key: "Initials") {
+        value
+      }
+      merchandise {
+        __typename
+        ... on ProductVariant {
+          product {
+            title
+            # Which fields this product needs (JSON, see shared/personalization/rules.ts).
+            personalization: metafield(namespace: "custom", key: "personalization") {
+              jsonValue
+            }
+          }
+        }
+      }
+    }
+  }
+}

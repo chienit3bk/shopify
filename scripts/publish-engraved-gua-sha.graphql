@@ -1,0 +1,7 @@
+# Publishes the demo product to the Online Store. productId comes from setup-personalization.graphql.
+# shopify store execute --store <shop> --allow-mutations --query-file scripts/publish-engraved-gua-sha.graphql -v '{"productId":"gid://shopify/Product/<id>"}'
+mutation PublishEngravedGuaSha($productId: ID!) {
+  publishablePublish(id: $productId, input: [{publicationId: "gid://shopify/Publication/322667872538"}]) {
+    userErrors { field message }
+  }
+}
