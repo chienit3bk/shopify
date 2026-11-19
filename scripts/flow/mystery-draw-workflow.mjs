@@ -2,7 +2,7 @@
 //   node scripts/flow/mystery-draw-workflow.mjs <store> [workflow gid] [--activate]
 // Order paid → Run code (scripts/flow/mystery-draw.js) → has a box? → order metafield custom.mystery_draw
 // → for each draw: metaobjectCreate (public feed entry, type mystery_draw).
-// Needs scripts/setup-mystery-box.graphql first, and `shopify store auth` with write_automations.
+// Needs scripts/setup-mystery-box.graphql and scripts/setup-mystery-salt.graphql first, and `shopify store auth` with write_automations.
 import {execFileSync} from 'node:child_process';
 import {mkdtempSync, readFileSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
@@ -18,13 +18,15 @@ const here = dirname(fileURLToPath(import.meta.url));
 const dir = mkdtempSync(join(tmpdir(), 'mystery-flow-'));
 
 export const INPUT_QUERY = `query {
+  shop { mysterySalt { value } }
   order {
+    id
     processedAt
     createdAt
     customer { firstName }
     billingAddress { firstName }
     shippingAddress { firstName }
-    lineItems { quantity product { id mysteryPrizes { value } } }
+    lineItems { id quantity product { id mysteryPrizes { value } } }
   }
 }`;
 
@@ -103,6 +105,14 @@ const configuration = {
         arguments: {namespace: 'custom', key: 'mystery_prizes'},
         handle: 'mysteryPrizes',
         patched_type: 'PRODUCT',
+        merchant_configured: true,
+      },
+      // The secret salt of every roll (scripts/setup-mystery-salt.graphql). Never in the feed or the order.
+      {
+        field: 'metafield',
+        arguments: {namespace: 'custom', key: 'mystery_salt'},
+        handle: 'mysterySalt',
+        patched_type: 'SHOP',
         merchant_configured: true,
       },
     ],
