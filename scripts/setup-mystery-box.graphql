@@ -1,0 +1,49 @@
+# Mystery box definitions. Merchant-owned on purpose: the draw runs in Shopify Flow, which is another app,
+# and app-owned ($app) definitions give no other app write access. Run once per store:
+#   shopify store execute -s <store> --allow-mutations --query-file scripts/setup-mystery-box.graphql
+mutation SetupMysteryBox {
+  # Published prize list on the box product: [{"id","title","tier","odds","handle"}], odds add up to 100.
+  prizes: metafieldDefinitionCreate(definition: {
+    ownerType: PRODUCT
+    namespace: "custom"
+    key: "mystery_prizes"
+    name: "Mystery box prizes"
+    description: "Prize list with published odds (percent). The odds must add up to 100 or no box is drawn."
+    type: "json"
+    access: {storefront: PUBLIC_READ}
+  }) {
+    createdDefinition { id }
+    userErrors { field message code }
+  }
+  # The draw result on the order, written by Flow and read by the order status page.
+  draw: metafieldDefinitionCreate(definition: {
+    ownerType: ORDER
+    namespace: "custom"
+    key: "mystery_draw"
+    name: "Mystery box draw"
+    description: "Prizes drawn for this order's boxes (written by the Mystery box draw workflow)."
+    type: "json"
+    access: {customerAccount: READ}
+  }) {
+    createdDefinition { id }
+    userErrors { field message code }
+  }
+  # Public feed of real draws for the storefront popup. No email, no order id, buyer = first letter.
+  feed: metaobjectDefinitionCreate(definition: {
+    type: "mystery_draw"
+    name: "Mystery draw"
+    displayNameKey: "prize"
+    access: {storefront: PUBLIC_READ}
+    fieldDefinitions: [
+      {key: "buyer", name: "Buyer", type: "single_line_text_field", required: true}
+      {key: "prize", name: "Prize", type: "single_line_text_field", required: true}
+      {key: "prize_handle", name: "Prize product handle", type: "single_line_text_field"}
+      {key: "tier", name: "Tier", type: "single_line_text_field"}
+      {key: "odds", name: "Odds (%)", type: "number_decimal", required: true}
+      {key: "drawn_at", name: "Drawn at", type: "date_time", required: true}
+    ]
+  }) {
+    metaobjectDefinition { id type }
+    userErrors { field message code }
+  }
+}

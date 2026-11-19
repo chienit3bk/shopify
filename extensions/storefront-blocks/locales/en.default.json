@@ -86,5 +86,11 @@
     "letters": "{{ label }} can only use letters, spaces, apostrophes and hyphens.",
     "number": "{{ label }} must be a number.",
     "range": "{{ label }} must be from {{ min }} to {{ max }}."
+  },
+  "mystery": {
+    "just_pulled": "just pulled",
+    "close": "Close",
+    "odds_note": "Every box is drawn on its own after payment with these odds. Your pull shows on your order page.",
+    "odds_paused": "Draws are paused: the odds add up to {{ total }}%, not 100%."
   }
 }

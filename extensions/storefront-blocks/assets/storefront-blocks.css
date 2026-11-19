@@ -168,3 +168,22 @@
 .sb-personalize__error { margin: 0; color: #b3261e; font-size: 0.9em; }
 .sb-personalize__error[hidden] { display: none; }
 .sb-personalize__note { margin: 0; font-size: 0.85em; opacity: 0.75; }
+.sb-mystery-odds { margin: 16px 0; padding: 14px 16px; border: 1px solid rgb(var(--color-foreground, 18, 18, 18) / 0.15); border-radius: 10px; }
+.sb-mystery-odds__heading { margin: 0 0 10px; font-weight: 600; }
+.sb-mystery-odds__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.sb-mystery-odds__row { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+.sb-mystery-odds__image { display: block; width: 48px; height: 48px; object-fit: cover; border-radius: 6px; background: rgb(var(--color-foreground, 18, 18, 18) / 0.06); }
+.sb-mystery-odds__info { display: grid; min-width: 0; }
+.sb-mystery-odds__tier { font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.7; }
+.sb-mystery-odds__title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: inherit; }
+.sb-mystery-odds__odds { font-weight: 700; font-variant-numeric: tabular-nums; }
+.sb-mystery-odds__note { margin: 10px 0 0; font-size: 0.85em; opacity: 0.75; }
+.sb-mystery-odds__note--error { color: #b42318; opacity: 1; }
+.sb-mystery-feed { position: fixed; z-index: 95; left: 16px; bottom: calc(16px + var(--sb-sticky-height, 0px)); max-width: min(360px, calc(100vw - 32px)); pointer-events: none; }
+.sb-mystery-feed__card { position: relative; display: grid; gap: 2px; padding: 12px 36px 12px 14px; border-radius: 12px; background: rgb(var(--color-background, 255, 255, 255)); color: rgb(var(--color-foreground, 18, 18, 18)); box-shadow: 0 6px 24px rgb(0 0 0 / 0.18); opacity: 0; transform: translateY(12px); transition: opacity 0.3s, transform 0.3s; pointer-events: auto; }
+.sb-mystery-feed__card.is-visible { opacity: 1; transform: none; }
+.sb-mystery-feed__prize { color: inherit; font-weight: 600; }
+.sb-mystery-feed__meta { font-size: 0.8em; opacity: 0.7; }
+.sb-mystery-feed__odds { font-weight: 700; }
+.sb-mystery-feed__close { position: absolute; top: 6px; right: 8px; border: 0; background: none; font-size: 18px; line-height: 1; cursor: pointer; color: inherit; opacity: 0.6; }
+@media (prefers-reduced-motion: reduce) { .sb-mystery-feed__card { transition: none; transform: none; } }

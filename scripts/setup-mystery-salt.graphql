@@ -1,0 +1,26 @@
+# The secret salt of the mystery box draw: shop metafield custom.mystery_salt. Every box's roll is
+# SHA-256(salt | order id | createdAt | line item id | box index) (shared/mystery/roll.ts), so whoever
+# lacks the salt can't predict a draw. No storefront or customer account access. Never commit the value.
+# Run once per store, with the value kept out of the shell history and the logs:
+#   d=$(mktemp -d); printf '{"shopId":"%s","salt":"%s"}' "<shop gid>" "$(openssl rand -hex 32)" > "$d/v.json"
+#   shopify store execute -s <store> --allow-mutations --query-file scripts/setup-mystery-salt.graphql \
+#     --variable-file "$d/v.json"; rm -r "$d"
+# Rotating the salt changes nothing already drawn (draws are stored on the order); it only re-keys future boxes.
+mutation SetupMysterySalt($shopId: ID!, $salt: String!) {
+  definition: metafieldDefinitionCreate(definition: {
+    ownerType: SHOP
+    namespace: "custom"
+    key: "mystery_salt"
+    name: "Mystery box salt"
+    description: "Secret mixed into every mystery box roll. Never show or share it."
+    type: "single_line_text_field"
+    access: {storefront: NONE, customerAccount: NONE}
+  }) {
+    createdDefinition { id }
+    userErrors { field message code }
+  }
+  value: metafieldsSet(metafields: [{ownerId: $shopId, namespace: "custom", key: "mystery_salt", type: "single_line_text_field", value: $salt}]) {
+    metafields { id }
+    userErrors { field message code }
+  }
+}

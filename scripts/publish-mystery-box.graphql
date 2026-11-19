@@ -1,0 +1,11 @@
+# Price the box and put it on the Online Store. Variables: { "product": ID, "variant": ID, "publication": ID }.
+# A box is a draw, not a stock item: untracked AND continue selling (untracked + DENY still sold out after 4 orders).
+mutation PublishMysteryBox($product: ID!, $variant: ID!, $publication: ID!) {
+  productVariantsBulkUpdate(productId: $product, variants: [{id: $variant, price: "29.99", inventoryPolicy: CONTINUE, inventoryItem: {tracked: false}}]) {
+    productVariants { id price inventoryPolicy }
+    userErrors { field message }
+  }
+  publishablePublish(id: $product, input: [{publicationId: $publication}]) {
+    userErrors { field message }
+  }
+}

@@ -1,0 +1,59 @@
+{%- comment -%}
+  Published odds of a mystery box, from the product's `custom.mystery_prizes` JSON
+  ([{"id","title","tier","handle","odds"}]). The Flow draw uses the same list and refuses to draw when the
+  odds don't add up to 100, so this block says so too instead of showing odds nobody gets.
+{%- endcomment -%}
+{%- assign prizes = product.metafields.custom.mystery_prizes.value -%}
+{%- if prizes != blank -%}
+  {%- assign total = 0 -%}
+  {%- for prize in prizes -%}
+    {%- assign total = total | plus: prize.odds -%}
+  {%- endfor -%}
+  {%- assign total_rounded = total | times: 100 | round | divided_by: 100.0 -%}
+  <div class="sb-mystery-odds" {{ block.shopify_attributes }}>
+    <p class="sb-mystery-odds__heading">{{ block.settings.heading | escape }}</p>
+    <ul class="sb-mystery-odds__list">
+      {%- for prize in prizes -%}
+        {%- assign item = all_products[prize.handle] -%}
+        <li class="sb-mystery-odds__row">
+          {%- if item.featured_image -%}
+            {{ item.featured_image | image_url: width: 96 | image_tag: class: 'sb-mystery-odds__image', width: 48, height: 48, loading: 'lazy', alt: prize.title }}
+          {%- else -%}
+            <span class="sb-mystery-odds__image" aria-hidden="true"></span>
+          {%- endif -%}
+          <span class="sb-mystery-odds__info">
+            <span class="sb-mystery-odds__tier">{{ prize.tier | escape }}</span>
+            {%- if item != blank -%}
+              <a class="sb-mystery-odds__title" href="{{ item.url }}">{{ prize.title | escape }}</a>
+            {%- else -%}
+              <span class="sb-mystery-odds__title">{{ prize.title | escape }}</span>
+            {%- endif -%}
+          </span>
+          <span class="sb-mystery-odds__odds">{{ prize.odds }}%</span>
+        </li>
+      {%- endfor -%}
+    </ul>
+    {%- if total_rounded == 100 -%}
+      <p class="sb-mystery-odds__note">{{ 'mystery.odds_note' | t }}</p>
+    {%- else -%}
+      <p class="sb-mystery-odds__note sb-mystery-odds__note--error">{{ 'mystery.odds_paused' | t: total: total_rounded }}</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Mystery box odds",
+  "target": "section",
+  "enabled_on": { "templates": ["product"] },
+  "stylesheet": "storefront-blocks.css",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What's inside: published odds"
+    }
+  ]
+}
+{% endschema %}
