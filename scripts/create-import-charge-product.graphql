@@ -1,0 +1,16 @@
+# One-time setup for the US import charge (run with `shopify store execute --allow-mutations`).
+# 1) productCreate "US import charge (10%)" (type Fee, seo.hidden = 1) → note the ids,
+# 2) this file makes the variant a fee (no tax, no shipping, not tracked) and publishes it, since
+#    the cart transform adds it as a component of each product line.
+mutation SetupImportCharge {
+  productVariantsBulkUpdate(
+    productId: "gid://shopify/Product/10546537234714"
+    variants: [{id: "gid://shopify/ProductVariant/53541445927194", price: "0.00", taxable: false, inventoryItem: {requiresShipping: false, tracked: false}}]
+  ) {
+    productVariants { id price }
+    userErrors { field message }
+  }
+  publishablePublish(id: "gid://shopify/Product/10546537234714", input: [{publicationId: "gid://shopify/Publication/322667872538"}]) {
+    userErrors { message }
+  }
+}

@@ -1,7 +1,17 @@
 query CartTransformRunInput {
   # Cart currency vs shop currency, for the build-your-own bundle price.
   presentmentCurrencyRate
+  # The buyer's country: the market country in the cart, the shipping country in checkout.
+  localization {
+    country {
+      isoCode
+    }
+  }
   shop {
+    # App-owned config of the import charge (scripts/set-import-charge-config.graphql).
+    importCharge: metafield(key: "import_charge") {
+      jsonValue
+    }
     # App-owned config of the build-your-own bundle (scripts/set-bundle-builder-config.graphql).
     builder: metafield(key: "bundle_builder") {
       jsonValue
@@ -24,6 +34,9 @@ query CartTransformRunInput {
       merchandise {
         __typename
         ... on ProductVariant {
+          id
+          # Only physical goods carry an import charge (not fees, gift cards or the charge itself).
+          requiresShipping
           product {
             id
           }

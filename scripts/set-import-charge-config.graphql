@@ -1,0 +1,8 @@
+# Writes scripts/import-charge-config.json to the app-owned shop metafield (the cart transform in bundle-expand).
+# shopify app execute --store <shop> --query-file scripts/set-import-charge-config.graphql --variable-file <vars.json>
+mutation SetImportChargeConfig($shopId: ID!, $config: String!) {
+  metafieldsSet(metafields: [{ownerId: $shopId, namespace: "$app", key: "import_charge", type: "json", value: $config}]) {
+    metafields { key updatedAt }
+    userErrors { field message }
+  }
+}

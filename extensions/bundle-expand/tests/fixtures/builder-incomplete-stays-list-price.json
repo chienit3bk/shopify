@@ -3,8 +3,9 @@
     "export": "cart-transform-run",
     "target": "cart.transform.run",
     "input": {
-      "presentmentCurrencyRate": 1.0,
+      "presentmentCurrencyRate": 1,
       "shop": {
+        "importCharge": null,
         "builder": {
           "jsonValue": {
             "version": 1,
@@ -35,6 +36,8 @@
             },
             "merchandise": {
               "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/100",
+              "requiresShipping": true,
               "bundle": null,
               "product": {
                 "id": "gid://shopify/Product/10"
@@ -54,6 +57,8 @@
             },
             "merchandise": {
               "__typename": "ProductVariant",
+              "id": "gid://shopify/ProductVariant/101",
+              "requiresShipping": true,
               "bundle": null,
               "product": {
                 "id": "gid://shopify/Product/20"
@@ -61,6 +66,11 @@
             }
           }
         ]
+      },
+      "localization": {
+        "country": {
+          "isoCode": "US"
+        }
       }
     },
     "output": {
