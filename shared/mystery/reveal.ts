@@ -46,8 +46,9 @@ export function oneIn(odds: number): string {
   return `1 in ${Math.max(1, Math.round(100 / odds))}`;
 }
 
+/** "4.5% · 1 in 22". Common pulls (50% and up) get the percentage only: 80% would read "1 in 1". */
 export function oddsLabel(odds: number): string {
-  return `${formatOdds(odds)} · ${oneIn(odds)}`;
+  return odds < 50 ? `${formatOdds(odds)} · ${oneIn(odds)}` : formatOdds(odds);
 }
 
 /** The rarest pull first: that's the headline. */

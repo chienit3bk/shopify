@@ -36,7 +36,9 @@ describe('labels', () => {
   it('shows odds as a percent and as 1 in N', () => {
     expect(oneIn(0.5)).toBe('1 in 200');
     expect(oneIn(4.5)).toBe('1 in 22');
-    expect(oneIn(80)).toBe('1 in 1');
+    expect(oddsLabel(80)).toBe('80%');
+    expect(oddsLabel(50)).toBe('50%');
+    expect(oddsLabel(49)).toBe('49% · 1 in 2');
     expect(oddsLabel(15)).toBe('15% · 1 in 7');
   });
   it('puts the rarest pull first', () => {
