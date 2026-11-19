@@ -1360,7 +1360,7 @@ Setup: checkout editor → page **Order status** → Apps → **order-status-hel
 
 ## 46. 10% US import charge — Cart Transform, recalculated on every change
 
-VIDEO_URL
+https://github.com/user-attachments/assets/367423a6-0174-42ff-8d69-6a37cf3c3019
 
 **A UK store adds a 10% import charge to every order that ships to the US.** The charge is 10% of the product value, it
 shows on its own line under each item, and it disappears when the address is not in the US. No theme script, no pop-up.
