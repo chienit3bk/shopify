@@ -1,0 +1,27 @@
+{
+  "heading": "Track & get help",
+  "notShipped": "We're packing your order. Tracking appears here as soon as it ships.",
+  "shipment": "Shipment {{index}}",
+  "carrier": "{{carrier}} · {{number}}",
+  "track": "Track package",
+  "eta": "Arriving by {{date}}",
+  "stepOf": "Step {{step}} of 4",
+  "step": {
+    "packed": "Packed",
+    "shipped": "On the way",
+    "outForDelivery": "Out for delivery",
+    "delivered": "Delivered"
+  },
+  "attention": {
+    "DELAYED": "Delayed by the carrier",
+    "ATTEMPTED_DELIVERY": "Delivery attempted",
+    "FAILURE": "Carrier reported a problem"
+  },
+  "helpHeading": "Need help with {{order}}?",
+  "help": {
+    "contact": "Contact us about this order",
+    "shipping": "Shipping policy",
+    "returns": "Returns & refunds",
+    "faq": "FAQ"
+  }
+}
