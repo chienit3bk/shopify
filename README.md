@@ -26,7 +26,7 @@ trading cards, also test data only.
 | Cart rules, bundles and B2B | [Max quantity, minimum order and incompatible products](#14-max-quantity-minimum-order-and-incompatible-products), [B2B: minimum quantity, case packs, first-order minimum](#15-b2b-minimum-quantity-case-packs-first-order-minimum), [Fixed-price bundle](#16-fixed-price-bundle--cart-transform-lineexpand), [Case packs](#23-case-packs--sell-by-the-case-count-stock-by-the-bottle), [One sample kit per customer every 30 days](#28-one-sample-kit-per-customer-every-30-days), [Minimum order for wholesale-tagged customers](#29-minimum-order-for-wholesale-tagged-customers), [Native bundles with an image picker](#37-native-bundles-with-an-image-picker), [Build your own bundle](#38-build-your-own-bundle--cart-transform-linesmerge) |
 | Product page and storefront | [Buy more, save more on the product page](#24-buy-more-save-more-on-the-product-page), [Shop by concern on home and collection pages](#25-shop-by-concern-on-home-and-collection-pages), [Product page pack for a Dawn theme](#35-product-page-pack-for-a-dawn-theme), [Catalog import, ingredient chart and filter](#36-catalog-import-ingredient-chart-and-filter), [Custom text that reaches the order](#44-custom-text-that-reaches-the-order--name-and-number-with-a-checkout-backstop) |
 | Post-purchase and tracking | [Post-purchase: attribution survey + referral code](#3-post-purchase-attribution-survey--referral-code), [Gift funnel analytics](#5-gift-funnel-analytics--analyticspublish--a-web-pixel), [Connect GA4 with customer events](#31-connect-ga4-with-customer-events), [Affiliate ref tracking](#39-affiliate-ref-tracking--cart-attribute--web-pixel) |
-| Customer accounts | [Buy again on the Orders page](#34-buy-again-on-the-orders-page) |
+| Customer accounts | [Buy again on the Orders page](#34-buy-again-on-the-orders-page), [Order status: tracking + help links](#45-order-status-tracking--help-links) |
 | Subscriptions | [Loop Subscriptions: portal and cancellation flow](#33-loop-subscriptions-portal-and-cancellation-flow) |
 | Migration | [Scripts → Functions: three scripts side by side](#26-scripts--functions-three-scripts-side-by-side) |
 | Custom apps | [B2B price lists in a custom app](#32-b2b-price-lists-in-a-custom-app) |
@@ -1322,3 +1322,38 @@ Not tested: wallet buttons (PayPal, Apple Pay), quick add on a collection page, 
 Setup: `scripts/setup-personalization.graphql` (metafield definition + the demo product), `scripts/publish-engraved-gua-sha.graphql`,
 `scripts/activate-personalization-validation.graphql`, then add the **Personalization** block to the product template in the theme
 editor, under the variant picker.
+
+## 45. Order status: tracking + help links
+
+VIDEO_URL
+
+**"Where is my order?" is the most common support email.** This block answers it on the customer account **Order status**
+page, and gives the buyer the next step if the answer isn't enough.
+
+- **[`order-status-help`](extensions/order-status-help)** (`customer-account.order-status.block.render`) reads the order's
+  fulfillments from the Customer Account API: carrier, tracking number and URL, `latestShipmentStatus`, `estimatedDeliveryAt`.
+- One row per live fulfillment: a step badge (*Packed → On the way → Out for delivery → Delivered*), "Step N of 4", the ETA
+  until it is delivered, `UPS · 1Z…`, and a **Track package** button. Delays and failed delivery attempts get a red badge.
+  Cancelled or failed fulfillments are dropped; a manual fulfillment without tracking still shows its step.
+- Before anything ships: *"We're packing your order. Tracking appears here as soon as it ships."*
+- **Need help with #1021?** Contact (the order name is pre-filled: `/pages/contact?order=%231021`), Shipping policy, FAQ, and
+  **Returns & refunds only once something shipped**.
+
+Logic lives in [`shared/customer-account/order-help.ts`](shared/customer-account/order-help.ts): status → step, which
+tracking entry to show, which links to offer.
+
+**Gotcha:** the `shop` field of the Customer Account API returns `ACCESS_DENIED` until the buyer is *fully* signed in (an order
+link from an email, a staff "View order status page" preview). One denied field fails the whole response, so the first version
+rendered nothing there. The shop URL now comes from the extension API (`shopify.shop.storefrontUrl`), and help links render
+even when tracking can't be read.
+
+Tested:
+
+- 14 unit tests (`npx vitest run shared/customer-account/order-help.test.ts`): every shipment status → step, delay flag, ETA
+  hidden once delivered, cancelled fulfillments dropped, missing tracking, the contact link, Returns only after shipping.
+- Mutation check: mapping `DELIVERED` to step 2 and always showing Returns fails 3 tests.
+- Live on the demo store, order #1021: before fulfillment (packing message, no Returns) → fulfilled with UPS tracking →
+  *Packed · Step 1 of 4 · UPS · 1Z999AA10123456784*, Track package opens UPS, Returns link appears.
+
+Setup: checkout editor → page **Order status** → Apps → **order-status-help** → Add block → Save.
+
