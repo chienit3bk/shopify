@@ -11,6 +11,9 @@ one card per demo, each with a link that opens it ready to test. Test checkout, 
 Cards live in [`theme/templates/index.json`](theme/templates/index.json); add a block there or in
 the theme editor, then `node scripts/push-landing.mjs <theme id>`.
 
+**[TCG demo store](https://tcg-demo-store-adjeaoek.myshopify.com/)** (no password): a second development store selling
+trading cards, also test data only.
+
 ## Demos by area
 
 | Area | Demos |
