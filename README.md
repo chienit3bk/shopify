@@ -20,6 +20,7 @@ trading cards, also test data only.
 |---|---|
 | Checkout | [BFCM checkout offer](#2-bfcm-checkout-offer--countdown--one-click-add-ons), [Shipping cut-off countdown + trust badges](#4-shipping-cut-off-countdown--trust-badges), [Required consent checkbox (final sale, age 18+)](#17-required-consent-checkbox-final-sale-age-18), [Order note templates](#19-order-note-templates), [Country-restricted products (no catalogs)](#20-country-restricted-products-no-catalogs), [Address autocomplete and bad-address blocking](#42-address-autocomplete-and-bad-address-blocking--what-works-on-plus-and-what-doesnt) |
 | Shipping and delivery | [Free Express shipping over $120](#7-free-express-shipping-over-120--sale-items-dont-count), [Delivery rules](#11-delivery-rules--hide-rename-reorder-delivery-customization-function), [Delivery date picker + PO Box check](#12-delivery-date-picker--po-box-check), [Carbon-neutral delivery add-on](#13-carbon-neutral-delivery-add-on), [PO Box check per item, not per carrier](#27-po-box-check-per-item-not-per-carrier), [Pickup-only items](#30-pickup-only-items) |
+| Taxes and fees | [10% US import charge, recalculated on every change](#46-10-us-import-charge--cart-transform-recalculated-on-every-change) |
 | Payments | [Payment rules: bank transfer only on big orders, no COD by state or cap](#43-payment-rules--bank-transfer-only-on-big-orders-no-cod-by-state-or-cap) |
 | Discounts | [Buy 2, get 1 free](#8-buy-2-get-1-free--on-the-same-sku), [Tiered discounts](#9-tiered-discounts--volume-per-sku--spend-on-the-order), [Spend tiers that skip sale items and gift cards](#21-spend-tiers-that-skip-sale-items-and-gift-cards), [40 quantity-break tables from one discount](#22-40-quantity-break-tables-from-one-discount) |
 | Gifts | [Rules-based free gift](#1-rules-based-free-gift), [Gift picker + checkout validation](#6-gift-picker--checkout-validation), [Gift for a collection + out-of-stock fallback](#10-gift-for-a-collection--out-of-stock-fallback), [Gift message + gift wrap](#18-gift-message--gift-wrap) |
@@ -1357,3 +1358,41 @@ Tested:
 
 Setup: checkout editor → page **Order status** → Apps → **order-status-help** → Add block → Save.
 
+## 46. 10% US import charge — Cart Transform, recalculated on every change
+
+https://github.com/user-attachments/assets/367423a6-0174-42ff-8d69-6a37cf3c3019
+
+**A UK store adds a 10% import charge to every order that ships to the US.** The charge is 10% of the product value, it
+shows on its own line under each item, and it disappears when the address is not in the US. No theme script, no pop-up.
+
+- The existing cart transform ([`bundle-expand`](extensions/bundle-expand), a store runs one per app) reads the buyer's country
+  (`localization.country`: the market country in the cart, the **shipping country** in checkout) and the app-owned config
+  `$app:import_charge` (`{"percent": 10, "countries": ["US"], "variantId": …}`).
+- When the country matches, each physical line is expanded (`lineExpand`) into *the product at its own price* + *"US import
+  charge (10%)" at 10% of it*, per unit. 2 × $24 cleanser + 1 × $48 serum → +$4.80 + $4.80. Fixed-price bundles get the charge
+  as one more component.
+- Shopify reruns the Function on every cart and checkout change, so the charge can't be "missed" the way a theme script can.
+  Change the address to Canada → it's gone; back to the US → it's back.
+- On the order, the charge is its own line item (the "US import charge" product: not taxable, no shipping, not tracked).
+
+Logic lives in [`shared/import-charge/import-charge.ts`](shared/import-charge/import-charge.ts).
+
+**Plan check:** `lineExpand` works on every plan, but only through an App Store app. A **custom** app with any Function needs
+Shopify Plus ([About Shopify Functions](https://shopify.dev/docs/apps/build/functions)), and `lineUpdate` (price override) is
+Plus-only ([Cart Transform API](https://shopify.dev/docs/api/functions/latest/cart-transform)). Not on Plus: a US market price
+adjustment of +10% (Markets) raises US prices on any plan, but there's no separate charge line.
+
+Good to know: line discounts apply to the whole expanded line, so a "5% off" also takes 5% off the charge; line properties are
+not copied onto the expanded item; build-your-own (merged) bundles don't get the charge.
+
+Tested:
+
+- 6 unit tests (`npx vitest run shared/import-charge`) + 2 Function fixtures (`cd extensions/bundle-expand && npx vitest run`):
+  US cart with 3 lines + a bundle + a no-shipping fee line, and the same cart to GB (no charge, bundle still expands).
+- Mutation check: making `appliesTo` always true fails the GB fixture.
+- Live on the demo store (release clark-checkout-demos-97): US address → *2 × US import charge (10%)* under the cleanser
+  ($52.80) and *1 ×* under the serum ($52.80); Canada → no charge lines; back to the US → they return.
+
+Setup: `productCreate` "US import charge (10%)" + `scripts/create-import-charge-product.graphql` (store execute), then
+`scripts/set-import-charge-config.graphql` with `scripts/import-charge-config.json` (app execute). The cart transform is already
+active (`scripts/activate-bundle-expand.graphql`).
