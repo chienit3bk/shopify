@@ -1,0 +1,11 @@
+api_version = "2026-10"
+
+[[extensions]]
+name = "order-status-help"
+handle = "order-status-help"
+uid = "879f2c8a-6dd0-7e1d-db1d-a83eb98c8e53520ec4ae"
+type = "ui_extension"
+
+[[extensions.targeting]]
+module = "./src/OrderStatusHelp.tsx"
+target = "customer-account.order-status.block.render"
