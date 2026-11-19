@@ -13,10 +13,11 @@ export default async () => {
   render(<Extension />, document.body);
 };
 
+// No `shop` field here: it is ACCESS_DENIED until the buyer is fully signed in
+// (pre-authenticated order links, staff previews). The shop URL comes from the
+// extension API instead, so help links render in every state.
 const QUERY = `query OrderTracking($id: ID!) {
-  shop { url }
   order(id: $id) {
-    name
     fulfillments(first: 10) {
       nodes {
         id
@@ -30,23 +31,17 @@ const QUERY = `query OrderTracking($id: ID!) {
 }`;
 
 interface Result {
-  data?: {
-    shop: {url: string};
-    order: {name: string; fulfillments: {nodes: Fulfillment[]}} | null;
-  };
+  data?: {order: {fulfillments: {nodes: Fulfillment[]}} | null} | null;
   errors?: unknown[];
-}
-
-interface State {
-  shopUrl: string;
-  orderName: string;
-  shipments: Shipment[];
 }
 
 function Extension() {
   const t = shopify.i18n.translate;
-  const orderId = shopify.order.value?.id;
-  const [state, setState] = useState<State | null>(null);
+  const order = shopify.order.value;
+  const orderId = order?.id;
+  const shopUrl = shopify.shop.storefrontUrl ?? `https://${shopify.shop.myshopifyDomain}`;
+  // null = tracking not readable (loading or not signed in): help links still show.
+  const [list, setList] = useState<Shipment[] | null>(null);
 
   useEffect(() => {
     if (!orderId) return;
@@ -59,35 +54,31 @@ function Extension() {
       .then(({data, errors}: Result) => {
         if (errors) console.error('order-status-help', JSON.stringify(errors));
         if (!data?.order) return;
-        setState({
-          shopUrl: data.shop.url,
-          orderName: data.order.name,
-          shipments: shipments(data.order.fulfillments.nodes),
-        });
+        setList(shipments(data.order.fulfillments.nodes));
       })
       .catch(console.error);
   }, [orderId]);
 
-  if (!state) return null;
-  const links = helpLinks(state.shopUrl, state.orderName, state.shipments.length > 0);
+  if (!order) return null;
+  const links = helpLinks(shopUrl, order.name, (list?.length ?? 0) > 0);
 
   return (
     <s-section heading={t('heading')}>
       <s-stack gap="large">
-        {state.shipments.length === 0 ? (
+        {list === null ? null : list.length === 0 ? (
           <s-text color="subdued">{t('notShipped')}</s-text>
         ) : (
-          state.shipments.map((s, i) => (
+          list.map((s, i) => (
             <ShipmentRow
               key={s.id}
               shipment={s}
-              title={state.shipments.length > 1 ? t('shipment', {index: i + 1}) : null}
+              title={list.length > 1 ? t('shipment', {index: i + 1}) : null}
             />
           ))
         )}
-        <s-divider />
+        {list === null ? null : <s-divider />}
         <s-stack gap="small-200">
-          <s-text type="strong">{t('helpHeading', {order: state.orderName})}</s-text>
+          <s-text type="strong">{t('helpHeading', {order: order.name})}</s-text>
           {links.map((link) => (
             <s-link key={link.topic} href={link.href}>
               {t(`help.${link.topic}`)}
