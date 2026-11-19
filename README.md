@@ -11,8 +11,8 @@ one card per demo, each with a link that opens it ready to test. Test checkout, 
 Cards live in [`theme/templates/index.json`](theme/templates/index.json); add a block there or in
 the theme editor, then `node scripts/push-landing.mjs <theme id>`.
 
-**[TCG demo store](https://tcg-demo-store-adjeaoek.myshopify.com/)** (no password): a second development store selling
-trading cards, also test data only.
+**[TCG demo store](https://tcg-demo-store-adjeaoek.myshopify.com/)**: a second development store selling trading cards, also
+test data only. Shopify keeps every development store behind a password page (it can't be turned off); ask me for it.
 
 ## Demos by area
 
@@ -25,7 +25,7 @@ trading cards, also test data only.
 | Discounts | [Buy 2, get 1 free](#8-buy-2-get-1-free--on-the-same-sku), [Tiered discounts](#9-tiered-discounts--volume-per-sku--spend-on-the-order), [Spend tiers that skip sale items and gift cards](#21-spend-tiers-that-skip-sale-items-and-gift-cards), [40 quantity-break tables from one discount](#22-40-quantity-break-tables-from-one-discount) |
 | Gifts | [Rules-based free gift](#1-rules-based-free-gift), [Gift picker + checkout validation](#6-gift-picker--checkout-validation), [Gift for a collection + out-of-stock fallback](#10-gift-for-a-collection--out-of-stock-fallback), [Gift message + gift wrap](#18-gift-message--gift-wrap) |
 | Cart rules, bundles and B2B | [Max quantity, minimum order and incompatible products](#14-max-quantity-minimum-order-and-incompatible-products), [B2B: minimum quantity, case packs, first-order minimum](#15-b2b-minimum-quantity-case-packs-first-order-minimum), [Fixed-price bundle](#16-fixed-price-bundle--cart-transform-lineexpand), [Case packs](#23-case-packs--sell-by-the-case-count-stock-by-the-bottle), [One sample kit per customer every 30 days](#28-one-sample-kit-per-customer-every-30-days), [Minimum order for wholesale-tagged customers](#29-minimum-order-for-wholesale-tagged-customers), [Native bundles with an image picker](#37-native-bundles-with-an-image-picker), [Build your own bundle](#38-build-your-own-bundle--cart-transform-linesmerge) |
-| Product page and storefront | [Buy more, save more on the product page](#24-buy-more-save-more-on-the-product-page), [Shop by concern on home and collection pages](#25-shop-by-concern-on-home-and-collection-pages), [Product page pack for a Dawn theme](#35-product-page-pack-for-a-dawn-theme), [Catalog import, ingredient chart and filter](#36-catalog-import-ingredient-chart-and-filter), [Custom text that reaches the order](#44-custom-text-that-reaches-the-order--name-and-number-with-a-checkout-backstop) |
+| Product page and storefront | [Buy more, save more on the product page](#24-buy-more-save-more-on-the-product-page), [Shop by concern on home and collection pages](#25-shop-by-concern-on-home-and-collection-pages), [Product page pack for a Dawn theme](#35-product-page-pack-for-a-dawn-theme), [Catalog import, ingredient chart and filter](#36-catalog-import-ingredient-chart-and-filter), [Custom text that reaches the order](#44-custom-text-that-reaches-the-order--name-and-number-with-a-checkout-backstop), [Mystery box: published odds, fair draws, a live pulls feed](#47-mystery-box-published-odds-fair-draws-a-live-pulls-feed) |
 | Post-purchase and tracking | [Post-purchase: attribution survey + referral code](#3-post-purchase-attribution-survey--referral-code), [Gift funnel analytics](#5-gift-funnel-analytics--analyticspublish--a-web-pixel), [Connect GA4 with customer events](#31-connect-ga4-with-customer-events), [Affiliate ref tracking](#39-affiliate-ref-tracking--cart-attribute--web-pixel) |
 | Customer accounts | [Buy again on the Orders page](#34-buy-again-on-the-orders-page), [Order status: tracking + help links](#45-order-status-tracking--help-links) |
 | Subscriptions | [Loop Subscriptions: portal and cancellation flow](#33-loop-subscriptions-portal-and-cancellation-flow) |
@@ -1396,3 +1396,73 @@ Tested:
 Setup: `productCreate` "US import charge (10%)" + `scripts/create-import-charge-product.graphql` (store execute), then
 `scripts/set-import-charge-config.graphql` with `scripts/import-charge-config.json` (app execute). The cart transform is already
 active (`scripts/activate-bundle-expand.graphql`).
+
+## 47. Mystery box: published odds, fair draws, a live pulls feed
+
+https://github.com/user-attachments/assets/da5934ac-d47a-4ca3-b5ac-0dafd8a1f22d
+
+**A $29.99 "Stellar Rift Mystery Box" on the [TCG demo store](https://tcg-demo-store-adjeaoek.myshopify.com/products/stellar-rift-mystery-box):**
+the box page publishes the odds, each box is drawn once the order is paid, the buyer sees the prize on the order status page,
+and a small popup on the storefront shows **real** pulls ("N*** just pulled Ember Drake ex – Special Illustration Rare · 4.5% · 1 min ago").
+
+Odds approved by the store owner:
+
+| Tier | Prize | Odds |
+|---|---|---|
+| Grail | Stellar Rift Booster Box (36 packs) | 0.5% |
+| Chase | Ember Drake ex – Special Illustration Rare | 4.5% |
+| Hit | Stellar Rift Elite Trainer Box | 15% |
+| Base | Tidal Sprite – Holo Rare | 80% |
+
+- **Odds live on the product** (metafield `custom.mystery_prizes`, [`scripts/mystery-box-prizes.json`](scripts/mystery-box-prizes.json)).
+  The odds table block and the draw read the same list, and a list that doesn't add up to 100% is never drawn from.
+- **The draw is a Shopify Flow workflow** (Order paid → Run code → order metafield `custom.mystery_draw` → one feed entry
+  per box): [`scripts/flow/mystery-draw.js`](scripts/flow/mystery-draw.js), built by
+  [`scripts/flow/mystery-draw-workflow.mjs`](scripts/flow/mystery-draw-workflow.mjs) through the Admin API. Quantity 3 = three
+  independent draws.
+- **Storefront** ([`storefront-blocks`](extensions/storefront-blocks)): the *Mystery box odds* block, the sticky add-to-cart bar,
+  and the *Mystery box live pulls* app embed. The feed is the `mystery_draw` metaobject (buyer = first letter only, no email, no
+  order id), read in Liquid; it hides itself when there's nothing from the last 72 hours.
+- **Order status** ([`mystery-box-reveal`](extensions/mystery-box-reveal)): "Drawing your card…" until Flow has written the
+  order metafield (polls every 5 s for up to 60 s), then the tier, odds ("1 in 200") and a link to the card.
+
+**Gotcha: `Math.random()` in Flow's Run code is seeded the same way on every run.** The first three real orders all rolled
+**0.854925** first (an order of two rolled 0.854925, 0.745196), so every first box would have been the 80% prize, forever.
+Flow Run code also has no `crypto`. So each box gets its roll from the order itself, mixed with a secret:
+
+```js
+// shared/mystery/roll.ts, inlined in the Flow script
+const digest = sha256([salt, order.id, order.createdAt, lineItem.id, boxIndex].join('|'));
+const r = mulberry32(digest[0])(); // [0, 1)
+```
+
+The salt is a shop metafield (`custom.mystery_salt`, 64 random hex characters, **no storefront or customer account access**,
+set by [`scripts/setup-mystery-salt.graphql`](scripts/setup-mystery-salt.graphql) and never committed). Be honest about what
+that gives you:
+
+- **Deterministic per box**: Flow re-running an order gives the same prize, and anyone holding the salt can re-check a draw.
+- **Unpredictable without the salt**: the order id and timestamp don't exist before checkout, and the salt never leaves the
+  admin. SHA-256, not a 32-bit string hash (FNV-1a, xmur3): a 32-bit hash's state after the salt is only 2^32 values, small
+  enough to brute-force from a few published rolls.
+- **Not a certified RNG.** A merchant running a regulated draw needs an audited random source, and the salt holder could in
+  principle predict draws. For a hobby store's mystery box it's fair, checkable and free.
+- No salt (or a short one) → nothing is drawn, rather than a predictable draw.
+
+Another gotcha: Flow is a separate app, so it can't write **app-owned** (`$app`) metafields or metaobjects. The definitions are
+merchant-owned, created by [`scripts/setup-mystery-box.graphql`](scripts/setup-mystery-box.graphql).
+
+Tested:
+
+- 50 mystery-box unit tests (`npx vitest run shared/mystery`): odds validation, the draw, the public feed, the order reveal,
+  SHA-256 against `node:crypto`, rolls that differ per order/line/box/salt, 100k boxes uniform (chi-square) and landing on
+  each tier at its odds, and the Flow script matching the shared code roll for roll. It never calls `Math.random`.
+- Mutation check: dropping the box index from the seed, changing a mulberry32 or SHA-256 constant (Flow script or shared code),
+  or removing the salt guard each fails 1–4 tests; earlier, moving a prize boundary or the "must add up to 100" guard failed 1–2.
+- Live on the TCG store: 3 Bogus orders, 4 boxes, after the fix. #1005 r = 0.301978 (Base), #1006 r = 0.030244 (Chase),
+  #1007 r = 0.045812 (Chase) and 0.597809 (Base). Every roll re-computed locally from the salt matched. The popup showed
+  *N\*\*\* just pulled Ember Drake ex – Special Illustration Rare · 4.5% · 1 min ago*; order #1007's status page shows both pulls.
+
+Setup on a store: run `setup-mystery-box.graphql` and `setup-mystery-salt.graphql`, create the product with
+`create-mystery-box.graphql` + `publish-mystery-box.graphql`, `node scripts/flow/mystery-draw-workflow.mjs <store> --activate`,
+`node scripts/push-mystery-box-theme.mjs <store> <theme id>`, then checkout editor → **Order status** → Apps →
+**mystery-box-reveal** → Add block → Save.
