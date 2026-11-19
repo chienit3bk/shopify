@@ -1325,7 +1325,7 @@ editor, under the variant picker.
 
 ## 45. Order status: tracking + help links
 
-VIDEO_URL
+https://github.com/user-attachments/assets/12e1a69e-5401-4312-b3c6-ed8b86e2aa81
 
 **"Where is my order?" is the most common support email.** This block answers it on the customer account **Order status**
 page, and gives the buyer the next step if the answer isn't enough.
