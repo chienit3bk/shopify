@@ -1,0 +1,79 @@
+{%- comment -%}
+  App embed: "J*** just pulled Ember Drake ex · 4.5% · 5 min ago". Rows come from the `mystery_draw` metaobjects
+  that the "Mystery box draw" Flow workflow writes after each paid box: real draws only, buyer masked to one
+  letter, no email or order id. Nothing in the last `max_age` hours = no popup. Switch it on under
+  Theme settings > App embeds.
+{%- endcomment -%}
+{%- assign show_here = true -%}
+{%- if block.settings.box_pages_only -%}
+  {%- assign show_here = false -%}
+  {%- if template.name == 'product' and product.metafields.custom.mystery_prizes != blank -%}
+    {%- assign show_here = true -%}
+  {%- endif -%}
+{%- endif -%}
+{%- if show_here -%}
+  <div
+    class="sb-mystery-feed"
+    data-mystery-feed
+    data-interval="{{ block.settings.interval }}"
+    data-max-age="{{ block.settings.max_age }}"
+    hidden
+  >
+    <div class="sb-mystery-feed__card" data-mystery-card role="status" aria-live="polite">
+      <span class="sb-mystery-feed__text">
+        <strong data-mystery-buyer></strong>
+        {{ 'mystery.just_pulled' | t }}
+        <a class="sb-mystery-feed__prize" data-mystery-prize href="#"></a>
+      </span>
+      <span class="sb-mystery-feed__meta">
+        <span class="sb-mystery-feed__odds" data-mystery-odds></span>
+        <span aria-hidden="true">·</span>
+        <span data-mystery-when></span>
+      </span>
+      <button type="button" class="sb-mystery-feed__close" data-mystery-close aria-label="{{ 'mystery.close' | t }}">×</button>
+    </div>
+    <script type="application/json" data-mystery-entries>
+      [
+        {%- for entry in metaobjects.mystery_draw.values -%}
+          {"buyer": {{ entry.buyer.value | json }}, "prize": {{ entry.prize.value | json }}, "handle": {{ entry.prize_handle.value | json }}, "odds": {{ entry.odds.value | json }}, "drawnAt": {{ entry.drawn_at.value | date: '%s' | json }}}
+          {%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
+    </script>
+  </div>
+  <script src="{{ 'mystery-feed.js' | asset_url }}" defer></script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Mystery box live pulls",
+  "target": "body",
+  "stylesheet": "storefront-blocks.css",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "box_pages_only",
+      "label": "Only on mystery box product pages",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "interval",
+      "label": "Seconds between pulls",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "max_age",
+      "label": "Show pulls from the last (hours)",
+      "min": 1,
+      "max": 168,
+      "step": 1,
+      "default": 72
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,17 @@
+api_version = "2026-10"
+
+[[extensions]]
+name = "mystery-box-reveal"
+handle = "mystery-box-reveal"
+uid = "170c8a89-1f1c-4ff2-ab07-9292e30eebde"
+type = "ui_extension"
+
+# Products in the order: which lines are mystery boxes (merchant-owned, so not $app).
+[[extensions.metafields]]
+namespace = "custom"
+key = "mystery_prizes"
+owner_type = "PRODUCT"
+
+[[extensions.targeting]]
+module = "./src/MysteryBoxReveal.tsx"
+target = "customer-account.order-status.block.render"

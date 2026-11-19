@@ -1,0 +1,10 @@
+# Price the box and put it on the Online Store. Variables: { "product": ID, "variant": ID, "publication": ID }.
+mutation PublishMysteryBox($product: ID!, $variant: ID!, $publication: ID!) {
+  productVariantsBulkUpdate(productId: $product, variants: [{id: $variant, price: "29.99", inventoryItem: {tracked: false}}]) {
+    productVariants { id price }
+    userErrors { field message }
+  }
+  publishablePublish(id: $product, input: [{publicationId: $publication}]) {
+    userErrors { field message }
+  }
+}

@@ -1,0 +1,21 @@
+# The demo mystery box product, with its published prize list (scripts/mystery-box-prizes.json).
+# Run after setup-mystery-box.graphql, with variables { "prizes": "<the prizes array as a JSON string>" }.
+mutation CreateMysteryBox($prizes: String!) {
+  productCreate(
+    product: {
+      title: "Stellar Rift Mystery Box"
+      handle: "stellar-rift-mystery-box"
+      productType: "Mystery Box"
+      vendor: "TCG Demo Store"
+      tags: ["Mystery Box", "Pokemon", "Set: Stellar Rift"]
+      status: ACTIVE
+      templateSuffix: "mystery-box"
+      descriptionHtml: "<p>One sealed box, one card pulled for you after payment. Every box is drawn on its own with the published odds below, and every pull shows up in the live feed.</p>"
+      metafields: [{namespace: "custom", key: "mystery_prizes", type: "json", value: $prizes}]
+    }
+    media: [{originalSource: "https://cdn.shopify.com/s/files/1/0853/8138/2253/files/tcg-mystery-all.jpg?v=1795066482", mediaContentType: IMAGE, alt: "Stellar Rift Mystery Box"}]
+  ) {
+    product { id handle variants(first: 1) { nodes { id } } }
+    userErrors { field message }
+  }
+}

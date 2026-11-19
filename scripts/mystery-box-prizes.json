@@ -1,0 +1,9 @@
+{
+  "box": "stellar-rift-mystery-box",
+  "prizes": [
+    {"id": "booster-box", "tier": "Grail", "title": "Stellar Rift Booster Box (36 packs)", "handle": "pokemon-tcg-stellar-rift-booster-box-36-packs", "odds": 0.5},
+    {"id": "ember-drake-sir", "tier": "Chase", "title": "Ember Drake ex – Special Illustration Rare", "handle": "ember-drake-ex-special-illustration-rare-201-180-stellar-rift", "odds": 4.5},
+    {"id": "elite-trainer-box", "tier": "Hit", "title": "Stellar Rift Elite Trainer Box", "handle": "pokemon-tcg-stellar-rift-elite-trainer-box", "odds": 15},
+    {"id": "tidal-sprite-holo", "tier": "Base", "title": "Tidal Sprite – Holo Rare", "handle": "tidal-sprite-holo-rare-045-180-stellar-rift", "odds": 80}
+  ]
+}

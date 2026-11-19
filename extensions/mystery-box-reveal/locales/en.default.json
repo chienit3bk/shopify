@@ -1,0 +1,9 @@
+{
+  "heading": "Your mystery box pull",
+  "pending": "Drawing your card… this takes a few seconds after payment.",
+  "late": "Your draw is taking longer than usual. Refresh this page in a minute.",
+  "box": "Box {{index}}",
+  "odds": "{{odds}} odds",
+  "view": "View card",
+  "fair": "Drawn with the published odds the moment your payment cleared."
+}
